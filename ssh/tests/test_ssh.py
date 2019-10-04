@@ -32,14 +32,12 @@ class SshTestCase(unittest.TestCase):
 
     # Reminder : test name must start with test ...
     def test_connect_and_close(self):
-        log.debug("* Running test_connect_and_close *")
         self.ssh.connect()
         self.assertTrue(self.ssh.connected)
         self.ssh.close()
         self.assertFalse(self.ssh.connected)
 
     def test_connect_key_authentication_failure(self):
-        log.debug("* Running test_connect_key_authentication_failure *")
         self.ssh.private_key_file = "whateverfile"
         self.ssh.mock(exception=paramiko.AuthenticationException)
         self.ssh.connect()
@@ -47,28 +45,24 @@ class SshTestCase(unittest.TestCase):
         self.assertRaises(paramiko.AuthenticationException)
 
     def test_ssh_connection_failure(self):
-        log.debug("* Running test_ssh_connection_failure *")
         self.ssh.mock(exception=paramiko.SSHException)
         self.ssh.connect()
         self.ssh.close()
         self.assertRaises(paramiko.SSHException)
 
     def test_socket_timeout(self):
-        log.debug("* Running test_socket_timeout *")
         self.ssh.mock(exception=socket.timeout)
         self.ssh.connect()
         self.ssh.close()
         self.assertRaises(socket.timeout)
 
     def test_genuine_exception(self):
-        log.debug("* Running test_genuine_exception *")
         self.ssh.mock(exception=Exception)
         self.ssh.connect()
         self.ssh.close()
         self.assertRaises(Exception)
 
     def test_sshcmd_single_command(self):
-        log.debug("* Running test_sshcmd_single_command *")
         self.ssh.connect()
         self.ssh.mock(context='default')
         self.ssh.commands(["uptime"])
@@ -77,7 +71,6 @@ class SshTestCase(unittest.TestCase):
         self.assertNotEqual(self.ssh.output.find("load average"),-1)
 
     def test_sshcmd_default_command(self):
-        log.debug("* Running test_sshcmd_default_command *")
         self.ssh.connect()
         self.ssh.commands(["whatever"])
         self.ssh.close()
@@ -85,7 +78,6 @@ class SshTestCase(unittest.TestCase):
 
     #@unittest.skip("by-passed for now")
     def test_sshcmd_double_command(self):
-        log.debug("* Running test_sshcmd_double_command *")
         self.ssh.connect()
         self.ssh.mock(context='default')
         self.ssh.commands(["uptime","ps -ef"])
@@ -93,7 +85,6 @@ class SshTestCase(unittest.TestCase):
         self.assertNotEqual(self.ssh.output.find("load average"),-1)
 
     def test_sshcmd_commands_timeout(self):
-        log.debug("* Running test_sshcmd_commands_timeout *")
         self.ssh.connect()
         self.ssh.mock(exception=socket.timeout)
         self.ssh.commands(["whatever"])
@@ -101,12 +92,25 @@ class SshTestCase(unittest.TestCase):
         self.assertRaises(socket.timeout)
 
     def test_sshcmd_commands_failure(self):
-        log.debug("* Running test_commands_failure *")
         self.ssh.connect()
         self.ssh.mock(exception=paramiko.SSHException)
         self.ssh.commands(["whatever"])
         self.ssh.close()
         self.assertRaises(paramiko.SSHException)
+
+    def test_sshcmd_execute(self):
+        self.ssh.connect()
+        self.ssh.mock(context='default')
+        self.ssh.execute(["uptime","pe -ef"])
+        self.ssh.close()
+        self.assertNotEqual(self.ssh.output.find("load average"),-1)
+
+    def test_shell_send_single(self):
+        self.ssh.connect()
+        self.ssh.mock(context='default')
+        self.ssh.commands(["uptime"])
+        self.ssh.close()
+        self.assertNotEqual(self.ssh.output.find("load average"),-1)
 
 
 if __name__ == '__main__':

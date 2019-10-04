@@ -37,6 +37,8 @@ provided.
 import logging as log
 import paramiko
 import socket
+import time
+import re
 
 # Workaround for paramiko deprecation warnings (will be fixed later version)
 import warnings
@@ -53,11 +55,9 @@ class Ssh(object):
         Use admin / no password by default
         """
 
-        # Set debug level first
         if debug:
             log.basicConfig(level='DEBUG')
 
-        # create logger
         log.basicConfig(
             format='%(asctime)s,%(msecs)3.3d\
             %(levelname)-8s[%(module)-7.7s.%(funcName)\
@@ -84,6 +84,8 @@ class Ssh(object):
 
         # Private attributs
         self._client = paramiko.SSHClient()
+        self._channel = None # Paramiko channel
+        self._prompt = ''
 
     def connect(self):
         """
@@ -97,6 +99,7 @@ class Ssh(object):
 
         Returns ssh object itself to allow methods chaining
         """
+        log.info("Enter")
 
         # Moking : position request for exception if asked
         if self.mock_exception:
@@ -145,25 +148,19 @@ class Ssh(object):
             result_flag = True
 
         self.connected = result_flag
-
         return self
-
-    # ---
 
     def close(self):
         """
         Close ssh connection if opened
         """
-
-        log.debug("Enter [self.connected={}]".format(self.connected))
+        log.info("Enter [self.connected={}]".format(self.connected))
 
         if self.connected:
             self._client.close()
             self.connected = False
 
-    # ---
-
-    def execute(self, commands='', type='command'):
+    def execute(self, commands=[], type='command'):
         """
         Executes a list of commands on the remote host.
         It is possible to use either the the ssh command channel (like when
@@ -179,15 +176,176 @@ class Ssh(object):
         session is close. 
         This should be supported by any ssh devices
         """
-
-        log.debug("Called with type={}".format(type))
+        log.info("Enter with type={}".format(type))
 
         if type == 'command':
             self.commands(commands)
         elif type == 'shell':
             self.send(commands)
 
-    # --
+
+    def shell_send(self, commands):
+        """
+        Open a shell channel and send a list of command.
+        To read the command output, use shell_read afterwards
+
+        Before anything, tries to discover the device prompt so we know the
+        device is ready for our commands. Discover the prompt will also be
+        helpful during future reads.
+
+        args : commands [] - list of one of more commands
+        ex : ['show date']
+ 
+        returns True if commands are sent succesfully
+        """
+        log.info("Enter with commands={}".format(commands))
+
+        self.output = ''
+        result_flag = False
+
+        if not self.connected:
+            self.connect()
+
+        try:
+            if self.connected:
+
+                if not self._channel:
+                    log.debug("Invoke shell")
+                    self._channel = self._client.invoke_shell(term='vt100', width=80, height=24,width_pixels=0, height_pixels=0, environment=None)
+
+                self.read_prompt()
+
+                # send all we need to send
+                for command in commands:
+                    log.debug("Executing command={}, context={}".
+                              format(command, self.mock_context))
+
+                    if self._channel.send_ready():
+                        log.debug("sending command={}".format(command))
+                        self._channel.send(command+"\n")
+
+        except socket.timeout as e:
+            log.debug("Command timed out : {}".format(e))
+            self._client.close()
+            result_flag = False
+
+        except paramiko.SSHException:
+            log.debug("Failed to execute the command {}".format(command))
+            self._client.close()
+            result_flag = False
+
+        return result_flag
+
+    def shell_read(self):
+        """
+        Read the shell.
+        Should be generally used after a shell_send to gather the command
+        output. If the device prompt is known (discovered during a previous
+        shell_send), it will stop gathering data once the prompt is seen.
+        The idea is to not spend time waitinf for nothing
+
+        Upon success, shell output is available in self.output
+
+        returns True if the prompt was found
+        """
+        log.info("Enter [prompt={}]".format(self._prompt))
+
+        result_flag = False
+
+        if not self.connected:
+            self.connect()
+
+        try:
+            if self.connected:
+
+                if not self._channel:
+                    log.debug("Invoke shell")
+                    self._channel = self._client.invoke_shell(term='vt100', width=80, height=24,width_pixels=0, height_pixels=0, environment=None)
+
+                looping = True
+                found = False
+                round = 1
+                read_block = ""
+
+                # Need some time after write or channel 
+                # will never be ready for read
+                # don't understand why this is required here...
+                time.sleep(0.1)
+
+                while (looping and round < 10): 
+
+                    if self._channel.recv_ready():
+                        read = self._channel.recv(9999).decode('utf-8')
+                        read_block += read
+                        log.debug("Reading channel round={} read={}".format(round,read))
+
+                    # See if prompt has been seen
+                    if self._prompt:
+                        log.debug("inspect for prompt={}".format(self._prompt))
+                        if read_block.find(self._prompt):
+                            log.debug("found prompt")
+                            looping = False
+                            result_flag = True
+
+                    if not found:
+                        time.sleep(0.1)
+
+                    round = round + 1
+
+        except socket.timeout as e:
+            log.debug("Command timed out : {}".format(e))
+            self._client.close()
+            result_flag = False
+
+        except paramiko.SSHException as e:
+            log.debug("Failed : {}".format(e))
+            self._client.close()
+            result_flag = False
+
+        log.debug("read_block={}".format(read_block))
+        self.output = read_block
+        return result_flag
+
+
+    def read_prompt(self):
+        """
+        Read up to 100 lines until we can identify the shell prompt
+        prompt is stored in self.prompt
+
+        Returns True if prompt si found
+        """
+        log.info("Enter")
+
+        prompt = ""
+        round = 1
+
+        found = False
+        while (not found and round < 100):
+            log.debug("wait for prompt round={}".format(round))
+            if self._channel.recv_ready():
+                tmp = self._channel.recv(99999)
+                for line in tmp.splitlines():
+                    if isinstance(line,bytes):
+                        decoded_line = line.decode('utf-8')
+                    else:
+                        decoded_line = line
+
+                    decoded_line.split('\n'[-1])
+
+                    search_prompt = '([A-Za-z0-9@~\:\-_]+\$|\#)\s?$'
+                    match_prompt = re.search(search_prompt, decoded_line)
+                    if match_prompt:
+                        prompt = match_prompt.groups(0)[0]
+                        log.debug("FOUND prompt={}".format(prompt))
+                        self._prompt=prompt
+                        found = True
+
+            time.sleep(0.2)
+            round = round + 1
+
+        return found
+
+
 
     def commands(self, commands):
         """
@@ -196,8 +354,7 @@ class Ssh(object):
 
         Returns True upon success
         """
-        
-        log.debug("Enter")
+        log.info("Enter with commands={}".format(commands))
 
         self.output = ''
         ssh_error = False
@@ -278,11 +435,12 @@ class Ssh(object):
             self._client.mock(exception=exception)
 
 
+
 if __name__ == '__main__': # pragma: no cover
 
     myssh = Ssh(ip='127.0.0.1', user='paratest', password='paratest', debug=True)
     myssh.connect()
-    myssh.commands(['ls -la', 'ps -ef'])
+    myssh.commands(['uptime'])
     for line in myssh.output.splitlines():
         print(line)
         myssh.close()

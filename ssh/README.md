@@ -72,7 +72,7 @@ CLASSES
      |      
      |      Returns ssh object itself to allow methods chaining
      |  
-     |  execute(self, commands='', type='command')
+     |  execute(self, commands=[], type='command')
      |      Executes a list of commands on the remote host.
      |      It is possible to use either the the ssh command channel (like when
      |      sending a single command over ssh) or to open a shell and behave more
@@ -92,6 +92,10 @@ CLASSES
      |      Allows to set a context for moking
      |      Allows to raise an exception from unittest.
      |      This is only possible if using our test paramiko mocked module
+     |  
+     |  shell_send(self, commands)
+     |      Open a shell channel and send a list of command.
+     |      Command return in self.output
      |  
      |  ----------------------------------------------------------------------
      |  Data descriptors defined here:
