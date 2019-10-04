@@ -56,9 +56,10 @@ CLASSES
      |      Close ssh connection if opened
      |  
      |  commands(self, commands)
-     |      Execute a command on the remote host.
-     |      Commands output is stored in self.output
-     |      Return True if sending command successful
+     |      Execute a list of commands on remote host using ssh command channel
+     |      Command results is return in self.output 
+     |      
+     |      Returns True upon success
      |  
      |  connect(self)
      |      Connects to ssh server. All connections details should be set
@@ -70,6 +71,21 @@ CLASSES
      |      connection in connected state.
      |      
      |      Returns ssh object itself to allow methods chaining
+     |  
+     |  execute(self, commands='', type='command')
+     |      Executes a list of commands on the remote host.
+     |      It is possible to use either the the ssh command channel (like when
+     |      sending a single command over ssh) or to open a shell and behave more
+     |      like a user typing commands.
+     |      
+     |      type='command' : the channel is close immediately after each command
+     |      so it is not possible to follow-up on the same connection with the next
+     |      command. In this cased a new channel is opened for the next command.
+     |      
+     |      type='shell' : channel requested is type 'shell', multiple commands are
+     |      allowed and channel will stay opened until explicitely closed or
+     |      session is close. 
+     |      This should be supported by any ssh devices
      |  
      |  mock(self, context=None, exception=None)
      |      For moking purpose only

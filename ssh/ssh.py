@@ -108,24 +108,19 @@ class Ssh(object):
         log.debug("Connecting with ip={} port={} user={} password={}"
                   .format(self.ip, self.port, self.user, self.password))
 
+        # Connecting
         try:
-
+            private_key = None
             if (self.private_key_file != ''):
-                private_key = paramiko.RSAKey.from_private_key_file(
-                    self.private_key_file)
+                private_key = paramiko.RSAKey.from_private_key_file(self.private_key_file)
                 log.debug("Got private_key={}".format(private_key))
-                self._client.connect(hostname=self.ip, port=self.port,
-                                     username=self.user, pkey=private_key,
-                                     timeout=self.timeout, allow_agent=False,
-                                     look_for_keys=False)
 
-            else:
-                self._client.connect(hostname=self.ip, port=self.port,
-                                     username=self.user,
-                                     password=self.password,
-                                     timeout=self.timeout,
-                                     allow_agent=False,
-                                     look_for_keys=False)
+            self._client.connect(hostname=self.ip, port=self.port,
+                                 username=self.user, pkey=private_key,
+                                 password=self.password,
+                                 timeout=self.timeout,
+                                 allow_agent=False,
+                                 look_for_keys=False)
 
         except paramiko.AuthenticationException:
             log.debug("exception : Authentication failed")
@@ -168,13 +163,40 @@ class Ssh(object):
 
     # ---
 
-    def commands(self, commands):
+    def execute(self, commands='', type='command'):
         """
-        Execute a command on the remote host.
-        Commands output is stored in self.output
-        Return True if sending command successful
+        Executes a list of commands on the remote host.
+        It is possible to use either the the ssh command channel (like when
+        sending a single command over ssh) or to open a shell and behave more
+        like a user typing commands.
+
+        type='command' : the channel is close immediately after each command
+        so it is not possible to follow-up on the same connection with the next
+        command. In this cased a new channel is opened for the next command.
+
+        type='shell' : channel requested is type 'shell', multiple commands are
+        allowed and channel will stay opened until explicitely closed or
+        session is close. 
+        This should be supported by any ssh devices
         """
 
+        log.debug("Called with type={}".format(type))
+
+        if type == 'command':
+            self.commands(commands)
+        elif type == 'shell':
+            self.send(commands)
+
+    # --
+
+    def commands(self, commands):
+        """
+        Execute a list of commands on remote host using ssh command channel
+        Command results is return in self.output 
+
+        Returns True upon success
+        """
+        
         log.debug("Enter")
 
         self.output = ''
@@ -190,8 +212,8 @@ class Ssh(object):
                     log.debug("Executing command {} [context={}]".
                               format(command, self.mock_context))
 
-                    stdin, stdout, stderr = self._client.exec_command(
-                        command, timeout=10)
+                    stdin, stdout, stderr = self._client.exec_command(command,
+                                                                      timeout=10)
 
                     # stdout could either be a channel object (real paramiko)
                     # or a filehandle when using mocked paramiko.
@@ -200,13 +222,13 @@ class Ssh(object):
                     read_stdout = stdout.read()
 
                     if type(read_stdout) is str:
-                        # Mocked paramiko
-                        log.debug("read_stdout is a {} (mocked paramiko)".format(type(read_stdout)))
+                        # Mocked paramiko or paramiko on python2
+                        log.debug("read_stdout is a {} (mocked paramiko or python2)".format(type(read_stdout)))
                         self.output += read_stdout
 
                     else:
-                        # Real paramiko
-                        log.debug("read_stdout is a {} (real paramiko)".format(type(read_stdout)))
+                        # paramiko on python3
+                        log.debug("read_stdout is a {} (paramiko on python3)".format(type(read_stdout)))
                         self.output += read_stdout.decode('utf-8')
 
                     ssh_error = stderr.read()
@@ -258,7 +280,7 @@ class Ssh(object):
 
 if __name__ == '__main__': # pragma: no cover
 
-    myssh = Ssh(ip='127.0.0.1', user='cgustave', password='', debug=True)
+    myssh = Ssh(ip='127.0.0.1', user='paratest', password='paratest', debug=True)
     myssh.connect()
     myssh.commands(['ls -la', 'ps -ef'])
     for line in myssh.output.splitlines():

@@ -1,0 +1,7 @@
+# paramiko moked class need to be provided as well as all moked_files for
+# stdin, stdout, stderr to allow fonctional testings on classes
+# this is the reason of this package existence
+
+global-exclude *.py[co]
+global-exclude *.log
+graft tests

@@ -22,13 +22,13 @@ CLASSES
         Fpocctl
     
     class Fpocctl(builtins.object)
-     |  Fpocctl(ip='', port=22, user='admin', password='', private_key_file='', debug=0)
+     |  Fpocctl(ip='', port=22, user='admin', password='', private_key_file='', debug=False)
      |  
      |  main class
      |  
      |  Methods defined here:
      |  
-     |  __init__(self, ip='', port=22, user='admin', password='', private_key_file='', debug=0)
+     |  __init__(self, ip='', port=22, user='admin', password='', private_key_file='', debug=False)
      |      Initialize self.  See help(type(self)) for accurate signature.
      |  
      |  close(self)

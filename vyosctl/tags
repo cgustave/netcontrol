@@ -1,0 +1,17 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.9~svn20110310	//
+Vyosctl	vyosctl.py	/^class Vyosctl(object) :$/;"	c
+__init__	vyosctl.py	/^    def __init__(self,ip='', port=22, user='vyos', password='vyos', traffic_policy='WAN', mock=False, debug=0) :$/;"	m	class:Vyosctl
+_login	vyosctl.py	/^    def _login(self):$/;"	m	class:Vyosctl
+datefmt	vyosctl.py	/^        datefmt='%Y%m%d:%H:%M:%S',$/;"	v	class:Vyosctl
+dump_config	vyosctl.py	/^    def dump_config(self):$/;"	m	class:Vyosctl
+filename	vyosctl.py	/^        filename='Vyosctl.log',$/;"	v	class:Vyosctl
+format	vyosctl.py	/^        format='%(asctime)s,%(msecs)3.3d %(levelname)-8s[%(module)-7.7s.%(funcName)-30.30s:%(lineno)5d] %(message)s',$/;"	v	class:Vyosctl
+get_traffic_policy	vyosctl.py	/^    def get_traffic_policy(self):$/;"	m	class:Vyosctl
+level	vyosctl.py	/^        level=log.NOTSET)$/;"	v	class:Vyosctl
+set_traffic_policy	vyosctl.py	/^    def set_traffic_policy(self, network_delay='',$/;"	m	class:Vyosctl
+vyosctl	vyosctl.py	/^    vyosctl = Vyosctl(ip='10.5.58.162', port='10106', user='vyos',$/;"	v

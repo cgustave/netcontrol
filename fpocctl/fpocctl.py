@@ -25,7 +25,7 @@ class Fpocctl(object):
     """
 
     def __init__(self, ip='', port=22, user='admin', password='',
-                 private_key_file='', debug=0):
+                 private_key_file='', debug=False):
 
         # Set debug level first
         if debug:
@@ -193,7 +193,7 @@ if __name__ == '__main__': #pragma: no cover
 
     # Get the device port status table (JSON format)
     print("Check device {} port {} status :".format(dev, port))
-    fpoc = Fpocctl(ip=ip, user='admin', password='', debug=False)
+    fpoc = Fpocctl(ip=ip, user='admin', password='', debug=True)
     print(fpoc.get_poc_link_status(device=dev))
 
     # Bring port1 down and verify
