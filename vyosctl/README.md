@@ -87,15 +87,16 @@ CLASSES
      |      'bandwidth in mbps (only mbps supported) - value '0' means no limitation
      |  
      |  run_op_mode_command(self, cmd)
+     |      Use netcontrol shell to send commands to vyos
      |  
      |  set_traffic_policy(self, network_delay='', packet_loss='', packet_reordering='', packet_corruption='', bandwidth='')
      |      Sets network-emulator settings
      |      optional arguments : 
-     |      -network_delay <number> in ms
-     |      -packet_corruption <number> in %
-     |      -packet_loss <number> in %
-     |      -packet_reordering <number> in %
-     |      -bandwidth <number> in mbps (only mbps supported)
+     |         - network_delay <number> in ms
+     |         - packet_corruption <number> in %
+     |         - packet_loss <number> in %
+     |         - packet_reordering <number> in %
+     |         - bandwidth <number> in mbps (only mbps supported)
      |  
      |  ----------------------------------------------------------------------
      |  Data descriptors defined here:

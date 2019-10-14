@@ -160,6 +160,8 @@ class Ssh(object):
             self._client.close()
             self.connected = False
 
+            self._channel.close()
+
     def execute(self, commands=[], type='command'):
         """
         Executes a list of commands on the remote host.
@@ -211,7 +213,12 @@ class Ssh(object):
 
                 if not self._channel:
                     log.debug("Invoke shell")
-                    self._channel = self._client.invoke_shell(term='vt100', width=80, height=24,width_pixels=0, height_pixels=0, environment=None)
+                    self._channel = self._client.invoke_shell(term='vt100', 
+                                                              width=80,
+                                                              height=24, 
+                                                              width_pixels=0, 
+                                                              height_pixels=0, 
+                                                              environment=None)
 
                 self.read_prompt()
 
@@ -222,7 +229,7 @@ class Ssh(object):
 
                     if self._channel.send_ready():
                         log.debug("sending command={}".format(command))
-                        self._channel.send(command+"\n")
+                        self._channel.send(command)
 
         except socket.timeout as e:
             log.debug("Command timed out : {}".format(e))
@@ -251,6 +258,7 @@ class Ssh(object):
         log.info("Enter [prompt={}]".format(self._prompt))
 
         result_flag = False
+        read_block = ""
 
         if not self.connected:
             self.connect()
@@ -275,15 +283,33 @@ class Ssh(object):
                 while (looping and round < 10): 
 
                     if self._channel.recv_ready():
-                        read = self._channel.recv(9999).decode('utf-8')
-                        read_block += read
-                        log.debug("Reading channel round={} read={}".format(round,read))
+                        read_stdout = self._channel.recv(9999)
+                        log.debug("Reading channel round={} read_stdout={}".
+                                  format(round,read_stdout))
+                        
+                        if type(read_stdout) is str:
+                            # Mocked paramiko or paramiko on python2
+                            log.debug("read_stdout is a {} (mocked paramiko or python2)".
+                                      format(type(read_stdout)))
+                            read_block += read_stdout
+                        else:
+                            # paramiko on python3
+                            log.debug("read_stdout is a {} (paramiko on python3)".
+                                      format(type(read_stdout)))
+                            read_block += read_stdout.decode('utf-8')
+
 
                     # See if prompt has been seen
+                    # For mockup, make sure file 'default_stdin.txt' has same
+                    # prompt as 'show configuration commands | grep network-emulator_stdin.txt'
+                    # or the prompt won't be found !
+
                     if self._prompt:
-                        log.debug("inspect for prompt={}".format(self._prompt))
-                        if read_block.find(self._prompt):
-                            log.debug("found prompt")
+                        log.debug("round={} inspect for prompt={} in read_block={}".
+                                  format(round,self._prompt,read_block))
+                        if not (read_block.find(self._prompt) == -1):
+                            log.debug("found prompt in read_block find index={}".
+                                      format(read_block.find(self._prompt)))
                             looping = False
                             result_flag = True
 
@@ -302,7 +328,6 @@ class Ssh(object):
             self._client.close()
             result_flag = False
 
-        log.debug("read_block={}".format(read_block))
         self.output = read_block
         return result_flag
 
@@ -331,8 +356,9 @@ class Ssh(object):
                         decoded_line = line
 
                     decoded_line.split('\n'[-1])
+                    log.debug("decoded_line={}".format(decoded_line))
 
-                    search_prompt = '([A-Za-z0-9@~\:\-_]+\$|\#)\s?$'
+                    search_prompt = '(^[A-Za-z0-9@~\:\-_]+\$|\#)\s?'
                     match_prompt = re.search(search_prompt, decoded_line)
                     if match_prompt:
                         prompt = match_prompt.groups(0)[0]
@@ -344,7 +370,6 @@ class Ssh(object):
             round = round + 1
 
         return found
-
 
 
     def commands(self, commands):
@@ -425,9 +450,11 @@ class Ssh(object):
                   .format(context, exception))
 
         # switch context in paramiko
+        # including the channel class
         if context:
             self.mock_context = context
             self._client.mock(context=context)
+            self._client.channel.mock(context=context)
 
         # set an exception in paramiko
         if exception:

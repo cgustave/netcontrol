@@ -5,10 +5,10 @@ Used for unittest
 
 #from paramiko.ssh_exception import *
 #from paramiko.rsakey import RSAKey
-import paramiko
+#import paramiko
+
 
 import logging as log
-import sys
 
 
 log.basicConfig(
@@ -101,6 +101,8 @@ class SSHClient():
         self.context = 'default'
         self.openedfiles = []
         self.exception = ""
+        self.channel = Channel()
+        self._send = ""
 
     def load_system_host_keys(self, filename=None):
         log.debug("Enter with filename=%s" % (filename))
@@ -122,20 +124,21 @@ class SSHClient():
             log.debug("raise exception=%s" % (self.exception))
             raise self.exception 
 
-
     def close(self):
         """ 
         Close all opened files.
         Need to do it also for all filehandles opened on multiple exec_command
-        calls
+        Need to do it also for all filehandles opened during shell_read
         """
         log.debug("Enter")
+
+        # Close SSHClient files
         for fh in self.openedfiles: 
             try:
+                log.debug("closing SSHClient opened file {}".format(fh))
                 fh.close()
             except Exception as e:
                 log.debug(str(e))
-
 
     def exec_command(self, command, bufsize=-1, timeout=None, get_pty=False, environment=None,):
         """
@@ -172,9 +175,18 @@ class SSHClient():
         self.openedfiles.append(self.stdout)
         self.openedfiles.append(self.stderr)
 
-
         return self.stdin, self.stdout, self.stderr
 
+    def invoke_shell(self, term='', width=0, height=0, width_pixels=0, 
+                     height_pixels=0, environment=None):
+        """
+        Opens a shell on the remote server
+        returns a channel object
+        """
+        log.debug("Enters with term={}, width={}, height={}, width_pixels={} height_pixels={}, environment={}".
+                  format(term, width, height, width_pixels, height_pixels, environment))
+        return self.channel
+           
 
     ### The following functions are not part of paramiko's original packate ####
     ### They are used to control the mocking environent when running unittest ### 
@@ -187,10 +199,127 @@ class SSHClient():
            test/paramiko/files/<context> used to store stdin, stdout and stderr
            crafted files
         """
-        log.debug("Enter with context=%s exception=%s" % (context,exception))
+        log.debug("Enter with context={} exception={}".format(context,exception))
         if context:
             self.context = context
 
         if exception:
              self.exception = exception
+
+
+
+class Channel():
+
+    def __init__(self):
+        log.debug("Enter")
+        self.context='default'
+        self.openedfiles = []
+
+        # Use to remember what was the last sent command
+        self._send = 'default'
+
+
+    def recv_ready(self):
+        """
+        Returns true if data is buffered and ready to be read from this
+        channel.  A ``False`` result does not mean that the channel has closed;
+        it means you may need to wait before more data arrives.
+
+        :return:
+            ``True`` if a `recv` call on this channel would immediately return
+            at least one byte; ``False`` otherwise.
+        """
+        return True 
+
+    def recv(self, nbytes):
+        """
+        Receive data from the channel.  The return value is a string
+        representing the data received.  The maximum amount of data to be
+        received at once is specified by ``nbytes``.  If a string of
+        length zero is returned, the channel stream has closed.
+
+        :param int nbytes: maximum number of bytes to read.
+        :return: received data, as a ``str``/``bytes``.
+        In mock condition, returns the output from the 
+        
+
+        :raises socket.timeout:
+            if no data is ready before the timeout set by `settimeout`.
+        """
+ 
+        try:
+            filename = "tests/mockfiles/"+self.context+"/"+self._send+"_stdin.txt"
+            log.debug("opening file={}".format(filename))
+            fh  = open(filename, "r", encoding="utf8") 
+            content = fh.read()
+
+        except Exception as e:
+            print ("Exception={}".format(e))
+            filename = "tests/mockfiles/default/stdout.txt"
+            log.debug("opening file={}".format(filename))
+            fh  = open(filename, "r", encoding="utf8")
+            content = fh.read()
+       
+        fh.close()
+
+        return content 
+
+    def send(self, s):
+        """
+        Send data to the channel.  Returns the number of bytes sent, or 0 if
+        the channel stream is closed.  Applications are responsible for
+        checking that all data has been sent: if only some of the data was
+        transmitted, the application needs to attempt delivery of the remaining
+        data.
+        Keep track of what has been sent
+
+        :param str s: data to send
+        :return: number of bytes actually sent, as an `int`
+
+        :raises socket.timeout: if no data could be sent before the timeout set
+            by `settimeout`.
+
+        in mocking, we don't send anything however we need to keep track of
+        what was sent to read the right response file
+
+        \n should be removed from command sent so the filename looks ok
+        """
+
+        self._send=s.strip('\n')
+       
+
+    def send_ready(self):
+        """
+        Always ready to send in mock
+        """
+        return True
+
+
+    ### The following functions are not part of paramiko's original packate ####
+    ### They are used to control the mocking environent when running unittest ###
+
+    def mock(self, context='default'):
+        """
+        This method only exists in moked paramiko. It should ne only called by
+        SSHClient moke to set context in Channel class
+        """
+        log.debug("Enter with context={}".format(context))
+        
+        if context:
+            self.context = context
+        
+    def close(self):
+        """ 
+        Close all opened files.
+        Need to do it also for all filehandles opened on multiple exec_command
+        calls
+        """
+        log.debug("Enter")
+        for fh in self.openedfiles: 
+            try:
+                fh.close()
+            except Exception as e:
+                log.debug(str(e))
+
+
 

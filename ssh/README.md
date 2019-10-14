@@ -93,9 +93,35 @@ CLASSES
      |      Allows to raise an exception from unittest.
      |      This is only possible if using our test paramiko mocked module
      |  
+     |  read_prompt(self)
+     |      Read up to 100 lines until we can identify the shell prompt
+     |      prompt is stored in self.prompt
+     |      
+     |      Returns True if prompt si found
+     |  
+     |  shell_read(self)
+     |      Read the shell.
+     |      Should be generally used after a shell_send to gather the command
+     |      output. If the device prompt is known (discovered during a previous
+     |      shell_send), it will stop gathering data once the prompt is seen.
+     |      The idea is to not spend time waitinf for nothing
+     |      
+     |      Upon success, shell output is available in self.output
+     |      
+     |      returns True if the prompt was found
+     |  
      |  shell_send(self, commands)
      |      Open a shell channel and send a list of command.
-     |      Command return in self.output
+     |      To read the command output, use shell_read afterwards
+     |      
+     |      Before anything, tries to discover the device prompt so we know the
+     |      device is ready for our commands. Discover the prompt will also be
+     |      helpful during future reads.
+     |      
+     |      args : commands [] - list of one of more commands
+     |      ex : ['show date']
+     |      
+     |      returns True if commands are sent succesfully
      |  
      |  ----------------------------------------------------------------------
      |  Data descriptors defined here:

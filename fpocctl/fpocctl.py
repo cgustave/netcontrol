@@ -129,12 +129,6 @@ class Fpocctl(object):
         if not self.ssh.connected:
             self.ssh.connect()
 
-        #if self.moke_context:
-        #    self.ssh.moke(context = self.moke_context)
-
-        #if self.moke_exception:
-        #    self.ssh.moke(exception = self.moke_exception)
-
         self.ssh.commands(['poc link list'])
 
         log.debug("output:{}".format(self.ssh.output))

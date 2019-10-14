@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-'''
+"""
 Created on Mar 20, 2019
 @author: cgustave
 
@@ -53,18 +53,18 @@ vyos@ISP1-192# set traffic-policy network-emulator WAN packet-reordering 0 (in %
 vyos@ISP1-192# set interfaces ethernet eth1 traffic-policy out WAN
 vyos@ISP1-192# set interfaces ethernet eth4 traffic-policy out WAN
 vyos@ISP1-192# commit
-'''
+"""
+
 from netcontrol.ssh.ssh import Ssh
-import time
 import logging as log
 import re
 import json
 
 
 class Vyosctl(object) :
-    '''
+    """
     classdocs
-    '''
+    """
     def __init__(self,ip='', port=22, user='vyos', password='vyos',
                  private_key_file='', traffic_policy='WAN', mock=False,
                  debug=False):
@@ -78,14 +78,12 @@ class Vyosctl(object) :
 
         # create logger
         log.basicConfig(
-            format='%(asctime)s,%(msecs)3.3d %(levelname)-8s[%(module)-\
-            7.7s.%(funcName)-30.30s:%(lineno)5d] %(message)s',
+            format='%(asctime)s,%(msecs)3.3d %(levelname)-8s[%(module)-7.7s.%(funcName)-30.30s:%(lineno)5d] %(message)s',
             datefmt='%Y%m%d:%H:%M:%S',
             filename='debug.log',
             level=log.NOTSET)
 
-        log.info("Constructor with ip={}, port={}, user={}, password={},\
-                 private_key_file={}, traffic_policy={}, debug={}".
+        log.info("Constructor with ip={}, port={}, user={}, password={}, private_key_file={}, traffic_policy={}, debug={}".
                  format(ip, port, user, password, private_key_file, traffic_policy, debug))
 
         # public attributs
@@ -110,13 +108,13 @@ class Vyosctl(object) :
         self.ssh.close()
 
     def get_traffic_policy(self):
-        '''
+        """
         Get network-emulator settings for the given interface
         Fills self._json with updated settings for the interfaces with keys like :
         'network_delay' (in ms), 'packet_loss' (in %), 
         'packet-corruption (in %), 'packet_reordering' (in %)
         'bandwidth in mbps (only mbps supported) - value '0' means no limitation
-        '''
+        """
 
         log.info("Enter")
 
@@ -132,8 +130,7 @@ class Vyosctl(object) :
             self.ssh.connect()
 
         # issue command and capture output
-        #self.run_op_mode_command('show configuration commands | grep network-emulator')
-        self.run_op_mode_command("show traffic-policy network-emulator WAN\n")
+        self.run_op_mode_command("show configuration commands | grep network-emulator\n")
 
         log.info("output={}".format(self.ssh.output))
         # Ex of output (all or some lines may be missing if not defined 
@@ -151,35 +148,35 @@ class Vyosctl(object) :
         match_delay = re.search(search_delay, str(self.ssh.output))
         if match_delay:
             network_delay = match_delay.group(1)
-            log.info('match network_delay=%s' % (str(network_delay)))
+            log.info("match network_delay={}".format(network_delay))
 
         # packet-corruption
         search_corruption = "(?:network-emulator\s"+self.traffic_policy+"\spacket-corruption\s')(\d+)'"
         match_corruption = re.search(search_corruption, str(self.ssh.output))
         if match_corruption:
            packet_corruption = match_corruption.groups(0)[0]
-           log.info('match packet_corruption=%s' % (str(packet_corruption)))
+           log.info("match packet_corruption={}".format(packet_corruption))
 
         # packet-loss
         search_loss = "(?:network-emulator\s"+self.traffic_policy+"\spacket-loss\s')(\d+)'"
         match_loss = re.search(search_loss, str(self.ssh.output))
         if match_loss:
             packet_loss = match_loss.groups(0)[0]
-            log.info('match packet_loss=%s' % (str(packet_loss)))
+            log.info("match packet_loss={}".format(packet_loss))
 
         # packet-reordering
         search_reorder = "(?:network-emulator\s"+self.traffic_policy+"\spacket-reordering\s')(\d+)'"
         match_reorder = re.search(search_reorder, str(self.ssh.output))
         if match_reorder:
             packet_reordering = match_reorder.groups(0)[0]
-            log.info('match packet_reordering=%s' % (str(packet_reordering)))
+            log.info("match packet_reordering={}".format(packet_reordering))
 
         # Bandwidth
         search_bandwidth = "(?:network-emulator\s"+self.traffic_policy+"\sbandwidth\s')(\d+)"
         match_bandwidth = re.search(search_bandwidth, str(self.ssh.output))
         if match_bandwidth:
             bandwidth = match_bandwidth.groups(0)[0]
-            log.info('match bandwidth=%s' % (str(bandwidth)))
+            log.info("match bandwidth={}".format(bandwidth))
 
         # apply values
         self._config['network_delay']     = network_delay
@@ -196,20 +193,23 @@ class Vyosctl(object) :
                            packet_reordering='',
                            packet_corruption='',
                            bandwidth=''):
-        '''
+        """
         Sets network-emulator settings
         optional arguments : 
-        -network_delay <number> in ms
-        -packet_corruption <number> in %
-        -packet_loss <number> in %
-        -packet_reordering <number> in %
-        -bandwidth <number> in mbps (only mbps supported)
-        '''
+           - network_delay <number> in ms
+           - packet_corruption <number> in %
+           - packet_loss <number> in %
+           - packet_reordering <number> in %
+           - bandwidth <number> in mbps (only mbps supported)
+        """
         flag_configured = False
         command_list = []
 
-        log.info('Enter with network_delay=%s packet_loss=%s packet_reordering=%s packet_corruption=%s bandwidth=%s' % 
-                 (network_delay, packet_loss, packet_reordering, packet_corruption, bandwidth))
+        log.info("Enter with network_delay={} packet_loss={}\
+                  packet_reordering={} packet_corruption={}\
+                  bandwidth={}".format(network_delay, packet_loss,
+                                       packet_reordering, packet_corruption,
+                                       bandwidth))
 
         # Process delay
         if (network_delay):
@@ -260,78 +260,41 @@ class Vyosctl(object) :
                 cmd = "set traffic-policy network-emulator "+self.traffic_policy+" bandwidth "+str(bandwidth)+"mbps"
                 command_list.append(cmd)
 
-        # In mocking mode, do not connect really to Vyos,
-        # set the attributes
-        if not self.mock:
+        # Processing commands
+        if (flag_configured):
 
-            # Processing commands
-            if (flag_configured):
+            if not self.ssh_connected:
+                self.ssh.connect()
 
-                if not self._is_logged :
-                    self._login()
-
-                # Avoid system yelling it is already in configuration mode
-                try:
-                    self._vymgmt.configure()
-                except Exception as e:
-                    log.error ("commit exception : %s" % (e))
-
-                # Avoid system yelling the command statement is already there
-                for cmd in command_list:
-                    try:
-                        log.debug("sending :"+str(cmd))
-                        self._vymgmt.run_conf_mode_command(cmd)
-                    except Exception as e:
-                        log.error ("exception for cmd=%s => %s" % (cmd,e))
-
-                # Commit 
-                # Avoid system yelling there is nothing to commit
-                try:
-                    log.debug("commit")
-                    self._vymgmt.run_conf_mode_command("commit")
-                except Exception as e:
-                    log.error ("commit exception : %s" % (e))
-
-                # Save
-                try:
-                    log.debug("save")
-                    self._vymgmt.save()
-                except Exception as e:
-                    log.error ("save exception : %s" % (e))
-
-                # Leave cleanly
-                self._vymgmt.exit()
-                self._vymgmt.logout()
-
-            else:
-                log.info('mocking, set attributes values')
-                self._config['network_delay']     = network_delay
-                self._config['packet_loss']       = packet_loss
-                self._config['packet_reordering'] = packet_reordering
-                self._config['packet_corruption'] = packet_corruption
-                self._config['bandwidth']         = bandwidth
-
-
+            self.ssh.shell_send(['configure'])
+            self.ssh.shell_send(command_list)
+            self.ssh.shell_send(['commit'])
+            self.ssh.shell_send(['save'])
 
     def dump_config(self):
-        '''
+        """
         For troubleshooting, dump internal representation for the configuration
-        '''
+        """
         print(json.dumps(self._config,indent = 4))
 
     def run_op_mode_command(self, cmd):
-        log.info("Enter with cmd={}".format(cmd))
-        self.ssh.commands([cmd])
+        """
+        Use netcontrol shell to send commands to vyos
+
+        """
+        log.info("Enter run_op_mode_command with cmd={}".format(cmd))
+        self.ssh.shell_send([cmd])
+        self.ssh.shell_read()
         return(self.ssh.output)
 
 
-'''
+"""
 Class sample code
-'''
+"""
 if __name__ == '__main__' :
 
     # create object
-    vyosctl = Vyosctl(ip='10.205.10.120', port='10106', user='vyos',
+    vyosctl = Vyosctl(ip='10.5.58.162', port='10106', user='vyos',
                       password='vyos', debug=True)
 
     result = json.loads(vyosctl.get_traffic_policy())
