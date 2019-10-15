@@ -155,18 +155,25 @@ class SSHClient():
             log.debug("raise exception=%s" % (self.exception))
             raise self.exception 
 
+        # some commands need to be translated so they can be used as filename
+        # We replace / with - and 'space' with _ and | with -
+        tr_command = command.translate(str.maketrans({"/": "-",
+                                                      " ": "_",
+                                                      "|": "-"}))
+        log.debug("tr_command={}".format(tr_command))
+
         try:
-            self.stdin  = open("tests/mockfiles/"+self.context+"/"+command+"_stdin.txt", "r", encoding="utf8") 
+            self.stdin  = open("tests/mockfiles/"+self.context+"/"+tr_command+"_stdin.txt", "r", encoding="utf8") 
         except Exception:
             self.stdin  = open("tests/mockfiles/default/stdin.txt", "r", encoding="utf8") 
 
         try:            
-            self.stdout = open("tests/mockfiles/"+self.context+"/"+command+"_stdout.txt", "r", encoding="utf8")
+            self.stdout = open("tests/mockfiles/"+self.context+"/"+tr_command+"_stdout.txt", "r", encoding="utf8")
         except Exception:
             self.stdout = open("tests/mockfiles/default/stdout.txt","r", encoding="utf8")
 
         try:
-            self.stderr = open("tests/mockfiles/"+self.context+"/"+command+"_stderr.txt", "r", encoding="utf8")
+            self.stderr = open("tests/mockfiles/"+self.context+"/"+tr_command+"_stderr.txt", "r", encoding="utf8")
         except Exception:
             self.stderr = open("tests/mockfiles/default/stderr.txt","r", encoding="utf8")
 
@@ -249,9 +256,16 @@ class Channel():
         in mocking : provide in the right context directory the proper stdin
         output to provide
         """
- 
+
+        # some commands need to be translated so they can be used as filename
+        # We replace / with - and 'space' with _ and | with -
+        tr_command = self._send.translate(str.maketrans({"/": "-",
+                                                         " ": "_",
+                                                         "|": "-"}))
+        log.debug("tr_command={}".format(tr_command))
+
         try:
-            filename = "tests/mockfiles/"+self.context+"/"+self._send+"_stdin.txt"
+            filename = "tests/mockfiles/"+self.context+"/"+tr_command+"_stdin.txt"
             log.debug("opening file={}".format(filename))
             fh  = open(filename, "r", encoding="utf8") 
             content = fh.read()

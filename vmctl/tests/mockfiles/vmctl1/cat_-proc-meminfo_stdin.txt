@@ -1,0 +1,49 @@
+MemTotal:       264097732 kB
+MemFree:        16434672 kB
+MemAvailable:   106462376 kB
+Buffers:          147568 kB
+Cached:         88520740 kB
+SwapCached:       221736 kB
+Active:         183597592 kB
+Inactive:       57196936 kB
+Active(anon):   128527772 kB
+Inactive(anon): 23765584 kB
+Active(file):   55069820 kB
+Inactive(file): 33431352 kB
+Unevictable:      574260 kB
+Mlocked:          574260 kB
+SwapTotal:      129156088 kB
+SwapFree:       127813644 kB
+Dirty:               756 kB
+Writeback:             0 kB
+AnonPages:      152438752 kB
+Mapped:           190680 kB
+Shmem:            158688 kB
+Slab:            3931496 kB
+SReclaimable:    3253872 kB
+SUnreclaim:       677624 kB
+KernelStack:       28704 kB
+PageTables:       394476 kB
+NFS_Unstable:          0 kB
+Bounce:                0 kB
+WritebackTmp:          0 kB
+CommitLimit:    261204952 kB
+Committed_AS:   209785448 kB
+VmallocTotal:   34359738367 kB
+VmallocUsed:           0 kB
+VmallocChunk:          0 kB
+HardwareCorrupted:     0 kB
+AnonHugePages:  141623296 kB
+ShmemHugePages:        0 kB
+ShmemPmdMapped:        0 kB
+CmaTotal:              0 kB
+CmaFree:               0 kB
+HugePages_Total:       0
+HugePages_Free:        0
+HugePages_Rsvd:        0
+HugePages_Surp:        0
+Hugepagesize:       2048 kB
+DirectMap4k:     2462528 kB
+DirectMap2M:    219789312 kB
+DirectMap1G:    48234496 kB
+root@chameleon:~#

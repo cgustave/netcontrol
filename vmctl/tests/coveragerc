@@ -1,0 +1,16 @@
+# .coveragerc to control coverage.py
+[run]
+
+omit =
+
+    # Omit packages which are not ours
+    /usr/lib/python3/dist-packages/*
+
+    # omit our ssh package
+	../ssh/*
+
+    # omit __init__
+    */__init__.py
+
+	# omit the test file itself
+	tests/test_vyosctl.py

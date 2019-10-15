@@ -221,6 +221,10 @@ class Ssh(object):
                                                               environment=None)
                     self.read_prompt()
 
+                # Clear all output so far, expecting that all usefull output
+                # has been processed on output buffer so far
+                self.output = ""
+
                 # send all we need to send
                 for command in commands:
                     log.debug("Processing command={}, context={}".
@@ -368,11 +372,10 @@ class Ssh(object):
                     else:
                         decoded_line = line
 
-                    decoded_line.split('\n'[-1])
                     log.debug("decoded_line={}".format(decoded_line))
 
                     # Store decoded lines in ssh.output
-                    self.output += decoded_line
+                    self.output += decoded_line+"\n"
 
                     search_prompt = '(^[A-Za-z0-9@~\:\-_]+(?:\$|\#))\s?'
                     match_prompt = re.search(search_prompt, decoded_line)
