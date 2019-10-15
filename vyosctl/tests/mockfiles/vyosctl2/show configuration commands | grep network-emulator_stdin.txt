@@ -1,0 +1,7 @@
+set traffic-policy network-emulator WAN bandwidth '10'
+set traffic-policy network-emulator WAN burst '15k'
+set traffic-policy network-emulator WAN network-delay '11'
+set traffic-policy network-emulator WAN packet-corruption '2'
+set traffic-policy network-emulator WAN packet-loss '3'
+set traffic-policy network-emulator WAN packet-reordering '4'
+vyos@ISP1-192:~$

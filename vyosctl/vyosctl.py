@@ -3,17 +3,17 @@
 Created on Mar 20, 2019
 @author: cgustave
 
-Driver for Vyos routers network-emulation, called by FortiPoc controller to adjust
-all PoC Vyos routers network-emulator such as packet delay, packet drop,
+Driver for Vyos routers network-emulation, called by FortiPoc controller to
+adjust all PoC Vyos routers network-emulator such as packet delay, packet drop,
 packet reordering, packet corruption...
 
 By default, network-emulator name is WAN, it should be applied to vyos
 interfaces as traffic policies. Vyos traffic-policy is unidirectional and only
-applied on egress so for bi-directional it should be applied on 2 interfaces. 
+applied on egress so for bi-directional it should be applied on 2 interfaces.
 
 * Examples of vyos corresponding configuration :
 
-interfaces {                                                                                                                                                                                  
+interfaces {
 ethernet eth1 {
    address 192.2.0.2/30
    description FGT-1
@@ -21,7 +21,7 @@ ethernet eth1 {
    smp_affinity auto
    speed auto
    out WAN
-   }                                                                                                                                                                                     
+   }
 
 ethernet eth4 {
    address 128.66.0.192/16
@@ -31,7 +31,7 @@ ethernet eth4 {
    speed auto
    traffic-policy {
       out WAN
-      }                                                                                                                                                                                     
+      }
    }
 
 traffic-policy {
@@ -53,6 +53,16 @@ vyos@ISP1-192# set traffic-policy network-emulator WAN packet-reordering 0 (in %
 vyos@ISP1-192# set interfaces ethernet eth1 traffic-policy out WAN
 vyos@ISP1-192# set interfaces ethernet eth4 traffic-policy out WAN
 vyos@ISP1-192# commit
+
+
+* Note : there is a change of prompt format between configuration and
+non-configuration mode : (notice the ~ that disappear)
+    vyos@ISP1-192:~$
+    vyos@ISP1-192:~$ configure
+    [edit]
+    vyos@ISP1-192#
+
+
 """
 
 from netcontrol.ssh.ssh import Ssh
@@ -61,27 +71,26 @@ import re
 import json
 
 
-class Vyosctl(object) :
+class Vyosctl(object):
     """
     classdocs
     """
-    def __init__(self,ip='', port=22, user='vyos', password='vyos',
+    def __init__(self, ip='', port=22, user='vyos', password='vyos',
                  private_key_file='', traffic_policy='WAN', mock=False,
                  debug=False):
         '''
         Constructor
         '''
-        # Set debug level first
-        if debug:
-            self.debug = True 
-            log.basicConfig(level='DEBUG')
-
         # create logger
         log.basicConfig(
             format='%(asctime)s,%(msecs)3.3d %(levelname)-8s[%(module)-7.7s.%(funcName)-30.30s:%(lineno)5d] %(message)s',
             datefmt='%Y%m%d:%H:%M:%S',
             filename='debug.log',
             level=log.NOTSET)
+
+        if debug:
+            self.debug = True
+            log.basicConfig(level='DEBUG')
 
         log.info("Constructor with ip={}, port={}, user={}, password={}, private_key_file={}, traffic_policy={}, debug={}".
                  format(ip, port, user, password, private_key_file, traffic_policy, debug))
@@ -99,7 +108,7 @@ class Vyosctl(object) :
                        private_key_file='', debug=debug)
 
         # private attributs
-        self._config    = {} # Internal representation of config
+        self._config = {}  # Internal representation of config
 
     def connect(self):
         self.ssh.connect()
@@ -110,10 +119,10 @@ class Vyosctl(object) :
     def get_traffic_policy(self):
         """
         Get network-emulator settings for the given interface
-        Fills self._json with updated settings for the interfaces with keys like :
-        'network_delay' (in ms), 'packet_loss' (in %), 
+        Fills self._json with settings for the interfaces with keys like :
+        'network_delay' (in ms), 'packet_loss' (in %),
         'packet-corruption (in %), 'packet_reordering' (in %)
-        'bandwidth in mbps (only mbps supported) - value '0' means no limitation
+        'bandwidth in mbps (only mbps supported) -'0' means no limitation
         """
 
         log.info("Enter")
@@ -133,7 +142,7 @@ class Vyosctl(object) :
         self.run_op_mode_command("show configuration commands | grep network-emulator\n")
 
         log.info("output={}".format(self.ssh.output))
-        # Ex of output (all or some lines may be missing if not defined 
+        # Ex of output (all or some lines may be missing if not defined
         # set traffic-policy network-emulator WAN burst '15k'
         # set traffic-policy network-emulator WAN network-delay '100'
         # set traffic-policy network-emulator WAN packet-loss '0'
@@ -154,8 +163,8 @@ class Vyosctl(object) :
         search_corruption = "(?:network-emulator\s"+self.traffic_policy+"\spacket-corruption\s')(\d+)'"
         match_corruption = re.search(search_corruption, str(self.ssh.output))
         if match_corruption:
-           packet_corruption = match_corruption.groups(0)[0]
-           log.info("match packet_corruption={}".format(packet_corruption))
+            packet_corruption = match_corruption.groups(0)[0]
+            log.info("match packet_corruption={}".format(packet_corruption))
 
         # packet-loss
         search_loss = "(?:network-emulator\s"+self.traffic_policy+"\spacket-loss\s')(\d+)'"
@@ -179,11 +188,11 @@ class Vyosctl(object) :
             log.info("match bandwidth={}".format(bandwidth))
 
         # apply values
-        self._config['network_delay']     = network_delay
+        self._config['network_delay'] = network_delay
         self._config['packet_corruption'] = packet_corruption
-        self._config['packet_loss']       = packet_loss
+        self._config['packet_loss'] = packet_loss
         self._config['packet_reordering'] = packet_reordering
-        self._config['bandwidth']         = bandwidth                 
+        self._config['bandwidth'] = bandwidth
 
         # If needed, return JSON
         return(json.dumps(self._config))
@@ -195,7 +204,7 @@ class Vyosctl(object) :
                            bandwidth=''):
         """
         Sets network-emulator settings
-        optional arguments : 
+        optional arguments :
            - network_delay <number> in ms
            - packet_corruption <number> in %
            - packet_loss <number> in %
@@ -205,18 +214,15 @@ class Vyosctl(object) :
         flag_configured = False
         command_list = []
 
-        log.info("Enter with network_delay={} packet_loss={}\
-                  packet_reordering={} packet_corruption={}\
-                  bandwidth={}".format(network_delay, packet_loss,
-                                       packet_reordering, packet_corruption,
-                                       bandwidth))
+        log.info("Enter with network_delay={} packet_loss={} packet_reordering={} packet_corruption={} bandwidth={}".
+                 format(network_delay, packet_loss, packet_reordering, packet_corruption, bandwidth))
 
         # Process delay
         if (network_delay):
             log.info('processing network_delay=%s' % (network_delay))
-            flag_configured = True 
+            flag_configured = True
             # ex : set traffic-policy network-emulator WAN network-delay 80
-            cmd = "set traffic-policy network-emulator "+self.traffic_policy+" network-delay "+str(network_delay)
+            cmd = "set traffic-policy network-emulator "+self.traffic_policy+" network-delay "+str(network_delay)+"\n"
             command_list.append(cmd)
 
         # Process packet_loss
@@ -224,7 +230,7 @@ class Vyosctl(object) :
             log.info('processing packet_loss=%s' % (packet_loss))
             flag_configured = True
             # set traffic-policy network-emulator WAN packet-loss 0
-            cmd = "set traffic-policy network-emulator "+self.traffic_policy+" packet-loss "+str(packet_loss) 
+            cmd = "set traffic-policy network-emulator "+self.traffic_policy+" packet-loss "+str(packet_loss)+"\n"
             command_list.append(cmd)
 
         # Process packet_corruption
@@ -232,7 +238,7 @@ class Vyosctl(object) :
             log.info('processing packet_corruption=%s' % (packet_corruption))
             flag_configured = True
             # set traffic-policy network-emulator WAN packet-corruption 0
-            cmd = "set traffic-policy network-emulator "+self.traffic_policy+" packet-corruption "+str(packet_corruption) 
+            cmd = "set traffic-policy network-emulator "+self.traffic_policy+" packet-corruption "+str(packet_corruption)+"\n"
             command_list.append(cmd)
 
         # Process packet reordering
@@ -240,7 +246,7 @@ class Vyosctl(object) :
             log.info('processing packet_reordering=%s' % (packet_reordering))
             flag_configured = True
             # set traffic-policy network-emulator WAN packet-reordering 2
-            cmd = "set traffic-policy network-emulator "+self.traffic_policy+" packet-reordering "+str(packet_reordering)
+            cmd = "set traffic-policy network-emulator "+self.traffic_policy+" packet-reordering "+str(packet_reordering)+"\n"
             command_list.append(cmd)
 
         # Process bandwidth
@@ -252,30 +258,35 @@ class Vyosctl(object) :
             # value '0' is not supported in vyos configuration
             if (str(bandwidth) == '0'):
                 log.info('need config statement removal')
-                cmd = "delete traffic-policy network-emulator "+self.traffic_policy+" bandwidth"
+                cmd = "delete traffic-policy network-emulator "+self.traffic_policy+" bandwidth"+"\n"
                 command_list.append(cmd)
 
             else:
                 # set traffic-policy network-emulator WAN bandwidth 100mbps
-                cmd = "set traffic-policy network-emulator "+self.traffic_policy+" bandwidth "+str(bandwidth)+"mbps"
+                cmd = "set traffic-policy network-emulator "+self.traffic_policy+" bandwidth "+str(bandwidth)+"mbps"+"\n"
                 command_list.append(cmd)
 
         # Processing commands
         if (flag_configured):
 
-            if not self.ssh_connected:
-                self.ssh.connect()
+            # Enter configuration more
+            self.ssh.shell_send(["configure\n"])
 
-            self.ssh.shell_send(['configure'])
+            # Issue our list of configuration commands
             self.ssh.shell_send(command_list)
-            self.ssh.shell_send(['commit'])
-            self.ssh.shell_send(['save'])
+
+            # Commit and save
+            self.ssh.shell_send(["commit\n"])
+            self.ssh.shell_send(["save\n"])
+
+            # Exit from configuration mode
+            self.ssh.shell_send(["exit\n"])
 
     def dump_config(self):
         """
         For troubleshooting, dump internal representation for the configuration
         """
-        print(json.dumps(self._config,indent = 4))
+        print(json.dumps(self._config, indent=4))
 
     def run_op_mode_command(self, cmd):
         """
@@ -284,21 +295,36 @@ class Vyosctl(object) :
         """
         log.info("Enter run_op_mode_command with cmd={}".format(cmd))
         self.ssh.shell_send([cmd])
-        self.ssh.shell_read()
         return(self.ssh.output)
 
 
 """
 Class sample code
 """
-if __name__ == '__main__' :
+if __name__ == '__main__':  # pragma: no cover
 
     # create object
     vyosctl = Vyosctl(ip='10.5.58.162', port='10106', user='vyos',
                       password='vyos', debug=True)
 
+    # Get and print traffic policy
     result = json.loads(vyosctl.get_traffic_policy())
-    print ("traffic policy is {}".format(result))
+    print("1: get traffic policy : {}".format(result))
 
-    
+    # Set traffic policy 1:
+    vyosctl.set_traffic_policy(network_delay='99', packet_loss='2',
+                               packet_reordering='3', packet_corruption='1',
+                               bandwidth='9')
 
+    # Retrieve values to see if set correctly
+    result = json.loads(vyosctl.get_traffic_policy())
+    print("2: traffic policy after modification : {}".format(result))
+
+    # Set traffic policy 1:
+    vyosctl.set_traffic_policy(network_delay='0', packet_loss='0',
+                               packet_reordering='0', packet_corruption='0',
+                               bandwidth='0')
+
+    # Retrieve values to see if set correctly
+    result = json.loads(vyosctl.get_traffic_policy())
+    print("3: traffic policy after reset : {}".format(result))

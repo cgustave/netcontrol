@@ -245,6 +245,9 @@ class Channel():
 
         :raises socket.timeout:
             if no data is ready before the timeout set by `settimeout`.
+
+        in mocking : provide in the right context directory the proper stdin
+        output to provide
         """
  
         try:
@@ -255,7 +258,7 @@ class Channel():
 
         except Exception as e:
             print ("Exception={}".format(e))
-            filename = "tests/mockfiles/default/stdout.txt"
+            filename = "tests/mockfiles/default/stdin.txt"
             log.debug("opening file={}".format(filename))
             fh  = open(filename, "r", encoding="utf8")
             content = fh.read()

@@ -30,7 +30,7 @@ DESCRIPTION
     
     All modules using this ssh wrapper are given a possibility for unittest mocking
     
-    Using ssh on a module :  Create a 'tests' directory on your project and copy 
+    Using ssh on a module :  Create a 'tests' directory on your project and copy
     the tests/paramiko module in it (or a link to the module so it is loaded
     before the real paramiko is. Create a test/paramiko_files and store your files.
     
@@ -57,7 +57,7 @@ CLASSES
      |  
      |  commands(self, commands)
      |      Execute a list of commands on remote host using ssh command channel
-     |      Command results is return in self.output 
+     |      Command results is return in self.output
      |      
      |      Returns True upon success
      |  
@@ -84,7 +84,7 @@ CLASSES
      |      
      |      type='shell' : channel requested is type 'shell', multiple commands are
      |      allowed and channel will stay opened until explicitely closed or
-     |      session is close. 
+     |      session is close.
      |      This should be supported by any ssh devices
      |  
      |  mock(self, context=None, exception=None)
@@ -94,8 +94,12 @@ CLASSES
      |      This is only possible if using our test paramiko mocked module
      |  
      |  read_prompt(self)
-     |      Read up to 100 lines until we can identify the shell prompt
+     |      Read up to 10 blocks until we can identify the shell prompt
      |      prompt is stored in self.prompt
+     |      It can be called after a shell_send to make sure we have received an
+     |      aknowledgment prompt from the device
+     |      While waiting for prompt, all output received is stored in the
+     |      ssh.output for processing
      |      
      |      Returns True if prompt si found
      |  

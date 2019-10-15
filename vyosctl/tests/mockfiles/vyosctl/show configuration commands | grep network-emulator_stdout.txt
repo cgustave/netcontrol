@@ -1,5 +1,0 @@
-set traffic-policy network-emulator WAN burst '15k'
-set traffic-policy network-emulator WAN network-delay '100'
-set traffic-policy network-emulator WAN packet-loss '0'
-set traffic-policy network-emulator WAN packet-reordering '0'
-

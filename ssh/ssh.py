@@ -26,7 +26,7 @@ to really connect to phyical devices.
 
 All modules using this ssh wrapper are given a possibility for unittest mocking
 
-Using ssh on a module :  Create a 'tests' directory on your project and copy 
+Using ssh on a module :  Create a 'tests' directory on your project and copy
 the tests/paramiko module in it (or a link to the module so it is loaded
 before the real paramiko is. Create a test/paramiko_files and store your files.
 
@@ -84,7 +84,7 @@ class Ssh(object):
 
         # Private attributs
         self._client = paramiko.SSHClient()
-        self._channel = None # Paramiko channel
+        self._channel = None  # Paramiko channel
         self._prompt = ''
 
     def connect(self):
@@ -160,7 +160,8 @@ class Ssh(object):
             self._client.close()
             self.connected = False
 
-            self._channel.close()
+            if self._channel:
+                self._channel.close()
 
     def execute(self, commands=[], type='command'):
         """
@@ -175,7 +176,7 @@ class Ssh(object):
 
         type='shell' : channel requested is type 'shell', multiple commands are
         allowed and channel will stay opened until explicitely closed or
-        session is close. 
+        session is close.
         This should be supported by any ssh devices
         """
         log.info("Enter with type={}".format(type))
@@ -184,7 +185,6 @@ class Ssh(object):
             self.commands(commands)
         elif type == 'shell':
             self.send(commands)
-
 
     def shell_send(self, commands):
         """
@@ -197,7 +197,7 @@ class Ssh(object):
 
         args : commands [] - list of one of more commands
         ex : ['show date']
- 
+
         returns True if commands are sent succesfully
         """
         log.info("Enter with commands={}".format(commands))
@@ -213,23 +213,24 @@ class Ssh(object):
 
                 if not self._channel:
                     log.debug("Invoke shell")
-                    self._channel = self._client.invoke_shell(term='vt100', 
+                    self._channel = self._client.invoke_shell(term='vt100',
                                                               width=80,
-                                                              height=24, 
-                                                              width_pixels=0, 
-                                                              height_pixels=0, 
+                                                              height=24,
+                                                              width_pixels=0,
+                                                              height_pixels=0,
                                                               environment=None)
-
-                self.read_prompt()
+                    self.read_prompt()
 
                 # send all we need to send
                 for command in commands:
-                    log.debug("Executing command={}, context={}".
+                    log.debug("Processing command={}, context={}".
                               format(command, self.mock_context))
 
                     if self._channel.send_ready():
                         log.debug("sending command={}".format(command))
                         self._channel.send(command)
+                        if self.read_prompt():
+                            log.debug("command is confirmed, output recorded")
 
         except socket.timeout as e:
             log.debug("Command timed out : {}".format(e))
@@ -240,6 +241,9 @@ class Ssh(object):
             log.debug("Failed to execute the command {}".format(command))
             self._client.close()
             result_flag = False
+
+        else:
+            result_flag = True
 
         return result_flag
 
@@ -268,25 +272,31 @@ class Ssh(object):
 
                 if not self._channel:
                     log.debug("Invoke shell")
-                    self._channel = self._client.invoke_shell(term='vt100', width=80, height=24,width_pixels=0, height_pixels=0, environment=None)
+                    self._channel = self._client.invoke_shell(term='vt100',
+                                                              width=80,
+                                                              height=24,
+                                                              width_pixels=0,
+                                                              height_pixels=0,
+                                                              environment=None)
 
                 looping = True
                 found = False
                 round = 1
                 read_block = ""
 
-                # Need some time after write or channel 
+                # Need some time after write or channel
                 # will never be ready for read
                 # don't understand why this is required here...
+
                 time.sleep(0.1)
 
-                while (looping and round < 10): 
+                while (looping and round < 10):
 
                     if self._channel.recv_ready():
                         read_stdout = self._channel.recv(9999)
                         log.debug("Reading channel round={} read_stdout={}".
-                                  format(round,read_stdout))
-                        
+                                  format(round, read_stdout))
+
                         if type(read_stdout) is str:
                             # Mocked paramiko or paramiko on python2
                             log.debug("read_stdout is a {} (mocked paramiko or python2)".
@@ -298,7 +308,6 @@ class Ssh(object):
                                       format(type(read_stdout)))
                             read_block += read_stdout.decode('utf-8')
 
-
                     # See if prompt has been seen
                     # For mockup, make sure file 'default_stdin.txt' has same
                     # prompt as 'show configuration commands | grep network-emulator_stdin.txt'
@@ -306,7 +315,7 @@ class Ssh(object):
 
                     if self._prompt:
                         log.debug("round={} inspect for prompt={} in read_block={}".
-                                  format(round,self._prompt,read_block))
+                                  format(round, self._prompt, read_block))
                         if not (read_block.find(self._prompt) == -1):
                             log.debug("found prompt in read_block find index={}".
                                       format(read_block.find(self._prompt)))
@@ -334,8 +343,12 @@ class Ssh(object):
 
     def read_prompt(self):
         """
-        Read up to 100 lines until we can identify the shell prompt
+        Read up to 10 blocks until we can identify the shell prompt
         prompt is stored in self.prompt
+        It can be called after a shell_send to make sure we have received an
+        aknowledgment prompt from the device
+        While waiting for prompt, all output received is stored in the
+        ssh.output for processing
 
         Returns True if prompt si found
         """
@@ -345,12 +358,12 @@ class Ssh(object):
         round = 1
 
         found = False
-        while (not found and round < 100):
+        while (not found and round <= 10):
             log.debug("wait for prompt round={}".format(round))
             if self._channel.recv_ready():
                 tmp = self._channel.recv(99999)
                 for line in tmp.splitlines():
-                    if isinstance(line,bytes):
+                    if isinstance(line, bytes):
                         decoded_line = line.decode('utf-8')
                     else:
                         decoded_line = line
@@ -358,12 +371,15 @@ class Ssh(object):
                     decoded_line.split('\n'[-1])
                     log.debug("decoded_line={}".format(decoded_line))
 
-                    search_prompt = '(^[A-Za-z0-9@~\:\-_]+\$|\#)\s?'
+                    # Store decoded lines in ssh.output
+                    self.output += decoded_line
+
+                    search_prompt = '(^[A-Za-z0-9@~\:\-_]+(?:\$|\#))\s?'
                     match_prompt = re.search(search_prompt, decoded_line)
                     if match_prompt:
                         prompt = match_prompt.groups(0)[0]
-                        log.debug("FOUND prompt={}".format(prompt))
-                        self._prompt=prompt
+                        log.debug("found prompt={}".format(prompt))
+                        self._prompt = prompt
                         found = True
 
             time.sleep(0.2)
@@ -371,11 +387,10 @@ class Ssh(object):
 
         return found
 
-
     def commands(self, commands):
         """
         Execute a list of commands on remote host using ssh command channel
-        Command results is return in self.output 
+        Command results is return in self.output
 
         Returns True upon success
         """
@@ -461,9 +476,7 @@ class Ssh(object):
             self.mock_exception = exception
             self._client.mock(exception=exception)
 
-
-
-if __name__ == '__main__': # pragma: no cover
+if __name__ == '__main__':  # pragma: no cover
 
     myssh = Ssh(ip='127.0.0.1', user='paratest', password='paratest', debug=True)
     myssh.connect()

@@ -1,0 +1,4 @@
+Saving configuration to '/config/config.boot'...
+Done
+[edit]
+vyos@ISP1-192#

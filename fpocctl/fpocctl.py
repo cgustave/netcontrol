@@ -181,7 +181,7 @@ if __name__ == '__main__': #pragma: no cover
     # Simple example :
 
     # Settings
-    ip="10.205.10.101"
+    ip="10.5.58.162"
     dev="FGT-1"
     port="port1"
 
