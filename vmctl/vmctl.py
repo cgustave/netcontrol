@@ -75,12 +75,22 @@ class Vmctl(object):
 
     def get_statistics(self):
         """
-        Returns server CPU, MEMORY and DISK usage
+        Get server CPU, MEMORY and DISK usage
+        Return: json
         """
         log.info('Enter')
+        self._get_nbcpu()
+        self._get_loadavg()
+        self._get_memory()
+        self._get_disk()
+        return(json.dumps(self._statistics))
 
-        # Number of CPUs
-        self.ssh.connect()
+    def _get_nbcpu(self):
+        """
+        Fills self._statistics with the number of CPU on the server
+        """
+        log.info("Enter")
+
         self.ssh.shell_send(["cat /proc/cpuinfo | grep processor | wc -l\n"])
         log.debug("output={}".format(self.ssh.output))
 
@@ -91,7 +101,20 @@ class Vmctl(object):
             log.debug("np_cpu={}".format(nb_cpu))
             self._statistics['nb_cpu'] = nb_cpu
 
-        # load average (1mn 5mn 15mn)
+    def _get_loadavg(self):
+        """
+        Fills self._statistics with cpu load average information
+        Using key 'load', average load is given in 1m, 5m and 15mn interval
+        Ex :
+            'load': {
+                '1mn': ...
+                '5mn': ...
+                '15mn': ...
+            }
+        """
+        log.info("Enter")
+
+        # load average (1mn 5mn 15mn) typical output :
         # 13.14 13.65 13.96 20/1711 38763
         self.ssh.shell_send(["cat /proc/loadavg\n"])
         load_match = re.search("(\d+\.?\d?\d?)\s+(\d+\.?\d?\d?)\s+(\d+\.?\d?\d?)",
@@ -103,35 +126,106 @@ class Vmctl(object):
             log.debug("load_1mn={}, load_5mn={}, load_15mn={}".
                       format(load_1mn, load_5mn, load_15mn))
 
-            self._statistics['load_1mn'] = load_1mn
-            self._statistics['load_5mn'] = load_5mn
-            self._statistics['load_15mn'] = load_15mn
+            self._statistics['load'] = {}
+            self._statistics['load']['1mn'] = load_1mn
+            self._statistics['load']['5mn'] = load_5mn
+            self._statistics['load']['15mn'] = load_15mn
 
-        # Memory load
+    def _get_memory(self):
+        """
+        Fills  self._statistics with memory load information
+        Using first key 'memory' and subkeys 'total' and 'free'
+        Unit : KB
+        Ex:
+            'memory': {
+                'total': ...
+                'free' : ...
+            }
+        """
+        log.info("Enter")
+
+        # Memory load typical output (skip unecessary lines):
+        # MemTotal:       264097732 kB
+        # MemFree:         5160488 kB
+        # MemAvailable:   108789520 kB
+
+        self._statistics['memory'] = {}
         self.ssh.shell_send(["cat /proc/meminfo\n"])
         mem_total_match = re.search("MemTotal:\s+(\d+) kB", str(self.ssh.output))
         if mem_total_match:
             memory_total = mem_total_match.groups(0)[0]
-            self._statistics['memory_total'] = memory_total
+            self._statistics['memory']['total'] = memory_total
 
         mem_free_match = re.search("MemFree:\s+(\d+) kB", str(self.ssh.output))
         if mem_free_match:
             memory_free = mem_free_match.groups(0)[0]
-            self._statistics['memory_free'] = memory_free
+            self._statistics['memory']['free'] = memory_free
 
         log.debug("memory_total={}, memory_free={}".
                   format(memory_total, memory_free))
 
-        # Disk usage
-        # Unsure what should be taken
+    def _get_disk(self):
+        """
+        Fills self._statistics with disk usage information
+        The goal is to get the remaining free space on the /home
+        Using first key 'disk', subkeys 'home', subkeys 'used' 'available'
+        'used_percent'
+        Unit is in MB
+        Ex :
+            'disk': {
+                <mount>': {               # <mount> could be /home or others
+                    'dev' : xxx           # dev is the Filesystem
+                    'used': xxx (in G)
+                    'used_percent' : xxx (in percent)
+                    'available': xxx (in G)
+                }
+            }
+        """
+        log.info("Enter")
+        # Typical output (skip unessary lines):
+        # Filesystem                   1G-blocks  Used Available Use% Mounted on
+        # udev                              126G    0G      126G   0% /dev
+        # tmpfs                              26G    1G       26G   1% /run
+        # /dev/sda1                          10G    4G        5G  45% /
+        # /dev/sda6                        1751G 1167G      496G  71% /home
 
-        return(json.dumps(self._statistics))
+        self.ssh.shell_send(["df -BG\n"])
+        self._statistics['disk'] = {}
+
+        for line in self.ssh.output.splitlines():
+            log.debug("line={}".format(line))
+            home_re = "(?P<dev>[A-Za-z0-9\/]+)(?:\s+)(\d+)G\s+(?P<used>\d+)G\s+"\
+                    + "(?P<available>\d+)G\s+(?P<used_percent>\d+)%\s+"\
+                    + "(?P<mounted>[A-Za-z0-9\/]+)"
+            home_match = re.search(home_re, line)
+            if home_match:
+                log.debug("dev={} used={} available={} used_percent={} mounted={}".
+                          format(home_match.group('dev'),
+                                 home_match.group('used'),
+                                 home_match.group('available'),
+                                 home_match.group('used_percent'),
+                                 home_match.group('mounted')))
+
+                self._statistics['disk'][home_match.group('mounted')] = {}
+                self._statistics['disk'][home_match.group('mounted')]['dev'] = home_match.group('dev')
+                self._statistics['disk'][home_match.group('mounted')]['used'] = home_match.group('used')
+                self._statistics['disk'][home_match.group('mounted')]['available'] = home_match.group('available')
+                self._statistics['disk'][home_match.group('mounted')]['used_percent'] = home_match.group('used_percent')
 
     def get_resources(self):
         """
         Returns lab user resource usage
         """
         log.info('Enter')
+
+    def dump_statistics(self):
+        """
+        For debugging purpose, returns a nicely formated json of
+        self._statistics
+        """
+        log.info('Enter')
+
+        print(json.dumps(self._statistics, indent=4, sort_keys=True))
 
 
 """

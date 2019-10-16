@@ -40,11 +40,16 @@ CLASSES
      |  
      |  connect(self)
      |  
+     |  dump_statistics(self)
+     |      For debugging purpose, returns a nicely formated json of
+     |      self._statistics
+     |  
      |  get_resources(self)
      |      Returns lab user resource usage
      |  
      |  get_statistics(self)
-     |      Returns server CPU, MEMORY and DISK usage
+     |      Get server CPU, MEMORY and DISK usage
+     |      Return: json
      |  
      |  ----------------------------------------------------------------------
      |  Data descriptors defined here:

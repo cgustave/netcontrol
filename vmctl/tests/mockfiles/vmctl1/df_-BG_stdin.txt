@@ -1,0 +1,12 @@
+Filesystem                   1G-blocks  Used Available Use% Mounted on
+udev                              126G    0G      126G   0% /dev
+tmpfs                              26G    1G       26G   1% /run
+/dev/sda1                          10G    4G        5G  45% /
+tmpfs                             126G    1G      126G   1% /dev/shm
+tmpfs                               1G    0G        1G   0% /run/lock
+tmpfs                             126G    0G      126G   0% /sys/fs/cgroup
+/dev/sda6                        1751G 1167G      496G  71% /home
+storage1:/kvm/iso               59603G 2941G    56662G   5% /home/remote/iso
+storage1:/kvm/home/templates    59603G 2941G    56662G   5% /home/remote/templates
+tmpfs                              26G    0G       26G   0% /run/user/0
+root@chameleon:~#
