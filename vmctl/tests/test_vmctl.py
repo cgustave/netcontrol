@@ -43,5 +43,15 @@ class VMctlTestCase(unittest.TestCase):
         # Dump is too long for a string comparison so checking the string length instead
         self.assertEqual(len(str(result)),1026)
 
+    def test_get_vm_resources(self):
+        self.vmctl.ssh.mock(context='vmctl2')
+        result = json.loads(self.vmctl.get_vm_resources())
+        log.debug("Result : {} len={}".format(result, len(str(result))))
+        #self.vmctl.dump_vms()
+        self.vmctl.close()
+        self.assertEqual(len(str(result)),5436)
+
+
+
 if __name__ == '__main__':
     unittest.main() 

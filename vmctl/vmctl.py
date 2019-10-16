@@ -66,6 +66,7 @@ class Vmctl(object):
 
         # private class attributes
         self._statistics = {}  # Internal representation of statistics
+        self._vms = []  # Internal representation of VMs
 
     def connect(self):
         self.ssh.connect()
@@ -212,20 +213,114 @@ class Vmctl(object):
                 self._statistics['disk'][home_match.group('mounted')]['available'] = home_match.group('available')
                 self._statistics['disk'][home_match.group('mounted')]['used_percent'] = home_match.group('used_percent')
 
-    def get_resources(self):
+    def get_vm_resources(self):
         """
-        Returns lab user resource usage
+        Returns vm resource usage
+        For each vm, we want to have
+            - the number of CPUs used
+            - the memory used 
+        Return: json object representing
+        Ex:
+            'vms': {
+                'id': <vm_id>
+                'cpu': <nb_cpu>
+                'memory': <allocated_memory>
+                }
+            }
         """
         log.info('Enter')
+
+        self._get_processes()
+        return(json.dumps(self._vms))
+
+    def _get_processes(self):
+        """
+        Retrieve qemu processes from KVM server 
+        """
+        log.info("Enter")
+
+        self.ssh.shell_send(["ps -xww | grep qemu-system-x86\n"])
+        self._statistics['vms'] = {}
+
+        for line in self.ssh.output.splitlines():
+            if line.find('qemu-system-x86_64'):
+                result = self._tokenize(line)
+                if result:
+                    self._vms.append(result)
+
+    def _tokenize(self, line):
+        """
+        Tokenise ps lines has run into a dictionnary where the key is the option
+        (the -xxxx). Only tokenize tokens we are interested in
+        
+
+        return: dictionary like
+        {
+            'id': ...
+            'cpu' ...
+            'memory': ...
+            'template': ...
+        }
+        """
+        log.info("Enter with line={}".format(line))
+
+        vm_id = None
+        cpu = None
+        memory = None
+        template = None
+
+        # VM id
+        id_match = re.search("\sguest=(\d+)(?:,|\s)", line)
+        if id_match:
+            vm_id = id_match.groups(0)[0]
+            log.debug("id={}".format(vm_id))
+
+        # Number of CPU assigned to the VM
+        cpu_match = re.search("\s-smp\s(\d+)(?:,|\s)", line)
+        if cpu_match:
+            cpu = cpu_match.groups(0)[0]
+            log.debug("cpu={}".format(cpu))
+
+        # Allocated memory in Mb
+        memory_match = re.search("\s-m\s(\d+)(?:,|\s)", line)
+        if memory_match:
+            memory = memory_match.groups(0)[0]
+            log.debug("memory={}".format(memory))
+
+        # Running template
+        template_match = re.search("\s-drive\sfile=([A-Za-z0-9_\-\.\/\s]+)", line)
+        if template_match:
+            template = template_match.groups(0)[0]
+            log.debug("template={}".format(template))
+
+        vm = {}
+        if template_match and memory_match and cpu_match and id_match:
+            log.debug("tokenize succesful : id={} cpu={} memory={} template={}".
+                      format(vm_id, cpu, memory, template))
+            vm['id'] = vm_id
+            vm['cpu'] = cpu
+            vm['memory'] = memory
+            vm['template'] = template
+            return vm
+        else:
+            log.warning("tokenize failed : line={}".format(line))
+
+        return  
 
     def dump_statistics(self):
         """
-        For debugging purpose, returns a nicely formated json of
+        For debugging purpose, returns a formated json of
         self._statistics
         """
         log.info('Enter')
-
         print(json.dumps(self._statistics, indent=4, sort_keys=True))
+
+    def dump_vms(self):
+       """
+       For debugging purpose, returns a formated json of self._vms
+       """
+       log.info('Enter')
+       print(json.dumps(self._vms, indent=4, sort_keys=True))
 
 
 """

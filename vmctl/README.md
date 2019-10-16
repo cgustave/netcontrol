@@ -41,15 +41,29 @@ CLASSES
      |  connect(self)
      |  
      |  dump_statistics(self)
-     |      For debugging purpose, returns a nicely formated json of
+     |      For debugging purpose, returns a formated json of
      |      self._statistics
      |  
-     |  get_resources(self)
-     |      Returns lab user resource usage
+     |  dump_vms(self)
+     |      For debugging purpose, returns a formated json of self._vms
      |  
      |  get_statistics(self)
      |      Get server CPU, MEMORY and DISK usage
      |      Return: json
+     |  
+     |  get_vm_resources(self)
+     |      Returns vm resource usage
+     |      For each vm, we want to have
+     |          - the number of CPUs used
+     |          - the memory used 
+     |      Return: json object representing
+     |      Ex:
+     |          'vms': {
+     |              'id': <vm_id>
+     |              'cpu': <nb_cpu>
+     |              'memory': <allocated_memory>
+     |              }
+     |          }
      |  
      |  ----------------------------------------------------------------------
      |  Data descriptors defined here:
