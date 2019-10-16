@@ -1,5 +1,5 @@
 #!/bin/bash
-export PYTHONPATH=${PYTHONPATH}:~/github/python:./tests
+export PYTHONPATH=${PYTHONPATH}:~/github/python/netcontrol:./tests
 
 NAME=vyosctl
 

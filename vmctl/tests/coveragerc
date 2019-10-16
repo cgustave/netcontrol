@@ -7,10 +7,10 @@ omit =
     /usr/lib/python3/dist-packages/*
 
     # omit our ssh package
-	../ssh/*
+	../sshctl/*
 
     # omit __init__
     */__init__.py
 
 	# omit the test file itself
-	tests/test_vyosctl.py
+	tests/test_vmctl.py

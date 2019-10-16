@@ -1,7 +1,7 @@
 #!/bin/bash
-export PYTHONPATH=${PYTHONPATH}:~/github/python/netcontrol:./tests
+export PYTHONPATH=${PYTHONPATH}:./tests
 
-NAME=vmctl
+NAME=sshctl
 
 echo
 echo "======================================================================"

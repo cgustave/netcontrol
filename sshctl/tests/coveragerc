@@ -1,0 +1,9 @@
+# .coveragerc to control coverage.py
+
+[run]
+omit =
+    # omit our paramiko moke
+	tests/paramiko/*
+
+	# omit the test file itself
+	tests/test_sshctl.py

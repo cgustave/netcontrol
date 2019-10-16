@@ -8,7 +8,7 @@ Created on Sep 25, 2019
 import unittest
 import logging as log
 import json
-from netcontrol.fpocctl.fpocctl import Fpocctl
+from fpocctl import Fpocctl
 
 # create logger
 log.basicConfig(

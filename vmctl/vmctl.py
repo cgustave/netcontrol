@@ -14,7 +14,7 @@ sub classes vmctl_driver_kvm and vmctl_driver_esxi are the hypervisor specific c
 
 This object is used in project labvmstats for all interaction with VM servers.
 '''
-from netcontrol.ssh.ssh import Ssh
+from sshctl.sshctl import Ssh
 import logging as log
 
 import re

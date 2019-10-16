@@ -65,7 +65,7 @@ non-configuration mode : (notice the ~ that disappear)
 
 """
 
-from netcontrol.ssh.ssh import Ssh
+from sshctl.sshctl import Ssh
 import logging as log
 import re
 import json

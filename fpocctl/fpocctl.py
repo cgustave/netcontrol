@@ -13,7 +13,7 @@ FortiPoc link control :
 - set_poc_link_status (device: <fpoc_device_name>,
                        link: <ETHx>, status: <up|down>)
 """
-from netcontrol.ssh.ssh import Ssh
+from sshctl.sshctl import Ssh
 import logging as log
 import re
 import json

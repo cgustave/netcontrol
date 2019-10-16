@@ -7,7 +7,7 @@ Created on Mar 21, 2019
 import logging as log
 import json
 import unittest
-from netcontrol.vyosctl.vyosctl import Vyosctl
+from vyosctl import Vyosctl
 
 # create logger
 log.basicConfig(
