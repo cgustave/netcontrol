@@ -7,7 +7,7 @@ Created on Oct 15, 2019
 import logging as log
 import json
 import unittest
-from vmctl.vmctl import Vmctl
+from vmctl import Vmctl
 
 # create logger
 log.basicConfig(
