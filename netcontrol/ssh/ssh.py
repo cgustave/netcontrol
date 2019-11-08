@@ -214,7 +214,7 @@ class Ssh(object):
                 if not self._channel:
                     log.debug("Invoke shell")
                     self._channel = self._client.invoke_shell(term='vt100',
-                                                              width=80,
+                                                              width=1000,
                                                               height=24,
                                                               width_pixels=0,
                                                               height_pixels=0,
