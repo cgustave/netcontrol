@@ -153,6 +153,8 @@ class Vm(object):
         self._statistics['memory'] = {}
         self.ssh.shell_send(["cat /proc/meminfo\n"])
         mem_total_match = re.search("MemTotal:\s+(\d+) kB", str(self.ssh.output))
+        memory_total = 0
+        memory_free = 0
         if mem_total_match:
             memory_total = mem_total_match.groups(0)[0]
             self._statistics['memory']['total'] = memory_total
