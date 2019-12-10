@@ -122,8 +122,8 @@ class Vm(object):
                                str(self.ssh.output))
         if load_match:
             load_1mn = load_match.groups(0)[0]
-            load_5mn = load_match.groups(1)[0]
-            load_15mn = load_match.groups(2)[0]
+            load_5mn = load_match.groups(0)[1]
+            load_15mn = load_match.groups(0)[2]
             log.debug("load_1mn={}, load_5mn={}, load_15mn={}".
                       format(load_1mn, load_5mn, load_15mn))
 
