@@ -66,7 +66,8 @@ class Vm(object):
 
         # private class attributes
         self._statistics = {}  # Internal representation of statistics
-        self._vms = []  # Internal representation of VMs
+        self._vms = []         # Internal representation of each VMs 
+        self._vms_total = {}   # Total VMs statistics
 
     def connect(self):
         self.ssh.connect()
@@ -85,6 +86,20 @@ class Vm(object):
         self._get_memory()
         self._get_disk()
         return(json.dumps(self._statistics))
+
+
+    def get_vms_statistics(self):
+        """
+        Get server VMS related statistics
+        Return: json
+        """
+        log.info('Enter')
+        self._get_processes()
+        result = {}
+        result['vms'] = self._vms
+        result['vms_total'] = self._vms_total
+        return(json.dumps(result))
+
 
     def _get_nbcpu(self):
         """
@@ -215,40 +230,38 @@ class Vm(object):
                 self._statistics['disk'][home_match.group('mounted')]['available'] = home_match.group('available')
                 self._statistics['disk'][home_match.group('mounted')]['used_percent'] = home_match.group('used_percent')
 
-    def get_vm_resources(self):
-        """
-        Returns vm resource usage
-        For each vm, we want to have
-            - the number of CPUs used
-            - the memory used 
-        Return: json object representing
-        Ex:
-            'vms': {
-                'id': <vm_id>
-                'cpu': <nb_cpu>
-                'memory': <allocated_memory>
-                }
-            }
-        """
-        log.info('Enter')
-
-        self._get_processes()
-        return(json.dumps(self._vms))
 
     def _get_processes(self):
         """
         Retrieve qemu processes from KVM server 
+        Fills _vms and _vms_total attributs
         """
         log.info("Enter")
 
         self.ssh.shell_send(["ps -xww | grep qemu-system-x86\n"])
-        self._statistics['vms'] = {}
+        self._vms_total = {}
+
+        # Prepare totals
+        self._vms_total['cpu'] = 0
+        self._vms_total['memory'] = 0
+        self._vms_total['number'] = 0
 
         for line in self.ssh.output.splitlines():
             if line.find('qemu-system-x86_64'):
                 result = self._tokenize(line)
                 if result:
                     self._vms.append(result)
+
+                    # Record total for all VMs
+                    if result['cpu']:
+                        # Count number of VMs based on the cpu token
+                        self._vms_total['number'] += 1 
+                        self._vms_total['cpu'] += int(result['cpu'])
+                        log.debug("vms_total_cpu={}".format(self._vms_total['cpu']))
+
+                    if result['memory']:
+                        self._vms_total['memory'] += int(result['memory'])
+                        log.debug("vms_total_memory={}".format(self._vms_total['memory']))
 
     def _tokenize(self, line):
         """

@@ -43,14 +43,21 @@ class VMctlTestCase(unittest.TestCase):
         # Dump is too long for a string comparison so checking the string length instead
         self.assertEqual(len(str(result)),1026)
 
-    def test_get_vm_resources(self):
+    def test_get_vm_resources(self): 
         self.vm.ssh.mock(context='vm2')
-        result = json.loads(self.vm.get_vm_resources())
+        result = json.loads(self.vm.get_vms_statistics())
         log.debug("Result : {} len={}".format(result, len(str(result))))
-        #self.vm.dump_vms()
+        self.vm.dump_vms()
         self.vm.close()
-        self.assertEqual(len(str(result)),5436)
+        self.assertEqual(len(str(result)),5503)
 
+    def test_total_vm_resources(self):
+        self.vm.ssh.mock(context='vm2')
+        result = json.loads(self.vm.get_vms_statistics())
+        log.debug("Result : {}".format(result))
+        used_cpu = result['vms_total']['cpu']
+        log.debug("used_cpu = {}".format(used_cpu))
+        self.assertEqual(used_cpu, 77)
 
 
 if __name__ == '__main__':

@@ -51,19 +51,9 @@ CLASSES
      |      Get server CPU, MEMORY and DISK usage
      |      Return: json
      |  
-     |  get_vm_resources(self)
-     |      Returns vm resource usage
-     |      For each vm, we want to have
-     |          - the number of CPUs used
-     |          - the memory used 
-     |      Return: json object representing
-     |      Ex:
-     |          'vms': {
-     |              'id': <vm_id>
-     |              'cpu': <nb_cpu>
-     |              'memory': <allocated_memory>
-     |              }
-     |          }
+     |  get_vms_statistics(self)
+     |      Get server VMS related statistics
+     |      Return: json
      |  
      |  ----------------------------------------------------------------------
      |  Data descriptors defined here:
