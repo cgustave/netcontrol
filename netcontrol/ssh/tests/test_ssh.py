@@ -101,7 +101,7 @@ class SshTestCase(unittest.TestCase):
     def test_sshcmd_execute(self):
         self.ssh.connect()
         self.ssh.mock(context='default')
-        self.ssh.execute(["uptime","pe -ef"])
+        self.ssh.execute(["uptime","ps -ef"])
         self.ssh.close()
         self.assertNotEqual(self.ssh.output.find("load average"),-1)
 
@@ -111,6 +111,21 @@ class SshTestCase(unittest.TestCase):
         self.ssh.commands(["uptime"])
         self.ssh.close()
         self.assertNotEqual(self.ssh.output.find("load average"),-1)
+
+    def test_ssh_ouputfile(self):
+        self.ssh.trace_open(filename="myTraceFile.log")
+        self.ssh.trace_write("\n*** This is test mark line 1 ***\n") 
+        self.ssh.trace_write("\n*** This is test mark line 2 ***\n") 
+        self.ssh.trace_mark("MARK1 - command sample") 
+
+        self.ssh.connect()
+        self.ssh.mock(context='default')
+        self.ssh.commands(["uptime"])
+        self.ssh.trace_mark("MARK2 - execute sample") 
+
+        self.ssh.mock(context='default')
+        self.ssh.execute(["ps -ef"])
+        self.ssh.close()
 
 
 if __name__ == '__main__':

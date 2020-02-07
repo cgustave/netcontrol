@@ -127,6 +127,19 @@ CLASSES
      |      
      |      returns True if commands are sent succesfully
      |  
+     |  trace_mark(self, mark)
+     |      Write a mark in the trace file. A mark is a preformated line with
+     |      timing information, ex:
+     |      ### <date_time> : <Mark> ###
+     |  
+     |  trace_open(self, filename='tracefile.log')
+     |      Opens an output file to copy all commands output
+     |      This file could be used for command post-processing
+     |  
+     |  trace_write(self, line)
+     |      Writes a line in the trace file
+     |      Tracefile should have been previously opened
+     |  
      |  ----------------------------------------------------------------------
      |  Data descriptors defined here:
      |  

@@ -64,6 +64,14 @@ class VyosTestCase(unittest.TestCase):
         self.vyos.close()
         self.assertEqual(str(result),expected)
 
+    def test_trace_file(self):
+        self.vyos.trace_open(filename="vyos_tracefile.log")
+        self.vyos.trace_write("\ntracefile test\n")
+        self.vyos.trace_mark("MARK TEST")
+        self.vyos.ssh.mock(context='vyosctl2')
+        self.vyos.set_traffic_policy(network_delay=11, packet_loss=3,packet_reordering=4, packet_corruption=2, bandwidth=10)
+        self.vyos.close()
+
 
     #def test_unset_bandwidth(self):
     #     self.vyos.set_traffic_policy(bandwidth=0)

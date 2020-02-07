@@ -55,6 +55,13 @@ CLASSES
      |      Get server VMS related statistics
      |      Return: json
      |  
+     |  trace_mark(self, mark)
+     |  
+     |  trace_open(self, filename='tracefile.log')
+     |      # Tracing wrapper on ssh
+     |  
+     |  trace_write(self, line)
+     |  
      |  ----------------------------------------------------------------------
      |  Data descriptors defined here:
      |  

@@ -59,6 +59,15 @@ class VMctlTestCase(unittest.TestCase):
         log.debug("used_cpu = {}".format(used_cpu))
         self.assertEqual(used_cpu, 77)
 
+    def test_trace_file(self):
+        self.vm.trace_open(filename="vm_tracefile.log")
+        self.vm.trace_write("\ntracefile test\n")
+        self.vm.trace_mark("MARK TEST")
+        self.vm.ssh.mock(context='vm2')
+        json.loads(self.vm.get_vms_statistics())
+        self.vm.close()
+
+
 
 if __name__ == '__main__':
     unittest.main() 

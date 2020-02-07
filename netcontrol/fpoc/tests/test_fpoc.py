@@ -77,6 +77,14 @@ class fpocTestCase(unittest.TestCase):
         self.fpoc.close()
         self.assertNotEqual(result.find("DONE"),'-1')
 
+    def test_trace_file(self):
+        log.debug("* Running test_trace_file *")
+        self.fpoc.trace_open(filename="fpoc_tracefile.log")
+        self.fpoc.trace_write("\ntracefile test\n")
+        self.fpoc.trace_mark("MARK TEST")
+        self.fpoc.ssh.mock(context='fpoc')
+        json.loads(self.fpoc.get_poc_link_status(device='FGT-1'))
+        self.fpoc.close()
 
 if __name__ == '__main__':
         unittest.main()

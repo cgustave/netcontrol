@@ -61,6 +61,16 @@ class Fpoc(object):
     def close(self):
         self.ssh.close()
 
+    # Tracing wrapper on ssh
+    def trace_open(self, filename="tracefile.log"):
+        self.ssh.trace_open(filename="tracefile.log")
+
+    def trace_write(self, line):
+         self.ssh.trace_write(line)
+
+    def trace_mark(self, mark):
+        self.ssh.trace_mark(mark)
+
     def set_poc_link_status(self, device='', link='', status=''):
         """
         Set fortipoc link UP or DOWN for the given device and link

@@ -69,6 +69,13 @@ CLASSES
      |      Device is the device name in FortiPoc (like 'FGT-1') and link
      |      is the port name for the device in FortiPoc
      |  
+     |  trace_mark(self, mark)
+     |  
+     |  trace_open(self, filename='tracefile.log')
+     |      # Tracing wrapper on ssh
+     |  
+     |  trace_write(self, line)
+     |  
      |  ----------------------------------------------------------------------
      |  Data descriptors defined here:
      |  

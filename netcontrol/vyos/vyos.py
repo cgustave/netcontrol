@@ -113,6 +113,16 @@ class Vyos(object):
     def connect(self):
         self.ssh.connect()
 
+    # Tracing wrapper on ssh
+    def trace_open(self, filename="tracefile.log"):
+        self.ssh.trace_open(filename="tracefile.log")
+
+    def trace_write(self, line):
+         self.ssh.trace_write(line)
+
+    def trace_mark(self, mark):
+        self.ssh.trace_mark(mark)
+
     def close(self):
         self.ssh.close()
 
