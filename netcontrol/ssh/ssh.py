@@ -271,7 +271,7 @@ class Ssh(object):
         Should be generally used after a shell_send to gather the command
         output. If the device prompt is known (discovered during a previous
         shell_send), it will stop gathering data once the prompt is seen.
-        The idea is to not spend time waitinf for nothing
+        The idea is to not spend time waiting for nothing
 
         Upon success, shell output is available in self.output
 
@@ -356,6 +356,11 @@ class Ssh(object):
             result_flag = False
 
         self.output = read_block
+
+        # If call with tracefile, dump self.output
+        if self._tracefile_FH:
+            self.trace_write(self.output)
+
         return result_flag
 
 
@@ -478,6 +483,36 @@ class Ssh(object):
             self.trace_write(self.output)
 
         return result_flag
+
+    ### Direct channel access for interactive needs ###
+    def invoke_channel(self):
+        """
+        Requirement : connected
+        """
+        log.info("Enter")
+        self._channel = self._client.invoke_shell(term='vt100',
+                                                  width=1000,
+                                                  height=24,
+                                                  width_pixels=0,
+                                                  height_pixels=0,
+                                                  environment=None)
+
+    def channel_send(self, data=""):
+        """
+        Requirement : invoque_channel or previous call to send_shell
+        Sends data on an already opened channel
+        Use shell_read to get the data output (including the ones sent here)
+        """
+        log.info("Enter with data={}".format(data))
+ 
+        if self._channel.send_ready():
+            log.debug("sending data={}".format(data))
+            
+            # no tracing : done on read (otherwise commands are doubled)
+
+            self._channel.send(data)
+
+
 
     def mock(self, context=None, exception=None):
         """

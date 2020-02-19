@@ -52,6 +52,8 @@ CLASSES
      |      Constructor with default values.
      |      Use admin / no password by default
      |  
+     |  channel_send(self, data='')
+     |  
      |  close(self)
      |      Close ssh connection if opened
      |  
@@ -86,6 +88,9 @@ CLASSES
      |      allowed and channel will stay opened until explicitely closed or
      |      session is close.
      |      This should be supported by any ssh devices
+     |  
+     |  invoke_channel(self)
+     |      Requirement : connected
      |  
      |  mock(self, context=None, exception=None)
      |      For moking purpose only

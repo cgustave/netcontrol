@@ -127,7 +127,6 @@ class SshTestCase(unittest.TestCase):
         self.ssh.execute(["ps -ef"])
         self.ssh.close()
 
-
 if __name__ == '__main__':
     unittest.main()
  
