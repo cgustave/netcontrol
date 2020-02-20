@@ -44,7 +44,6 @@ import re
 import warnings
 warnings.filterwarnings(action='ignore', module='.*paramiko.*')
 
-
 class Ssh(object):
     """ main class """
 
@@ -363,7 +362,6 @@ class Ssh(object):
 
         return result_flag
 
-
     def read_prompt(self):
         """
         Read up to 10 blocks until we can identify the shell prompt
@@ -484,12 +482,16 @@ class Ssh(object):
 
         return result_flag
 
-    ### Direct channel access for interactive needs ###
     def invoke_channel(self):
         """
-        Requirement : connected
+        Opens a new ssh channel for data
+        Opens also the ssh session if needed
         """
         log.info("Enter")
+
+        if not self.connected:
+            self.connect()
+
         self._channel = self._client.invoke_shell(term='vt100',
                                                   width=1000,
                                                   height=24,
@@ -504,6 +506,10 @@ class Ssh(object):
         Use shell_read to get the data output (including the ones sent here)
         """
         log.info("Enter with data={}".format(data))
+
+        if not self._channel:
+            log.debug("Channel is not opened, opening")
+            self.invoke_channel()
  
         if self._channel.send_ready():
             log.debug("sending data={}".format(data))
@@ -547,7 +553,6 @@ class Ssh(object):
             self.trace_write(read_block)
 
         return read_block 
-
 
     def mock(self, context=None, exception=None):
         """

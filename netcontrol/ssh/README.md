@@ -52,7 +52,19 @@ CLASSES
      |      Constructor with default values.
      |      Use admin / no password by default
      |  
+     |  channel_read(self)
+     |      Requirement : channel should be opened
+     |      Read what is available on the channel
+     |      Unlike shell_read, does not try to identify a prompt to stop reading
+     |      Should be used for short read without prompt, for example, to check if
+     |      packet has been received on netcat (a few chars).
+     |      Faster then shell_read
+     |      Returns the received data or empty string if no data
+     |  
      |  channel_send(self, data='')
+     |      Requirement : invoque_channel or previous call to send_shell
+     |      Sends data on an already opened channel
+     |      Use shell_read to get the data output (including the ones sent here)
      |  
      |  close(self)
      |      Close ssh connection if opened
@@ -90,7 +102,8 @@ CLASSES
      |      This should be supported by any ssh devices
      |  
      |  invoke_channel(self)
-     |      Requirement : connected
+     |      Opens a new ssh channel for data
+     |      Opens also the ssh session if needed
      |  
      |  mock(self, context=None, exception=None)
      |      For moking purpose only
@@ -113,7 +126,7 @@ CLASSES
      |      Should be generally used after a shell_send to gather the command
      |      output. If the device prompt is known (discovered during a previous
      |      shell_send), it will stop gathering data once the prompt is seen.
-     |      The idea is to not spend time waitinf for nothing
+     |      The idea is to not spend time waiting for nothing
      |      
      |      Upon success, shell output is available in self.output
      |      
