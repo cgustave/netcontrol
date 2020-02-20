@@ -512,6 +512,41 @@ class Ssh(object):
 
             self._channel.send(data)
 
+    def channel_read(self):
+        """
+        Requirement : channel should be opened
+        Read what is available on the channel
+        Unlike shell_read, does not try to identify a prompt to stop reading
+        Should be used for short read without prompt, for example, to check if
+        packet has been received on netcat (a few chars).
+        Faster then shell_read
+        Returns the received data or empty string if no data
+        """
+        log.info("Enter")
+
+        read_block = ""
+       
+        if not self._channel:
+            log.debug("Channel is not opened, leaving")
+            return ""
+       
+        time.sleep(0.1)
+
+        if self._channel.recv_ready():
+            time.sleep(0.1)
+            read_stdout = self._channel.recv(99999)
+            log.debug("Reading channel read_stdout={}".format(read_stdout))
+
+            if type(read_stdout) is str:
+                read_block += read_stdout
+            else:
+                read_block += read_stdout.decode('utf-8')
+
+        # If call with tracefile, dump self.output
+        if self._tracefile_FH:
+            self.trace_write(read_block)
+
+        return read_block 
 
 
     def mock(self, context=None, exception=None):
