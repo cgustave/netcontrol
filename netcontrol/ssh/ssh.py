@@ -236,6 +236,7 @@ class Ssh(object):
                     # Tracing command if needed
                     if self._tracefile_FH:
                         self.trace_write("\n* "+time.strftime("%y%m%d-%H:%M:%S")+" command="+str(command)+"\n")
+                        self._tracefile_FH.flush()
 
                     if self._channel.send_ready():
                         log.debug("sending command={}".format(command))
@@ -247,6 +248,8 @@ class Ssh(object):
                             # Tracefile if needed
                             if self._tracefile_FH:
                                 self.trace_write(self.output)
+                                self._tracefile_FH.flush()
+
 
 
         except socket.timeout as e:
@@ -359,6 +362,7 @@ class Ssh(object):
         # If call with tracefile, dump self.output
         if self._tracefile_FH:
             self.trace_write(self.output)
+            self._tracefile_FH.flush()
 
         return result_flag
 
@@ -432,6 +436,7 @@ class Ssh(object):
                     # Tracing command if needed
                     if self._tracefile_FH:
                         self.trace_write("\n* "+time.strftime("%y%m%d-%H:%M:%S")+" command="+str(command)+"\n")
+                        self._tracefile_FH.flush()
 
                     stdin, stdout, stderr = self._client.exec_command(command,
                                                                       timeout=10)
@@ -479,6 +484,7 @@ class Ssh(object):
         # Tracing output if needed
         if self._tracefile_FH:
             self.trace_write(self.output)
+            self._tracefile_FH.flush()
 
         return result_flag
 
@@ -551,6 +557,7 @@ class Ssh(object):
         # If call with tracefile, dump self.output
         if self._tracefile_FH:
             self.trace_write(read_block)
+            self._tracefile_FH.flush()
 
         return read_block 
 
@@ -592,6 +599,7 @@ class Ssh(object):
         log.debug("Enter with line={}".format(line))
         if self._tracefile_FH:
             self._tracefile_FH.write(line)
+            self._tracefile_FH.flush()
 
     def trace_mark(self, mark):
         """
@@ -602,6 +610,7 @@ class Ssh(object):
         log.debug("Enter with mark={}".format(mark))
         if self._tracefile_FH:
             self._tracefile_FH.write("\n### "+time.strftime("%y%m%d-%H:%M:%S")+" "+str(mark)+" ###\n")
+            self._tracefile_FH.flush()
 
 
 if __name__ == '__main__':  # pragma: no cover
