@@ -250,8 +250,6 @@ class Ssh(object):
                                 self.trace_write(self.output)
                                 self._tracefile_FH.flush()
 
-
-
         except socket.timeout as e:
             log.debug("Command timed out : {}".format(e))
             self._client.close()
@@ -267,19 +265,21 @@ class Ssh(object):
 
         return result_flag
 
-    def shell_read(self):
+    def shell_read(self, maxround=10):
         """
         Read the shell.
         Should be generally used after a shell_send to gather the command
         output. If the device prompt is known (discovered during a previous
         shell_send), it will stop gathering data once the prompt is seen.
         The idea is to not spend time waiting for nothing
+        maxround is set to 10 by default (enough for fast-answering commands)
+        For slow commands (pings...) it may be increased
 
         Upon success, shell output is available in self.output
 
         returns True if the prompt was found
         """
-        log.info("Enter [prompt={}]".format(self._prompt))
+        log.info("Enter with maxround={} [prompt={}]".format(maxround, self._prompt))
 
         result_flag = False
         read_block = ""
@@ -310,7 +310,7 @@ class Ssh(object):
 
                 time.sleep(0.1)
 
-                while (looping and round < 10):
+                while (looping and round < maxround):
 
                     if self._channel.recv_ready():
                         read_stdout = self._channel.recv(9999)

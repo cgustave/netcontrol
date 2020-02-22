@@ -121,12 +121,14 @@ CLASSES
      |      
      |      Returns True if prompt si found
      |  
-     |  shell_read(self)
+     |  shell_read(self, maxround=10)
      |      Read the shell.
      |      Should be generally used after a shell_send to gather the command
      |      output. If the device prompt is known (discovered during a previous
      |      shell_send), it will stop gathering data once the prompt is seen.
      |      The idea is to not spend time waiting for nothing
+     |      maxround is set to 10 by default (enough for fast-answering commands)
+     |      For slow commands (pings...) it may be increased
      |      
      |      Upon success, shell output is available in self.output
      |      
