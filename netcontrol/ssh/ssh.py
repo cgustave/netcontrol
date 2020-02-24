@@ -44,6 +44,7 @@ import re
 import warnings
 warnings.filterwarnings(action='ignore', module='.*paramiko.*')
 
+
 class Ssh(object):
     """ main class """
 
@@ -81,12 +82,17 @@ class Ssh(object):
         self.mock_exception = ''
         self.mock_context = ''
 
+        # Number of maximum round used to search for prompt
+        # Can be increased in case command takes time to
+        # give back prompt (ex : a failing ping, takes several seconds)
+        self.maxround = 10
+
         # Private attributs
         self._client = paramiko.SSHClient()
         self._channel = None  # Paramiko channel
         self._prompt = ''
-        self._tracefile_FH = None # Tracefile filehandle 
-        
+        self._tracefile_FH = None  # Tracefile filehandle
+
     def connect(self):
         """
         Connects to ssh server. All connections details should be set
@@ -265,21 +271,21 @@ class Ssh(object):
 
         return result_flag
 
-    def shell_read(self, maxround=10):
+    def shell_read(self):
         """
         Read the shell.
         Should be generally used after a shell_send to gather the command
         output. If the device prompt is known (discovered during a previous
         shell_send), it will stop gathering data once the prompt is seen.
-        The idea is to not spend time waiting for nothing
-        maxround is set to 10 by default (enough for fast-answering commands)
+        The idea is to not spend time waiting for nothing.
+        maxround default attribut is set to 10 by default (enough for fast-answering commands)
         For slow commands (pings...) it may be increased
 
         Upon success, shell output is available in self.output
 
         returns True if the prompt was found
         """
-        log.info("Enter with maxround={} [prompt={}]".format(maxround, self._prompt))
+        log.info("Enter with [prompt={} maxround={}]".format(self._prompt, self._maxround))
 
         result_flag = False
         read_block = ""
@@ -310,7 +316,7 @@ class Ssh(object):
 
                 time.sleep(0.1)
 
-                while (looping and round < maxround):
+                while (looping and round < self.maxround):
 
                     if self._channel.recv_ready():
                         read_stdout = self._channel.recv(9999)
@@ -516,10 +522,10 @@ class Ssh(object):
         if not self._channel:
             log.debug("Channel is not opened, opening")
             self.invoke_channel()
- 
+
         if self._channel.send_ready():
             log.debug("sending data={}".format(data))
-            
+
             # no tracing : done on read (otherwise commands are doubled)
 
             self._channel.send(data)
@@ -537,11 +543,11 @@ class Ssh(object):
         log.info("Enter")
 
         read_block = ""
-       
+
         if not self._channel:
             log.debug("Channel is not opened, leaving")
             return ""
-       
+
         time.sleep(0.1)
 
         if self._channel.recv_ready():
@@ -559,7 +565,7 @@ class Ssh(object):
             self.trace_write(read_block)
             self._tracefile_FH.flush()
 
-        return read_block 
+        return read_block
 
     def mock(self, context=None, exception=None):
         """
@@ -589,7 +595,7 @@ class Ssh(object):
         This file could be used for command post-processing
         """
         log.debug("Enter with filename={}".format(filename))
-        self._tracefile_FH = open(filename,"a")
+        self._tracefile_FH = open(filename, "a")
 
     def trace_write(self, line):
         """
