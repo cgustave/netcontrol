@@ -24,4 +24,5 @@ Cedric GUSTAVE (cgustave@free.fr)
 ##### Supported types of remote devices are :
   - fortipoc (using 'fpoc')
   - vyos (using 'vyos')
-  - kvm host (using 'vml')
+  - kvm host (using 'vm')
+  - fortigate (using 'fortigate')

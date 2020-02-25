@@ -1,0 +1,30 @@
+FGT-B1-1 # get system status
+Version: FortiGate-VM64-KVM v6.2.3,build1066,191219 (GA)
+Virus-DB: 75.01512(2020-02-25 07:21)
+Extended DB: 1.00000(2018-04-09 18:07)
+Extreme DB: 1.00000(2018-04-09 18:07)
+IPS-DB: 15.00777(2020-02-13 02:44)
+IPS-ETDB: 0.00000(2001-01-01 00:00)
+APP-DB: 15.00777(2020-02-13 02:44)
+INDUSTRIAL-DB: 15.00769(2020-01-31 01:19)
+Serial-Number: FGVM01TM19003382
+IPS Malicious URL Database: 2.00564(2020-02-25 04:34)
+Botnet DB: 4.00629(2020-02-03 20:42)
+License Status: Valid
+License Expiration Date: 2020-07-04
+VM Resources: 1 CPU/1 allowed, 1254 MB RAM
+Log hard disk: Available
+Hostname: FGT-B1-1
+Operation Mode: NAT
+Current virtual domain: root
+Max number of virtual domains: 10
+Virtual domains status: 1 in NAT mode, 0 in TP mode
+Virtual domain configuration: disable
+FIPS-CC mode: disable
+Current HA mode: standalone
+Branch point: 1066
+Release Version Information: GA
+FortiOS x86-64: Yes
+System time: Tue Feb 25 18:15:27 2020
+
+FGT-B1-1 #

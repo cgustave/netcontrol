@@ -377,7 +377,7 @@ class Ssh(object):
         Read up to 10 blocks until we can identify the shell prompt
         prompt is stored in self.prompt
         It can be called after a shell_send to make sure we have received an
-        aknowledgment prompt from the device
+        acknowledgment prompt from the device
         While waiting for prompt, all output received is stored in the
         ssh.output for processing
 
@@ -403,8 +403,7 @@ class Ssh(object):
 
                     # Store decoded lines in ssh.output
                     self.output += decoded_line+"\n"
-
-                    search_prompt = '(^[A-Za-z0-9@~\:\-_]+(?:\$|\#))\s?'
+                    search_prompt = '(^[A-Za-z0-9@~\:_-]+\s*(?:\$|\#))\s?'
                     match_prompt = re.search(search_prompt, decoded_line)
                     if match_prompt:
                         prompt = match_prompt.groups(0)[0]
