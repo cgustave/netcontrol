@@ -1,0 +1,13 @@
+FGT-B1-1 # get system performance status
+CPU states: 1% user 0% system 0% nice 98% idle 0% iowait 1% irq 0% softirq
+CPU0 states: 1% user 0% system 0% nice 98% idle 0% iowait 1% irq 0% softirq
+Memory: 1284132k total, 786116k used (61.2%), 347680k free (27.1%), 150336k freeable (11.7%)
+Average network usage: 7 / 6 kbps in 1 minute, 0 / 0 kbps in 10 minutes, 0 / 0 kbps in 30 minutes
+Average sessions: 18 sessions in 1 minute, 0 sessions in 10 minutes, 0 sessions in 30 minutes
+Average session setup rate: 0 sessions per second in last 1 minute, 0 sessions per second in last 10 minutes, 0 sessions per second in last 30 minutes
+Virus caught: 0 total in 1 minute
+IPS attacks blocked: 0 total in 1 minute
+Uptime: 0 days,  0 hours,  1 minutes
+
+FGT-B1-1 #
+

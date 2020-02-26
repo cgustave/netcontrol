@@ -1,0 +1,6 @@
+FGT-B1-1 # execute time
+current time is: 18:40:29
+last ntp sync:Wed Feb 26 18:31:58 2020
+
+
+FGT-B1-1 #
