@@ -1,0 +1,23 @@
+FGT-CGUSTAVE # diagnose sys session list
+
+session info: proto=6 proto_state=01 duration=375 expire=3599 timeout=3600 flags=00000000 sockflag=00000000 sockport=0 av_idx=0 use=4
+origin-shaper=
+reply-shaper=
+per_ip_shaper=
+class_id=0 ha_id=0 policy_dir=0 tunnel=/ vlan_cos=8/8
+state=log local may_dirty
+statistic(bytes/packets/allow_err): org=28670/369/1 reply=21275/200/1 tuples=2
+tx speed(Bps/kbps): 52/0 rx speed(Bps/kbps): 40/0
+orgin->sink: org pre->in, reply out->post dev=28->24/24->28 gwy=10.199.3.1/0.0.0.0
+hook=pre dir=org act=noop 10.199.3.10:36990->10.199.3.1:222(0.0.0.0:0)
+hook=post dir=reply act=noop 10.199.3.1:222->10.199.3.10:36990(0.0.0.0:0)
+pos/(before,after) 0/(0,0), 0/(0,0)
+misc=0 policy_id=4294967295 auth_info=0 chk_client_info=0 vd=0
+serial=010d58a6 tos=ff/ff app_list=0 app=0 url_cat=0
+rpdb_link_id = 00000000
+dd_type=0 dd_mode=0
+npu_state=00000000
+no_ofld_reason:  local
+total session 1
+
+FGT-CGUSTAVE #

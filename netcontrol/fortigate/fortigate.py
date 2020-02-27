@@ -217,8 +217,106 @@ class Fortigate(object):
        result['total'] = nb_route        
        log.debug("result={}".format(result))
        return result
-       
+      
 
+    def get_session(self, filter={}):
+        """
+        Filter and retrieve a session from the session list
+        The provided filter dictionary is based on session filter keywords :
+
+        FGT-CGUSTAVE # diagnose sys session filter
+        vd                Index of virtual domain. -1 matches all.
+        sintf             Source interface.
+        dintf             Destination interface.
+        src               Source IP address.
+        nsrc              NAT'd source ip address
+        dst               Destination IP address.
+        proto             Protocol number.
+        sport             Source port.
+        nport             NAT'd source port
+        dport             Destination port.
+        policy            Policy ID.
+        expire            expire
+        duration          duration
+        proto-state       Protocol state.
+        session-state1    Session state1.
+        session-state2    Session state2.
+        ext-src           Add a source address to the extended match list.
+        ext-dst           Add a destination address to the extended match list.
+        ext-src-negate    Add a source address to the negated extended match list.
+        ext-dst-negate    Add a destination address to the negated extended match list.
+        clear             Clear session filter.
+        negate            Inverse filter.
+
+        Returns a dictionary with the elements of the returned get_sessions
+        ex : {
+            'src' : '8.8.8.8',
+            'dst' : '10.10.10.1',
+            'sport' : 63440,
+            'dport' : 53,
+            'proto' : 17,
+            'state' : '01',
+            'flags' : ['may_dirty', 'dirty'],
+            'dev'   : '7->8',
+            'gwy'   : '10.10.10.1->8.8.8.8',
+            'duration' : 30,
+
+        session sample :
+
+            FGT-CGUSTAVE # diagnose sys session filter dport 222
+
+            FGT-CGUSTAVE # diagnose sys session list
+
+            session info: proto=6 proto_state=01 duration=233 expire=3599
+            timeout=3600 flags=00000000 sockflag=00000000 sockport=0 av_idx=0
+            use=4
+            origin-shaper=
+            reply-shaper=
+            per_ip_shaper=
+            class_id=0 ha_id=0 policy_dir=0 tunnel=/ vlan_cos=8/8
+            state=log local may_dirty
+            statistic(bytes/packets/allow_err): org=11994/132/1
+            reply=12831/87/1 tuples=2
+            tx speed(Bps/kbps): 33/0 rx speed(Bps/kbps): 43/0
+            orgin->sink: org pre->in, reply out->post dev=28->24/24->28
+            gwy=10.199.3.1/0.0.0.0
+            hook=pre dir=org act=noop
+            10.199.3.10:36714->10.199.3.1:222(0.0.0.0:0)
+            hook=post dir=reply act=noop
+            10.199.3.1:222->10.199.3.10:36714(0.0.0.0:0)
+            pos/(before,after) 0/(0,0), 0/(0,0)
+            misc=0 policy_id=4294967295 auth_info=0 chk_client_info=0 vd=0
+            serial=010d3b7f tos=ff/ff app_list=0 app=0 url_cat=0
+            rpdb_link_id = 00000000
+            dd_type=0 dd_mode=0
+            npu_state=00000000
+            no_ofld_reason:  local
+            total session 1
+
+            FGT-CGUSTAVE #
+
+        """
+        log.info("Enter with filter={}".format(filter))
+
+        result = {}
+        allowed_keys = ['vd','sintf','dintf','src','nsrc','dst','proto','sport','nport','dport','policy','expire','duration','proto-state','session-state1','session-state2','ext-src','ext-dst','ext-src-negate','ext-dst-negate','negate']
+
+        command_list = [ "diagnose sys session filter clear\n" ]
+        
+        for key in filter:
+            log.debug("key={} value={}".format(key, filter[key]))
+            if key not in allowed_keys:
+                log.error("unknown session key={}".format(key))
+                raise SystemExit
+            else:
+                command_list.append("diagnose sys session filter "+key+" "+str(filter[key])+"\n")
+            
+        command_list.append("diagnose sys session list\n") 
+        self.ssh.shell_send(command_list)        
+        result = self._session_analysis()
+        return (result)
+
+        
     def run_op_mode_command(self, cmd):
         """
         Use netcontrol shell to send commands to vyos
@@ -228,6 +326,88 @@ class Fortigate(object):
         self.ssh.shell_send([cmd])
         return(self.ssh.output)
 
+    def _session_analysis(self):
+        """
+        Returns a json reflecting the session
+        Takes self.ssh.output as input
+        """
+        log.info("Enter")
+        result = {}
+
+        # Parse and build session json
+        for line in self.ssh.output.splitlines():
+            log.debug("line={}".format(line))
+            
+            # session info: proto=6 proto_state=01 duration=375 expire=3599 timeout=3600 flags=00000000 sockflag=00000000 sockport=0 av_idx=0 use=4
+            match_session_info = re.search("^session\sinfo:\sproto=(?P<proto>\d+)\sproto_state=(?P<proto_state>\d+)\sduration=(?P<duration>\d+)\sexpire=(?P<expire>\d+)\stimeout=(?P<timeout>\d+)",line)
+            if match_session_info:
+                proto = match_session_info.group('proto')
+                proto_state = match_session_info.group('proto_state')
+                duration = match_session_info.group('duration')
+                expire = match_session_info.group('expire')
+                timeout = match_session_info.group('timeout')
+                log.debug("session-info : proto={} proto_state={} duration={} expire={} timeout={}".format(proto, proto_state, duration, expire, timeout))
+                result['proto'] = proto
+                result['proto_state'] = proto_state
+                result['duration'] = duration
+                result['expire'] = expire 
+                result['timeout'] = timeout
+
+            # state=log local may_dirty
+            match_state = re.search("^state=(?P<state>.+)", line)
+            if match_state:
+                states = []
+                session_states = match_state.group('state')
+                log.debug("states: {}".format(session_states))
+                for flag in session_states.split():
+                    log.debug("flag={}".format(flag))
+                    states.append(flag)
+                result['state'] = states
+
+            # statistic(bytes/packets/allow_err): org=28670/369/1 reply=21275/200/1 tuples=2
+            match_statistic = re.search("^statistic\(bytes/packets/allow_err\):\sorg=(?P<org_byte>\d+)/(?P<org_packet>\d+)/\d\sreply=(?P<reply_byte>\d+)/(?P<reply_packet>\d+)",line)
+            if match_statistic:
+                stats = {}
+                org_byte = match_statistic.group('org_byte')
+                org_packet = match_statistic.group('org_packet')
+                reply_byte = match_statistic.group('reply_byte')
+                reply_packet = match_statistic.group('reply_packet')
+                log.debug("org_byte={} org_packet={} reply_byte={} reply_packet={}".format(org_byte, org_packet, reply_byte, reply_packet))
+                stats['org_byte'] = org_byte
+                stats['org_packet'] = org_packet
+                stats['reply_byte'] = reply_byte
+                stats['reply_packet'] = reply_packet
+                result['statistics'] = stats
+
+            # orgin->sink: org pre->in, reply out->post dev=28->24/24->28 gwy=10.199.3.1/0.0.0.0
+            match_dev_gw = re.search("\sdev=(?P<dev>[0-9-/>]+)\sgwy=(?P<gwy>[0-9./]+)",line)
+            if match_dev_gw:
+                dev = match_dev_gw.group('dev')
+                gwy = match_dev_gw.group('gwy')
+                log.debug("dev={} gwy={}".format(dev, gwy))
+
+            # hook=pre dir=org act=noop 10.199.3.10:36990->10.199.3.1:222(0.0.0.0:0)
+            match_ip = re.search("^hook=pre\sdir=org\sact=noop\s(?P<src>[0-9.]+):(?P<sport>\d+)->(?P<dest>[0-9.]+):(?P<dport>\d+)",line)
+            if match_ip:
+                src = match_ip.group('src')
+                sport = match_ip.group('sport')
+                dest =  match_ip.group('dest')
+                dport = match_ip.group('dport')
+                result['src'] = src
+                result['sport'] = sport
+                result['dest'] = dest 
+                log.debug("src={} sport={} dest={} dport={}".format(src,sport,dest,dport))
+                  
+            # Total session (should be 1 ideally)
+            match_total_session = re.search("^total\ssession\s(?P<total>\d+)", line)
+            if match_total_session:
+                total = match_total_session.group('total')
+                result['total'] = total
+
+                log.debug("src={} sport={} dest={}".format(src, sport, dest))
+                
+        log.debug("result={}".format(result))
+        return result
 
 """
 Class sample code

@@ -1,0 +1,6 @@
+FGT-CGUSTAVE # execute time
+current time is: 23:51:57
+last ntp sync:Wed Feb 26 23:48:04 2020
+
+
+FGT-CGUSTAVE #
