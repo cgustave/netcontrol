@@ -22,25 +22,25 @@ class FGTTestCase(unittest.TestCase):
     def setUp(self):
         self.fgt = Fortigate(ip='192.168.122.178', port='10101', user='admin', password='', debug=True)
 
-    @unittest.skip  # no reason needed
+    #@unittest.skip  # no reason needed
     def test_connect(self):
         self.fgt.connect()
         pass 
 
-    @unittest.skip  # no reason needed
+    #@unittest.skip  # no reason needed
     def test_attributs_validation(self):
         self.assertTrue(self.fgt.ip == '192.168.122.178')
         self.assertTrue(self.fgt.port == '10101')
         self.assertTrue(self.fgt.user == 'admin')
         self.assertTrue(self.fgt.password == '')
   
-    @unittest.skip  # no reason needed
+    #@unittest.skip  # no reason needed
     def test_cli(self):
         self.fgt.ssh.mock(context='get_system_status')
         self.fgt.cli(commands=['get system status'])
         self.fgt.close()
 
-    @unittest.skip  # no reason needed
+    #@unittest.skip  # no reason needed
     def test_trace_file(self):
         self.fgt.ssh.mock(context='get_system_status')
         self.fgt.trace_open(filename="fgt_tracefile.log")
@@ -49,7 +49,7 @@ class FGTTestCase(unittest.TestCase):
         self.fgt.cli(commands=['exec date', 'exec time', 'get system performance status'])
         self.fgt.close()
 
-    @unittest.skip  # no reason needed
+    #@unittest.skip  # no reason needed
     def test_get_version(self):
         self.fgt.ssh.mock(context='get_system_status')
         self.fgt.trace_open(filename="fgt_tracefile.log")
@@ -57,7 +57,7 @@ class FGTTestCase(unittest.TestCase):
         self.fgt.close()
         self.assertTrue(version == 'v6.2.3,build1066,191219')
  
-    @unittest.skip  # no reason needed
+    #@unittest.skip  # no reason needed
     def test_ike_and_ipsec_SA(self):
         self.fgt.ssh.mock(context='ipsec')
         self.fgt.trace_open(filename="fgt_tracefile.log")
@@ -65,7 +65,7 @@ class FGTTestCase(unittest.TestCase):
         self.assertDictEqual(result, {'ike': {'created': '3', 'established': '3'}, 'ipsec': {'created': '3', 'established': '3'}})
         self.fgt.close()
 
-    @unittest.skip  # no reason needed
+    #@unittest.skip  # no reason needed
     def test_bgp_routes(self):
         self.fgt.ssh.mock(context='bgp_routes')
         self.fgt.trace_open(filename="fgt_tracefile.log")
