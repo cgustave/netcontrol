@@ -93,7 +93,7 @@ class Fortigate(object):
         if not self.ssh.connected:
             self.ssh.connect()
 
-        self.run_op_mode_command("get system status\n")
+        self.run_op_mode_command("get system status | grep Version\n")
         # FGT-B1-1 # get system status
         # Version: FortiGate-VM64-KVM v6.2.3,build1066,191219 (GA)
         # Returns "v6.2.3,build1066,191219"

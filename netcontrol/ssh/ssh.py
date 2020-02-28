@@ -154,7 +154,7 @@ class Ssh(object):
             result_flag = True
 
         self.connected = result_flag
-        return self
+        return result_flag
 
     def close(self):
         """
