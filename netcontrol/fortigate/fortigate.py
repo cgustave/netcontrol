@@ -99,7 +99,7 @@ class Fortigate(object):
         if not self.ssh.connected:
             self.ssh.connect()
 
-        self.run_op_mode_command("get sys status | grep '^Version\|License St'n")
+        self.run_op_mode_command("get sys status | grep '^Version\|License St'")
         #
         # FGT-B1-1 # get sys status | grep '^Version\|License St'
         #Version: FortiGate-VM64-KVM v6.2.3,build8348,200304 (GA)

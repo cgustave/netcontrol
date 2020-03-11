@@ -158,6 +158,9 @@ class SSHClient():
         # some commands need to be translated so they can be used as filename
         # We replace / with - and 'space' with _ and | with -
         tr_command = command.translate(str.maketrans({"/": "-",
+                                                      "\\": "_",
+                                                      "'" : "_",
+                                                      "^" : "_",
                                                       " ": "_",
                                                       "|": "-"}))
         log.debug("tr_command={}".format(tr_command))
@@ -261,6 +264,9 @@ class Channel():
         # We replace / with - and 'space' with _ and | with -
         tr_command = self._send.translate(str.maketrans({"/": "-",
                                                          " ": "_",
+                                                         "\\": "_",
+                                                         "'" : "_",
+                                                         "^" : "_",
                                                          "|": "-"}))
         log.debug("tr_command={}".format(tr_command))
 
