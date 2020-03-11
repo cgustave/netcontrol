@@ -139,10 +139,13 @@ CLASSES
      |      
      |          FGT-CGUSTAVE #
      |  
-     |  get_version(self)
-     |      Returns FortiGate version
+     |  get_status(self)
+     |      Returns a dictionary with FortiGate version, license status
      |      ex : v6.2.3,build1066,191219
      |      Uses "get system status"
+     |      return : { 'version' = 'v6.2.3,build1066,191219',
+     |                 'license' = True|false
+     |              }
      |  
      |  run_op_mode_command(self, cmd)
      |      Use netcontrol shell to send commands to vyos

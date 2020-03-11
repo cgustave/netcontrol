@@ -50,12 +50,12 @@ class FGTTestCase(unittest.TestCase):
         self.fgt.close()
 
     #@unittest.skip  # no reason needed
-    def test_get_version(self):
+    def test_get_status(self):
         self.fgt.ssh.mock(context='get_system_status')
         self.fgt.trace_open(filename="fgt_tracefile.log")
-        version = self.fgt.get_version()
+        result = self.fgt.get_status()
         self.fgt.close()
-        self.assertTrue(version == 'v6.2.3,build1066,191219')
+        self.assertDictEqual(result, {'version': 'v6.2.3,build8348,200304', 'license': True})
  
     #@unittest.skip  # no reason needed
     def test_ike_and_ipsec_SA(self):

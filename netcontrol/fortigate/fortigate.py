@@ -81,30 +81,53 @@ class Fortigate(object):
 
             log.info("command={} output={}".format(command, self.ssh.output))
 
-    def get_version(self):
+    def get_status(self):
         """
-        Returns FortiGate version
+        Returns a dictionary with FortiGate version, license status
         ex : v6.2.3,build1066,191219
         Uses "get system status"
+        return : { 'version' = 'v6.2.3,build1066,191219',
+                   'license' = True|false
+                }
         """
         log.info("Enter")
-        version = ""
+        result = {} 
+        result['version'] = ""
+        found_version = False
+        found_license = False
 
         if not self.ssh.connected:
             self.ssh.connect()
 
-        self.run_op_mode_command("get system status | grep Version\n")
-        # FGT-B1-1 # get system status
-        # Version: FortiGate-VM64-KVM v6.2.3,build1066,191219 (GA)
-        # Returns "v6.2.3,build1066,191219"
+        self.run_op_mode_command("get sys status | grep '^Version\|License St'n")
+        #
+        # FGT-B1-1 # get sys status | grep '^Version\|License St'
+        #Version: FortiGate-VM64-KVM v6.2.3,build8348,200304 (GA)
+        # License Status: Valid
 
-        match = re.search("(?:Version:\s[A-Za-z0-9-]+)\s(?P<version>\S+)",self.ssh.output)
-        if match:
-            version = match.group('version')
-            log.debug("version={}".format(version))
-        else:
-            log.debug("Could not find version")
-        return version
+        match_version = re.search("(?:Version:\s[A-Za-z0-9-]+)\s(?P<version>\S+)",self.ssh.output)
+        if match_version:
+            found_version = True
+            result['version'] = match_version.group('version')
+            log.debug("found version={}".format(result['version']))
+
+        match_license = re.search("(?:License\sStatus:\s)(?P<license>\S+)",self.ssh.output)
+        if match_license:
+            found_license = True
+            result['license'] = False
+            license = match_license.group('license')
+            log.debug("found license={}".format(license))
+            if license == 'Valid':
+                result['license'] = True
+        
+        if not found_version:
+            log.error("Could not extract version")
+
+        if not found_license:
+            log.error("Could not extract license status")
+
+        log.debug("result={}".format(result))
+        return result
 
     def get_ike_and_ipsec_sa_number(self):
         """
