@@ -211,7 +211,11 @@ class Vyos(object):
                            packet_loss='',
                            packet_reordering='',
                            packet_corruption='',
-                           bandwidth=''):
+                           bandwidth='',
+                           exit=True,
+                           save=True,
+                           commit=True,
+                           configure=True):
         """
         Sets network-emulator settings
         optional arguments :
@@ -220,6 +224,16 @@ class Vyos(object):
            - packet_loss <number> in %
            - packet_reordering <number> in %
            - bandwidth <number> in mbps (only mbps supported)
+
+           Following options are all enabled by default but it is made
+           configurable to fasten processing when multiple config should be
+           done successively on the same unit :
+           - exit : Force a disconnection once done
+           - save : Forces a saving of config
+           - commit : Apply the configuration
+           - configure : Enter configuration mode
+           
+
         """
         flag_configured = False
         command_list = []
@@ -280,17 +294,30 @@ class Vyos(object):
         if (flag_configured):
 
             # Enter configuration more
-            self.ssh.shell_send(["configure\n"])
+            if configure:
+                self.ssh.shell_send(["configure\n"])
+            else:
+                log.debug("configure is bypassed")
 
             # Issue our list of configuration commands
             self.ssh.shell_send(command_list)
 
             # Commit and save
-            self.ssh.shell_send(["commit\n"])
-            self.ssh.shell_send(["save\n"])
+            if commit:
+                self.ssh.shell_send(["commit\n"])
+            else:
+                log.debug("commit is bypassed")
+
+            if save:
+                self.ssh.shell_send(["save\n"])
+            else:
+                log.debug("save is bypassed")
 
             # Exit from configuration mode
-            self.ssh.shell_send(["exit\n"])
+            if exit:
+                self.ssh.shell_send(["exit\n"])
+            else:
+                log.debug("exit is bypassed")
 
     def dump_config(self):
         """

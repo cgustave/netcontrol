@@ -97,7 +97,7 @@ CLASSES
      |  run_op_mode_command(self, cmd)
      |      Use netcontrol shell to send commands to vyos
      |  
-     |  set_traffic_policy(self, network_delay='', packet_loss='', packet_reordering='', packet_corruption='', bandwidth='')
+     |  set_traffic_policy(self, network_delay='', packet_loss='', packet_reordering='', packet_corruption='', bandwidth='', exit=True, save=True, commit=True, configure=True)
      |      Sets network-emulator settings
      |      optional arguments :
      |         - network_delay <number> in ms
@@ -105,6 +105,14 @@ CLASSES
      |         - packet_loss <number> in %
      |         - packet_reordering <number> in %
      |         - bandwidth <number> in mbps (only mbps supported)
+     |      
+     |         Following options are all enabled by default but it is made
+     |         configurable to fasten processing when multiple config should be
+     |         done successively on the same unit :
+     |         - exit : Force a disconnection once done
+     |         - save : Forces a saving of config
+     |         - commit : Apply the configuration
+     |         - configure : Enter configuration mode
      |  
      |  trace_mark(self, mark)
      |  
