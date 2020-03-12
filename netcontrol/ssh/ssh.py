@@ -91,7 +91,10 @@ class Ssh(object):
         self._client = paramiko.SSHClient()
         self._channel = None  # Paramiko channel
         self._prompt = ''
+        self._maxround = 10
         self._tracefile_FH = None  # Tracefile filehandle
+        self._traceflag = False    # Flag to tell if tracing is needed or not
+        self._tracefilename = None # Name of tracefile
 
     def connect(self):
         """
@@ -236,13 +239,9 @@ class Ssh(object):
 
                 # send all we need to send
                 for command in commands:
-                    log.debug("Processing command={}, context={}".
-                              format(command, self.mock_context))
+                    log.debug("Processing command={}, context={}".format(command, self.mock_context))
 
-                    # Tracing command if needed
-                    if self._tracefile_FH:
-                        self.trace_write("\n* "+time.strftime("%y%m%d-%H:%M:%S")+" command="+str(command)+"\n")
-                        self._tracefile_FH.flush()
+                    self.trace_write("\n* "+time.strftime("%y%m%d-%H:%M:%S")+" command="+str(command)+"\n")
 
                     if self._channel.send_ready():
                         log.debug("sending command={}".format(command))
@@ -250,11 +249,7 @@ class Ssh(object):
                         self._channel.send(command)
                         if self.read_prompt():
                             log.debug("command is confirmed, output recorded")
-
-                            # Tracefile if needed
-                            if self._tracefile_FH:
-                                self.trace_write(self.output)
-                                self._tracefile_FH.flush()
+                            self.trace_write(self.output)
 
         except socket.timeout as e:
             log.debug("Command timed out : {}".format(e))
@@ -320,18 +315,15 @@ class Ssh(object):
 
                     if self._channel.recv_ready():
                         read_stdout = self._channel.recv(9999)
-                        log.debug("Reading channel round={} read_stdout={}".
-                                  format(round, read_stdout))
+                        log.debug("Reading channel round={} read_stdout={}".format(round, read_stdout))
 
                         if type(read_stdout) is str:
                             # Mocked paramiko or paramiko on python2
-                            log.debug("read_stdout is a {} (mocked paramiko or python2)".
-                                      format(type(read_stdout)))
+                            log.debug("read_stdout is a {} (mocked paramiko or python2)".format(type(read_stdout)))
                             read_block += read_stdout
                         else:
                             # paramiko on python3
-                            log.debug("read_stdout is a {} (paramiko on python3)".
-                                      format(type(read_stdout)))
+                            log.debug("read_stdout is a {} (paramiko on python3)".format(type(read_stdout)))
                             read_block += read_stdout.decode('utf-8')
 
                     # See if prompt has been seen
@@ -364,11 +356,7 @@ class Ssh(object):
             result_flag = False
 
         self.output = read_block
-
-        # If call with tracefile, dump self.output
-        if self._tracefile_FH:
-            self.trace_write(self.output)
-            self._tracefile_FH.flush()
+        self.trace_write(self.output)
 
         return result_flag
 
@@ -435,16 +423,10 @@ class Ssh(object):
         try:
             if self.connected:
                 for command in commands:
-                    log.debug("Executing command {} [context={}]".
-                              format(command, self.mock_context))
+                    log.debug("Executing command {} [context={}]".format(command, self.mock_context))
+                    self.trace_write("\n* "+time.strftime("%y%m%d-%H:%M:%S")+" command="+str(command)+"\n")
 
-                    # Tracing command if needed
-                    if self._tracefile_FH:
-                        self.trace_write("\n* "+time.strftime("%y%m%d-%H:%M:%S")+" command="+str(command)+"\n")
-                        self._tracefile_FH.flush()
-
-                    stdin, stdout, stderr = self._client.exec_command(command,
-                                                                      timeout=10)
+                    stdin, stdout, stderr = self._client.exec_command(command, timeout=10)
 
                     # stdout could either be a channel object (real paramiko)
                     # or a filehandle when using mocked paramiko.
@@ -486,11 +468,7 @@ class Ssh(object):
             self._client.close()
             result_flag = False
 
-        # Tracing output if needed
-        if self._tracefile_FH:
-            self.trace_write(self.output)
-            self._tracefile_FH.flush()
-
+        self.trace_write(self.output)
         return result_flag
 
     def invoke_channel(self):
@@ -559,11 +537,7 @@ class Ssh(object):
             else:
                 read_block += read_stdout.decode('utf-8')
 
-        # If call with tracefile, dump self.output
-        if self._tracefile_FH:
-            self.trace_write(read_block)
-            self._tracefile_FH.flush()
-
+        self.trace_write(read_block)
         return read_block
 
     def mock(self, context=None, exception=None):
@@ -579,6 +553,7 @@ class Ssh(object):
         # switch context in paramiko
         # including the channel class
         if context:
+            log.debug("context={}".format(context))
             self.mock_context = context
             self._client.mock(context=context)
             self._client.channel.mock(context=context)
@@ -590,21 +565,41 @@ class Ssh(object):
 
     def trace_open(self, filename="tracefile.log"):
         """
+        Activates file tracing
+        Record tracefile name
+        Does not open the tracefile, each write will open and closed it
+        This is needed to make sure all data is flushed in realtime
         Opens an output file to copy all commands output
         This file could be used for command post-processing
         """
         log.debug("Enter with filename={}".format(filename))
-        self._tracefile_FH = open(filename, "a")
+        self._tracefilename = filename
+        self._traceflag = True
 
     def trace_write(self, line):
         """
-        Writes a line in the trace file
-        Tracefile should have been previously opened
+        Writes a line in the trace file :
+        Opens tracefile, write and close
         """
         log.debug("Enter with line={}".format(line))
-        if self._tracefile_FH:
-            self._tracefile_FH.write(line)
-            self._tracefile_FH.flush()
+        
+        if not self._traceflag:
+            return
+
+        if self._tracefilename:
+            self._tracefile_FH = open(self._tracefilename, "a")
+
+            if self._tracefile_FH:
+                try:
+                    self._tracefile_FH.write(line)
+                    self._tracefile_FH.flush()
+                    self._tracefile_FH.close()
+                except:
+                    log.error("Could not write to tracefile")
+
+        else:
+            log.error("Tracefilename is not defined")
+            raise SystemExit
 
     def trace_mark(self, mark):
         """
@@ -613,9 +608,8 @@ class Ssh(object):
         ### <date_time> : <Mark> ###
         """
         log.debug("Enter with mark={}".format(mark))
-        if self._tracefile_FH:
-            self._tracefile_FH.write("\n### "+time.strftime("%y%m%d-%H:%M:%S")+" "+str(mark)+" ###\n")
-            self._tracefile_FH.flush()
+
+        self.trace_write("\n### "+time.strftime("%y%m%d-%H:%M:%S")+" "+str(mark)+" ###\n")
 
 
 if __name__ == '__main__':  # pragma: no cover

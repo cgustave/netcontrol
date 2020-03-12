@@ -115,7 +115,7 @@ CLASSES
      |      Read up to 10 blocks until we can identify the shell prompt
      |      prompt is stored in self.prompt
      |      It can be called after a shell_send to make sure we have received an
-     |      aknowledgment prompt from the device
+     |      acknowledgment prompt from the device
      |      While waiting for prompt, all output received is stored in the
      |      ssh.output for processing
      |      
@@ -153,12 +153,16 @@ CLASSES
      |      ### <date_time> : <Mark> ###
      |  
      |  trace_open(self, filename='tracefile.log')
+     |      Activates file tracing
+     |      Record tracefile name
+     |      Does not open the tracefile, each write will open and closed it
+     |      This is needed to make sure all data is flushed in realtime
      |      Opens an output file to copy all commands output
      |      This file could be used for command post-processing
      |  
      |  trace_write(self, line)
-     |      Writes a line in the trace file
-     |      Tracefile should have been previously opened
+     |      Writes a line in the trace file :
+     |      Opens tracefile, write and close
      |  
      |  ----------------------------------------------------------------------
      |  Data descriptors defined here:

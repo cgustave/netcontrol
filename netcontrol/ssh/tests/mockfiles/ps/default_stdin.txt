@@ -1,0 +1,258 @@
+UID        PID  PPID  C STIME TTY          TIME CMD
+root         1     0  0 12:15 ?        00:00:01 /sbin/init splash
+root         2     0  0 12:15 ?        00:00:00 [kthreadd]
+root         3     2  0 12:15 ?        00:00:00 [rcu_gp]
+root         4     2  0 12:15 ?        00:00:00 [rcu_par_gp]
+root         6     2  0 12:15 ?        00:00:00 [kworker/0:0H-events_highpri]
+root         9     2  0 12:15 ?        00:00:00 [mm_percpu_wq]
+root        10     2  0 12:15 ?        00:00:00 [ksoftirqd/0]
+root        11     2  0 12:15 ?        00:00:18 [rcu_sched]
+root        12     2  0 12:15 ?        00:00:00 [migration/0]
+root        13     2  0 12:15 ?        00:00:00 [idle_inject/0]
+root        14     2  0 12:15 ?        00:00:00 [cpuhp/0]
+root        15     2  0 12:15 ?        00:00:00 [cpuhp/1]
+root        16     2  0 12:15 ?        00:00:00 [idle_inject/1]
+root        17     2  0 12:15 ?        00:00:00 [migration/1]
+root        18     2  0 12:15 ?        00:00:00 [ksoftirqd/1]
+root        20     2  0 12:15 ?        00:00:00 [kworker/1:0H-events_highpri]
+root        21     2  0 12:15 ?        00:00:00 [cpuhp/2]
+root        22     2  0 12:15 ?        00:00:00 [idle_inject/2]
+root        23     2  0 12:15 ?        00:00:00 [migration/2]
+root        24     2  0 12:15 ?        00:00:00 [ksoftirqd/2]
+root        26     2  0 12:15 ?        00:00:00 [kworker/2:0H-events_highpri]
+root        27     2  0 12:15 ?        00:00:00 [cpuhp/3]
+root        28     2  0 12:15 ?        00:00:00 [idle_inject/3]
+root        29     2  0 12:15 ?        00:00:00 [migration/3]
+root        30     2  0 12:15 ?        00:00:00 [ksoftirqd/3]
+root        32     2  0 12:15 ?        00:00:00 [kworker/3:0H-kblockd]
+root        33     2  0 12:15 ?        00:00:00 [kdevtmpfs]
+root        34     2  0 12:15 ?        00:00:00 [netns]
+root        35     2  0 12:15 ?        00:00:00 [rcu_tasks_kthre]
+root        36     2  0 12:15 ?        00:00:00 [kauditd]
+root        37     2  0 12:15 ?        00:00:00 [khungtaskd]
+root        38     2  0 12:15 ?        00:00:00 [oom_reaper]
+root        39     2  0 12:15 ?        00:00:00 [writeback]
+root        40     2  0 12:15 ?        00:00:00 [kcompactd0]
+root        41     2  0 12:15 ?        00:00:00 [ksmd]
+root        42     2  0 12:15 ?        00:00:00 [khugepaged]
+root       135     2  0 12:15 ?        00:00:00 [kintegrityd]
+root       136     2  0 12:15 ?        00:00:00 [kblockd]
+root       137     2  0 12:15 ?        00:00:00 [blkcg_punt_bio]
+root       139     2  0 12:15 ?        00:00:00 [tpm_dev_wq]
+root       140     2  0 12:15 ?        00:00:00 [ata_sff]
+root       141     2  0 12:15 ?        00:00:00 [md]
+root       142     2  0 12:15 ?        00:00:00 [edac-poller]
+root       143     2  0 12:15 ?        00:00:00 [devfreq_wq]
+root       145     2  0 12:15 ?        00:00:00 [watchdogd]
+root       149     2  0 12:15 ?        00:00:00 [kswapd0]
+root       150     2  0 12:15 ?        00:00:00 [kworker/u9:0-rb_allocator]
+root       151     2  0 12:15 ?        00:00:00 [ecryptfs-kthrea]
+root       154     2  0 12:15 ?        00:00:00 [kthrotld]
+root       155     2  0 12:15 ?        00:00:00 [acpi_thermal_pm]
+root       158     2  0 12:15 ?        00:00:00 [ipv6_addrconf]
+root       169     2  0 12:15 ?        00:00:00 [kstrp]
+root       188     2  0 12:15 ?        00:00:00 [charger_manager]
+root       240     2  0 12:15 ?        00:00:00 [kworker/1:2-events]
+root       241     2  0 12:15 ?        00:00:00 [sdhci]
+root       242     2  0 12:15 ?        00:00:00 [irq/47-mmc0]
+root       244     2  0 12:15 ?        00:00:00 [cryptd]
+root       248     2  0 12:15 ?        00:00:00 [scsi_eh_0]
+root       249     2  0 12:15 ?        00:00:00 [scsi_tmf_0]
+root       250     2  0 12:15 ?        00:00:00 [scsi_eh_1]
+root       251     2  0 12:15 ?        00:00:00 [scsi_tmf_1]
+root       252     2  0 12:15 ?        00:00:00 [scsi_eh_2]
+root       253     2  0 12:15 ?        00:00:00 [scsi_tmf_2]
+root       254     2  0 12:15 ?        00:00:00 [scsi_eh_3]
+root       255     2  0 12:15 ?        00:00:00 [scsi_tmf_3]
+root       293     2  0 12:15 ?        00:00:00 [kworker/1:1H]
+root       297     2  0 12:15 ?        00:00:00 [e1000e]
+root       298     2  0 12:15 ?        00:00:00 [kworker/3:1H-events_highpri]
+root       342     2  0 12:15 ?        00:00:00 [raid5wq]
+root       355     2  0 12:15 ?        00:00:00 [kworker/0:1H-kblockd]
+root       371     2  0 12:15 ?        00:00:00 [kworker/2:1H-events_highpri]
+root       391     2  0 12:15 ?        00:00:00 [jbd2/sda1-8]
+root       392     2  0 12:15 ?        00:00:00 [ext4-rsv-conver]
+root       471     1  0 12:15 ?        00:00:01 /lib/systemd/systemd-journald
+root       476     2  0 12:15 ?        00:00:00 [rpciod]
+root       477     2  0 12:15 ?        00:00:00 [xprtiod]
+root       485     1  0 12:15 ?        00:00:00 /lib/systemd/systemd-udevd
+root       495     2  0 12:15 ?        00:00:00 [loop0]
+root       522     2  0 12:15 ?        00:00:00 [loop1]
+root       528     2  0 12:15 ?        00:00:00 [loop2]
+root       532     2  0 12:15 ?        00:00:00 [loop3]
+root       533     2  0 12:15 ?        00:00:00 [loop4]
+root       534     2  0 12:15 ?        00:00:00 [loop5]
+root       542     2  0 12:15 ?        00:00:00 [loop6]
+root       546     2  0 12:15 ?        00:00:00 [loop7]
+root       547     2  0 12:15 ?        00:00:00 [loop8]
+root       548     2  0 12:15 ?        00:00:00 [loop9]
+root       549     2  0 12:15 ?        00:00:00 [loop10]
+root       550     2  0 12:15 ?        00:00:00 [loop11]
+root       655     2  0 12:15 ?        00:00:00 [irq/18-smo8800]
+root       700     1  0 12:15 ?        00:00:00 ovsdb-server /etc/openvswitch/conf.db -vconsole:emer -vsyslog:err -vfile:info --remote=punix:/var/run/openvswitch/db.sock --private-key=db:Op
+root       731     2  0 12:15 ?        00:00:00 [irq/50-mei_me]
+systemd+   749     1  0 12:15 ?        00:00:00 /lib/systemd/systemd-resolved
+_rpc       754     1  0 12:15 ?        00:00:00 /sbin/rpcbind -f -w
+root       772     2  0 12:15 ?        00:00:00 [cfg80211]
+root       779     1  0 12:15 ?        00:00:00 /usr/sbin/irqbalance --foreground
+root       781     1  0 12:15 ?        00:00:00 /usr/sbin/atopacctd
+root       785     1  0 12:15 ?        00:00:00 /lib/systemd/systemd-logind
+syslog     786     1  0 12:15 ?        00:00:00 /usr/sbin/rsyslogd -n -iNONE
+root       787     2  0 12:15 ?        00:00:01 [kworker/3:5-events]
+root       788     1  0 12:15 ?        00:00:00 /usr/lib/accountsservice/accounts-daemon
+root       789     1  0 12:15 ?        00:00:02 /usr/lib/snapd/snapd
+root       795     1  0 12:15 ?        00:00:00 /usr/sbin/ModemManager --filter-policy=strict
+message+   798     1  0 12:15 ?        00:00:02 /usr/bin/dbus-daemon --system --address=systemd: --nofork --nopidfile --systemd-activation --syslog-only
+root       800     1  0 12:15 ?        00:00:03 /usr/sbin/NetworkManager --no-daemon
+avahi      802     1  0 12:15 ?        00:00:18 avahi-daemon: running [hector.local]
+root       806     1  0 12:15 ?        00:00:00 /usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers
+root       808     1  0 12:15 ?        00:00:00 /usr/sbin/smartd -n
+root       814     1  0 12:15 ?        00:00:00 /usr/sbin/cupsd -l
+root       817     1  0 12:15 ?        00:00:00 /sbin/wpa_supplicant -u -s -O /run/wpa_supplicant
+root       819     1  0 12:15 ?        00:00:00 /usr/lib/udisks2/udisksd
+root       821     1  0 12:15 ?        00:00:01 /usr/sbin/acpid
+root       825     1  0 12:15 ?        00:00:00 /usr/sbin/thermald --no-daemon --dbus-enable
+root       826     1  0 12:15 ?        00:00:00 /usr/bin/lxcfs /var/lib/lxcfs/
+root       828     1  2 12:15 ?        00:02:40 /opt/forticlient/fctsched
+root       846     1  0 12:15 ?        00:00:02 /usr/bin/atop -R -w /var/log/atop/atop_20200312 600
+root       860     1  0 12:15 ?        00:00:00 /usr/sbin/cron -f
+daemon     881     1  0 12:15 ?        00:00:00 /usr/sbin/atd -f
+root       932     2  0 12:15 ?        00:00:05 [irq/51-iwlwifi]
+root       944     2  0 12:15 ?        00:00:00 [kworker/u9:1-hci0]
+root       961     1  0 12:15 ?        00:00:23 ovs-vswitchd unix:/var/run/openvswitch/db.sock -vconsole:emer -vsyslog:err -vfile:info --mlockall --no-chdir --log-file=/var/log/openvswitch/
+avahi      965   802  0 12:15 ?        00:00:00 avahi-daemon: chroot helper
+root       974     1  0 12:15 ?        00:00:00 /usr/lib/policykit-1/polkitd --no-debug
+root       979     1  0 12:15 ?        00:00:00 /usr/sbin/cups-browsed
+colord     985     1  0 12:15 ?        00:00:00 /usr/lib/colord/colord
+root      1301     1  0 12:15 ?        00:00:00 /usr/lib/bluetooth/bluetoothd
+memcache  1468     1  0 12:15 ?        00:00:02 /usr/bin/memcached -m 64 -p 11211 -u memcache -l 127.0.0.1
+root      1474     1  0 12:15 ?        00:00:00 /usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal
+root      1476     1  0 12:15 ?        00:00:00 /usr/sbin/libvirtd
+root      1486     1  0 12:15 ?        00:00:00 /usr/bin/nfcapd -D -P /run/nfcapd.default.pid -l /var/cache/nfdump -p 2055
+root      1499     1  0 12:15 ?        00:00:00 /usr/sbin/lightdm
+root      1507     1  0 12:15 ?        00:00:00 /usr/sbin/sshd -D
+root      1508     1  0 12:15 ?        00:00:11 /usr/bin/containerd
+debian-+  1537     1  0 12:15 ?        00:00:00 /usr/bin/tor --defaults-torrc /usr/share/tor/tor-service-defaults-torrc -f /etc/tor/torrc --RunAsDaemon 0
+root      1538  1499  0 12:15 tty7     00:01:00 /usr/lib/xorg/Xorg -core :0 -seat seat0 -auth /var/run/lightdm/root/:0 -nolisten tcp vt7 -novtswitch
+root      1567     1  0 12:15 ?        00:00:00 /usr/sbin/apache2 -k start
+www-data  1569  1567  0 12:15 ?        00:00:00 /usr/sbin/apache2 -k start
+www-data  1570  1567  0 12:15 ?        00:00:00 /usr/sbin/apache2 -k start
+www-data  1574     1  0 12:15 ?        00:00:00 /usr/bin/htcacheclean -d 120 -p /var/cache/apache2/mod_cache_disk -l 300M -n
+root      1659     2  0 12:15 ?        00:00:00 bpfilter_umh
+root      1743     1  0 12:15 ?        00:00:00 /usr/lib/libmbim/mbim-proxy
+libvirt+  1791     1  0 12:15 ?        00:00:00 /usr/sbin/dnsmasq --conf-file=/var/lib/libvirt/dnsmasq/default.conf --leasefile-ro --dhcp-script=/usr/lib/libvirt/libvirt_leaseshelper
+root      1792  1791  0 12:15 ?        00:00:00 /usr/sbin/dnsmasq --conf-file=/var/lib/libvirt/dnsmasq/default.conf --leasefile-ro --dhcp-script=/usr/lib/libvirt/libvirt_leaseshelper
+rtkit     2094     1  0 12:15 ?        00:00:00 /usr/libexec/rtkit-daemon
+root      2117     2  0 12:15 ?        00:00:00 [krfcommd]
+root      2143   828  0 12:15 ?        00:00:15 /opt/forticlient/epctrl
+root      2395     1  0 12:15 ?        00:00:05 /usr/sbin/nmbd --foreground --no-process-group
+whoopsie  2397     1  0 12:15 ?        00:00:00 /usr/bin/whoopsie -f
+root      2398     1  0 12:15 ?        00:00:00 /usr/sbin/smcrouted -n -s
+kernoops  2438     1  0 12:15 ?        00:00:00 /usr/sbin/kerneloops --test
+nobody    2441     1  0 12:15 ?        00:00:00 /usr/sbin/atftpd --daemon --tftpd-timeout 300 --retry-timeout 5 --mcast-port 1758 --mcast-addr 239.239.239.0-255 --mcast-ttl 1 --maxthread 10
+kernoops  2444     1  0 12:15 ?        00:00:00 /usr/sbin/kerneloops
+lxc-dns+  2455     1  0 12:15 ?        00:00:00 dnsmasq -u lxc-dnsmasq --strict-order --bind-interfaces --pid-file=/run/lxc/dnsmasq.pid --listen-address 10.0.3.1 --dhcp-range 10.0.3.2,10.0.
+root      2463     1  0 12:15 ?        00:00:00 /usr/sbin/smbd --foreground --no-process-group
+root      2548  2463  0 12:15 ?        00:00:00 /usr/sbin/smbd --foreground --no-process-group
+root      2549  2463  0 12:15 ?        00:00:00 /usr/sbin/smbd --foreground --no-process-group
+root      2555     1  0 12:15 ?        00:00:00 /usr/bin/perl -wT /usr/sbin/munin-node
+root      2560  2463  0 12:15 ?        00:00:00 /usr/sbin/smbd --foreground --no-process-group
+root      2865     1  0 12:15 ?        00:00:00 /usr/lib/postfix/sbin/master -w
+postfix   2869  2865  0 12:15 ?        00:00:00 qmgr -l -t unix -u
+root      3375   828  0 12:15 ?        00:00:07 /opt/forticlient/confighandler
+root      3592   828  0 12:15 ?        00:00:45 /opt/forticlient/fmon -s /opt/forticlient/vir_sig/ -o /opt/forticlient/ --unit /opt/forticlient/ -a
+root      3594  3592  0 12:15 ?        00:00:06 /opt/forticlient/scanunit -p 55251 -s /opt/forticlient/vir_sig/ -a
+root      3661     1  0 12:15 tty1     00:00:00 /sbin/agetty -o -p -- \u --noclear tty1 linux
+postfix   9338  2865  0 13:14 ?        00:00:00 tlsmgr -l -t unix -u -c
+root     10407  1499  0 13:27 ?        00:00:00 lightdm --session-child 12 19
+cgustave 10421     1  0 13:27 ?        00:00:00 /lib/systemd/systemd --user
+cgustave 10437 10421  0 13:27 ?        00:00:00 (sd-pam)
+root     10438     2  0 13:27 ?        00:00:00 [kworker/1:0-events]
+cgustave 10467 10421  0 13:27 ?        00:00:02 /usr/bin/pulseaudio --daemonize=no
+cgustave 10471     1  0 13:27 ?        00:00:00 /usr/bin/gnome-keyring-daemon --daemonize --login
+cgustave 10474 10407  0 13:27 ?        00:00:00 xfce4-session
+cgustave 10488 10421  0 13:27 ?        00:00:00 /usr/bin/dbus-daemon --session --address=systemd: --nofork --nopidfile --systemd-activation --syslog-only
+cgustave 10562 10474  0 13:27 ?        00:00:00 /usr/bin/ssh-agent /usr/bin/im-launch startxfce4
+cgustave 10580 10421  0 13:27 ?        00:00:00 /usr/lib/at-spi2-core/at-spi-bus-launcher
+cgustave 10585 10580  0 13:27 ?        00:00:00 /usr/bin/dbus-daemon --config-file=/usr/share/defaults/at-spi2/accessibility.conf --nofork --print-address 3
+cgustave 10590 10421  0 13:27 ?        00:00:00 /usr/lib/x86_64-linux-gnu/xfce4/xfconf/xfconfd
+cgustave 10597 10421  0 13:27 ?        00:00:00 /usr/lib/at-spi2-core/at-spi2-registryd --use-gnome-session
+cgustave 10605 10474  0 13:27 ?        00:00:01 xfwm4 --replace
+cgustave 10608 10421  0 13:27 ?        00:00:00 /usr/lib/gvfs/gvfsd
+cgustave 10614 10421  0 13:27 ?        00:00:00 /usr/lib/gvfs/gvfsd-fuse /run/user/1000/gvfs -f -o big_writes
+cgustave 10624     1  0 13:27 ?        00:00:01 xfsettingsd
+cgustave 10625 10474  0 13:27 ?        00:00:01 xfce4-panel
+root     10629     1  0 13:27 ?        00:00:01 /usr/lib/upower/upowerd
+cgustave 10633 10625  0 13:27 ?        00:00:02 /usr/lib/x86_64-linux-gnu/xfce4/panel/wrapper-2.0 /usr/lib/x86_64-linux-gnu/xfce4/panel/plugins/libwhiskermenu.so 1 14680071 whiskermenu Whis
+cgustave 10634 10625  0 13:27 ?        00:00:02 /usr/lib/x86_64-linux-gnu/xfce4/panel/wrapper-2.0 /usr/lib/x86_64-linux-gnu/xfce4/panel/plugins/libsystray.so 4 14680073 systray Notification
+cgustave 10635 10625  1 13:27 ?        00:00:48 /usr/lib/x86_64-linux-gnu/xfce4/panel/wrapper-2.0 /usr/lib/x86_64-linux-gnu/xfce4/panel/plugins/libcpugraph.so 9 14680074 cpugraph CPU Graph
+cgustave 10636 10625  0 13:27 ?        00:00:00 /usr/lib/x86_64-linux-gnu/xfce4/panel/wrapper-2.0 /usr/lib/x86_64-linux-gnu/xfce4/panel/plugins/libscreenshooterplugin.so 8 14680075 screensh
+cgustave 10637 10625  0 13:27 ?        00:00:00 /usr/lib/x86_64-linux-gnu/xfce4/panel/wrapper-2.0 /usr/lib/x86_64-linux-gnu/xfce4/panel/plugins/libxfce4powermanager.so 11 14680076 power-man
+cgustave 10638 10625  0 13:27 ?        00:00:00 /usr/lib/x86_64-linux-gnu/xfce4/panel/wrapper-2.0 /usr/lib/x86_64-linux-gnu/xfce4/panel/plugins/libxkb.so 5 14680077 xkb Keyboard Layouts Key
+root     10708     2  0 13:27 ?        00:00:00 [kworker/3:0-events]
+cgustave 10712 10474  0 13:27 ?        00:00:00 Thunar --daemon
+cgustave 10717 10474  0 13:27 ?        00:00:01 xfdesktop
+cgustave 10720 10474  0 13:27 ?        00:00:05 jami-gnome --restore-last-window-state
+cgustave 10723 10474  0 13:27 ?        00:00:01 nm-applet
+cgustave 10726 10474  0 13:27 ?        00:00:00 xfce4-notes
+cgustave 10727 10474  0 13:27 ?        00:00:04 /usr/bin/nextcloud
+cgustave 10730 10474  0 13:27 ?        00:00:03 megasync
+cgustave 10737 10474  0 13:27 ?        00:00:00 xiccd
+cgustave 10749 10474  0 13:27 ?        00:00:00 /usr/bin/python3 /usr/share/system-config-printer/applet.py
+cgustave 10771 10474  0 13:27 ?        00:00:00 /opt/forticlient/fortitraylauncher
+cgustave 10773 10474  0 13:27 ?        00:00:00 /usr/bin/python3 /usr/bin/blueman-applet
+cgustave 10777 10474  0 13:27 ?        00:00:00 /usr/lib/policykit-1-gnome/polkit-gnome-authentication-agent-1
+cgustave 10780 10474  0 13:27 ?        00:00:00 xscreensaver -no-splash
+cgustave 10792 10474  0 13:27 ?        00:00:00 xfce4-screensaver
+cgustave 10793 10474  0 13:27 ?        00:00:00 pasystray
+cgustave 10797 10474  0 13:27 ?        00:00:00 update-notifier
+cgustave 10806     1  0 13:27 ?        00:00:00 xfce4-power-manager
+cgustave 10811     1  0 13:27 ?        00:00:03 /opt/forticlient/fortitray
+cgustave 10816     1  0 13:27 ?        00:00:00 xfce4-volumed
+cgustave 10836 10421  0 13:27 ?        00:00:00 /usr/lib/x86_64-linux-gnu/xfce4/notifyd/xfce4-notifyd
+cgustave 10840 10421  0 13:27 ?        00:00:00 /usr/lib/gvfs/gvfs-udisks2-volume-monitor
+cgustave 10869 10421  0 13:27 ?        00:00:00 /usr/lib/gvfs/gvfs-gphoto2-volume-monitor
+cgustave 10881 10421  0 13:27 ?        00:00:00 /usr/lib/gvfs/gvfs-afc-volume-monitor
+cgustave 10890 10421  0 13:27 ?        00:00:26 /usr/lib/ring/dring
+cgustave 10893 10421  0 13:27 ?        00:00:00 /usr/lib/gvfs/gvfs-mtp-volume-monitor
+cgustave 10897 10421  0 13:27 ?        00:00:00 /usr/lib/gvfs/gvfs-goa-volume-monitor
+cgustave 10907 10608  0 13:27 ?        00:00:00 /usr/lib/gvfs/gvfsd-trash --spawner :1.13 /org/gtk/gvfs/exec_spaw/0
+cgustave 10912 10421  0 13:27 ?        00:00:00 /usr/lib/gvfs/gvfsd-metadata
+cgustave 10938 10421  0 13:27 ?        00:00:00 /usr/lib/bluetooth/obexd
+cgustave 10979 10720  0 13:27 ?        00:00:00 /usr/lib/x86_64-linux-gnu/webkit2gtk-4.0/WebKitNetworkProcess 7 23
+cgustave 10994 10608  0 13:27 ?        00:00:00 /usr/lib/gvfs/gvfsd-network --spawner :1.13 /org/gtk/gvfs/exec_spaw/1
+cgustave 11018 10608  0 13:27 ?        00:00:00 /usr/lib/gvfs/gvfsd-dnssd --spawner :1.13 /org/gtk/gvfs/exec_spaw/3
+cgustave 11060     1  0 13:27 ?        00:00:05 /usr/bin/mrxvt
+cgustave 11061 11060  0 13:27 pts/0    00:00:00 -bash
+cgustave 11221 11060  0 13:27 pts/2    00:00:00 -bash
+cgustave 11229 11060  0 13:27 pts/3    00:00:00 -bash
+root     11298     2  0 13:27 ?        00:00:00 [kworker/0:3-events]
+cgustave 11819 11061  0 13:30 pts/0    00:00:16 vi /home/cgustave/github/python/netcontrol/netcontrol/ssh/tests/paramiko/client.py
+cgustave 11821 11819  0 13:30 ?        00:00:05 /usr/bin/python /home/cgustave/.vim/bundle/YouCompleteMe/python/ycm/../../third_party/ycmd/ycmd --port=58619 --options_file=/tmp/tmp4zwuzqia
+cgustave 11864 11821  0 13:30 ?        00:00:00 /usr/bin/python /home/cgustave/.vim/bundle/YouCompleteMe/third_party/ycmd/third_party/jedi_deps/jedi/jedi/evaluate/compiled/subprocess/__main
+cgustave 12133 11060  0 13:32 pts/1    00:00:00 -bash
+cgustave 14717 11060  0 13:51 pts/5    00:00:00 -bash
+cgustave 14784 11060  0 13:51 pts/6    00:00:00 -bash
+postfix  14913  2865  0 13:52 ?        00:00:00 pickup -l -t unix -u -c
+root     15571     2  0 13:58 ?        00:00:00 [kworker/u8:1-events_unbound]
+root     15578     2  0 13:58 ?        00:00:00 [kworker/2:8-events]
+cgustave 15727 10421  0 14:00 ?        00:00:00 /usr/lib/dconf/dconf-service
+cgustave 15761 10720  0 14:01 ?        00:00:01 /usr/lib/x86_64-linux-gnu/webkit2gtk-4.0/WebKitWebProcess 20 24
+root     16719     2  0 14:12 ?        00:00:00 [kworker/2:0-events]
+root     16724     2  0 14:12 ?        00:00:00 [kworker/0:0-events]
+cgustave 16903 10624  0 14:13 ?        00:00:00 pidgin
+root     16925     2  0 14:13 ?        00:00:00 [kworker/u8:2-events_unbound]
+cgustave 16989 11060  0 14:14 pts/7    00:00:00 -bash
+cgustave 17378 11060  0 14:17 pts/8    00:00:00 /bin/sh -c less -ifLR +G /tmp/11221-scrollback; rm /tmp/11221-scrollback
+cgustave 17379 17378  0 14:17 pts/8    00:00:00 less -ifLR +G /tmp/11221-scrollback
+root     18276     2  0 14:22 ?        00:00:00 [kworker/u8:0-events_unbound]
+cgustave 18366 12133  0 14:22 pts/1    00:00:00 vi ssh.py
+cgustave 18368 18366  0 14:22 ?        00:00:00 /usr/bin/python /home/cgustave/.vim/bundle/YouCompleteMe/python/ycm/../../third_party/ycmd/ycmd --port=59999 --options_file=/tmp/tmpn_3mek24
+cgustave 18411 18368  0 14:22 ?        00:00:00 /usr/bin/python /home/cgustave/.vim/bundle/YouCompleteMe/third_party/ycmd/third_party/jedi_deps/jedi/jedi/evaluate/compiled/subprocess/__main
+root     18515   828  0 14:23 ?        00:00:00 /opt/forticlient/fctlogupload
+cgustave 18537 11229 11 14:23 pts/3    00:00:00 vi tests/mockfiles/ps/default_stdin.txt
+cgustave 18538 18537 10 14:23 ?        00:00:00 /usr/bin/python /home/cgustave/.vim/bundle/YouCompleteMe/python/ycm/../../third_party/ycmd/ycmd --port=47563 --options_file=/tmp/tmprfyalulm
+cgustave 18577 11060  5 14:23 pts/4    00:00:00 -bash
+cgustave 18596 18577  0 14:23 pts/4    00:00:00 ps -ef
+~/github/python/netcontrol/netcontrol/ssh (release *)$
+

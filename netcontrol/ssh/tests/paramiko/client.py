@@ -7,7 +7,6 @@ Used for unittest
 #from paramiko.rsakey import RSAKey
 #import paramiko
 
-
 import logging as log
 
 
@@ -157,17 +156,14 @@ class SSHClient():
 
         # some commands need to be translated so they can be used as filename
         # We replace / with - and 'space' with _ and | with -
-        tr_command = command.translate(str.maketrans({"/": "-",
-                                                      "\\": "_",
-                                                      "'" : "_",
-                                                      "^" : "_",
-                                                      " ": "_",
-                                                      "|": "-"}))
+        tr_command = command.translate(str.maketrans({"/": "-", "\\": "_","'" : "_","^" : "_"," ": "_","|": "-"}))
         log.debug("tr_command={}".format(tr_command))
 
+        filename = "tests/mockfiles/"+self.context+"/"+tr_command+"_stdin.txt"
         try:
-            self.stdin  = open("tests/mockfiles/"+self.context+"/"+tr_command+"_stdin.txt", "r", encoding="utf8") 
+            self.stdin  = open(filename, "r", encoding="utf8") 
         except Exception:
+            log.warning("Could no open mockile {} using default/stdin.txt".format(filename))
             self.stdin  = open("tests/mockfiles/default/stdin.txt", "r", encoding="utf8") 
 
         try:            
@@ -262,12 +258,7 @@ class Channel():
 
         # some commands need to be translated so they can be used as filename
         # We replace / with - and 'space' with _ and | with -
-        tr_command = self._send.translate(str.maketrans({"/": "-",
-                                                         " ": "_",
-                                                         "\\": "_",
-                                                         "'" : "_",
-                                                         "^" : "_",
-                                                         "|": "-"}))
+        tr_command = self._send.translate(str.maketrans({"/": "-"," ": "_", "\\": "_", "'" : "_", "^" : "_", "|": "-"}))
         log.debug("tr_command={}".format(tr_command))
 
         try:

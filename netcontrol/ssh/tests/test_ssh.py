@@ -63,8 +63,8 @@ class SshTestCase(unittest.TestCase):
         self.assertRaises(Exception)
 
     def test_sshcmd_single_command(self):
-        self.ssh.connect()
         self.ssh.mock(context='default')
+        self.ssh.connect()
         self.ssh.commands(["uptime"])
         # Check we can see the work average in the output :  12:09:34 up  2:49, 1 user,  load average: 0.01, 0.05, 0.0
         self.ssh.close()
@@ -78,36 +78,36 @@ class SshTestCase(unittest.TestCase):
 
     #@unittest.skip("by-passed for now")
     def test_sshcmd_double_command(self):
-        self.ssh.connect()
         self.ssh.mock(context='default')
+        self.ssh.connect()
         self.ssh.commands(["uptime","ps -ef"])
         self.ssh.close()
         self.assertNotEqual(self.ssh.output.find("load average"),-1)
 
     def test_sshcmd_commands_timeout(self):
-        self.ssh.connect()
         self.ssh.mock(exception=socket.timeout)
+        self.ssh.connect()
         self.ssh.commands(["whatever"])
         self.ssh.close()
         self.assertRaises(socket.timeout)
 
     def test_sshcmd_commands_failure(self):
-        self.ssh.connect()
         self.ssh.mock(exception=paramiko.SSHException)
+        self.ssh.connect()
         self.ssh.commands(["whatever"])
         self.ssh.close()
         self.assertRaises(paramiko.SSHException)
 
     def test_sshcmd_execute(self):
-        self.ssh.connect()
         self.ssh.mock(context='default')
+        self.ssh.connect()
         self.ssh.execute(["uptime","ps -ef"])
         self.ssh.close()
         self.assertNotEqual(self.ssh.output.find("load average"),-1)
 
     def test_shell_send_single(self):
-        self.ssh.connect()
         self.ssh.mock(context='default')
+        self.ssh.connect()
         self.ssh.commands(["uptime"])
         self.ssh.close()
         self.assertNotEqual(self.ssh.output.find("load average"),-1)
@@ -118,13 +118,14 @@ class SshTestCase(unittest.TestCase):
         self.ssh.trace_write("\n*** This is test mark line 2 ***\n") 
         self.ssh.trace_mark("MARK1 - command sample") 
 
-        self.ssh.connect()
         self.ssh.mock(context='default')
+        self.ssh.connect()
         self.ssh.commands(["uptime"])
         self.ssh.trace_mark("MARK2 - execute sample") 
 
-        self.ssh.mock(context='default')
+        self.ssh.mock(context='ps')
         self.ssh.execute(["ps -ef"])
+        self.ssh.shell_read()
         self.ssh.close()
 
 if __name__ == '__main__':
