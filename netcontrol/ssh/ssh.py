@@ -163,8 +163,6 @@ class Ssh(object):
         """
         Close ssh connection if opened
         """
-        log.info("Enter [self.connected={}]".format(self.connected))
-
         if self.connected:
             self._client.close()
             self.connected = False

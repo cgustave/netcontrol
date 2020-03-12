@@ -59,7 +59,8 @@ class Fpoc(object):
         self.ssh.connect()
 
     def close(self):
-        self.ssh.close()
+        if self.ssh:
+            self.ssh.close()
 
     # Tracing wrapper on ssh
     def trace_open(self, filename="tracefile.log"):
