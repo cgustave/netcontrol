@@ -59,7 +59,8 @@ class Fortigate(object):
         self.ssh.trace_mark(mark)
 
     def close(self):
-        self.ssh.close()
+        if self.ssh:
+            self.ssh.close()
 
     def cli(self, commands=[]):
         """
@@ -294,18 +295,12 @@ class Fortigate(object):
                     result['members'][order]['status'] = status 
 
             # Get members
-            match_member_section = re.search("\sMembers:$",line)
+            match_member_section = re.search("\s\sMembers:",line)
             if match_member_section:
                 log.debug("found start of members section")
                 members_flag = True
 
         return result
-
- 
-         
-
-
-
 
     def get_session(self, filter={}):
         """
