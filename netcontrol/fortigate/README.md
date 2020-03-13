@@ -64,6 +64,26 @@ CLASSES
      |      For each line 'IKE SA' and 'IPsec SA' we look at 'x' in established x/y 
      |      ex : { 'ike': { 'created' : 3, 'established' : 3}, 'ipsec': { 'created' : 3, 'established' : 3}}
      |  
+     |  get_sdwan_service(self, service=1)
+     |      Returns a dictionary with information from 
+     |      diagnose sys viirtual-wan-link service <service>
+     |          FGT-B1-1 # diagnose sys virtual-wan-link service 1
+     |          Service(1): Address Mode(IPV4) flags=0x0
+     |            Gen(1), TOS(0x0/0x0), Protocol(0: 1->65535), Mode(sla)
+     |            Service role: standalone
+     |            Member sub interface:
+     |            Members:
+     |              1: Seq_num(1 vpn_isp1), alive, sla(0x1), cfg_order(0), cost(0), selected
+     |              2: Seq_num(2 vpn_isp2), alive, sla(0x1), cfg_order(1), cost(0), selected
+     |              3: Seq_num(3 vpn_mpls), alive, sla(0x1), cfg_order(2), cost(0), selected
+     |            Src address:
+     |                  10.0.1.0-10.0.1.255
+     |      
+     |            Dst address:
+     |                  10.0.2.0-10.0.2.255
+     |      
+     |          FGT-B1-1 #
+     |  
      |  get_session(self, filter={})
      |      Filter and retrieve a session from the session list
      |      The provided filter dictionary is based on session filter keywords :

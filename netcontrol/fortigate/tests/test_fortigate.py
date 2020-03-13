@@ -73,11 +73,20 @@ class FGTTestCase(unittest.TestCase):
         self.assertDictEqual(result, {'total': 6, 'subnet': ['10.0.0.0/24', '10.0.2.0/24'], 'nexthop': ['10.255.0.253', '10.255.1.253', '10.255.2.253', '10.255.0.2', '10.255.1.2', '10.255.2.2'], 'interface': ['vpn_mpls', 'vpn_isp1', 'vpn_isp2']}) 
         self.fgt.close()
 
+    #@unittest.skip  # no reason needed
     def test_session(self):
         self.fgt.ssh.mock(context='session')
         self.fgt.trace_open(filename="fgt_tracefile.log")
         result = self.fgt.get_session(filter={'dport' : '222', 'src' : '10.199.3.10', 'dst' : '10.199.3.1' })
         self.assertDictEqual(result, {'proto': '6', 'proto_state': '01', 'duration': '375', 'expire': '3599', 'timeout': '3600', 'state': ['log', 'local', 'may_dirty'], 'statistics': {'org_byte': '28670', 'org_packet': '369', 'reply_byte': '21275', 'reply_packet': '200'}, 'src': '10.199.3.10', 'sport': '36990', 'dest': '10.199.3.1', 'total': '1'}) 
+        self.fgt.close()
+
+    def test_sdwan_service(self):
+        self.fgt.ssh.mock(context='sdwan')
+        self.fgt.trace_open(filename="fgt_tracefile.log")
+        result = self.fgt.get_sdwan_service(service=1)
+        self.assertDictEqual(result,{'members': {'1': {'seq_num': '1', 'status': 'alive'}, '2': {'seq_num': '2', 'status': 'alive'}, '3': {'seq_num': '3', 'status': 'alive'}}, 'mode': 'sla'})
+        print ("sdwan = {}".format(result))
         self.fgt.close()
 
 if __name__ == '__main__':

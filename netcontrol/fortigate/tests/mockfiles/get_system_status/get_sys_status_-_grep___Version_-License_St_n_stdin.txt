@@ -1,5 +1,0 @@
-FGT-B1-1 # get sys status | grep '^Version\|License St'
-Version: FortiGate-VM64-KVM v6.2.3,build8348,200304 (GA)
-License Status: Valid
-
-FGT-B1-1 #

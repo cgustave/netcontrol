@@ -241,6 +241,71 @@ class Fortigate(object):
        log.debug("result={}".format(result))
        return result
       
+    def get_sdwan_service(self, service=1):
+        """
+        Returns a dictionary with information from 
+        diagnose sys viirtual-wan-link service <service>
+            FGT-B1-1 # diagnose sys virtual-wan-link service 1
+            Service(1): Address Mode(IPV4) flags=0x0
+              Gen(1), TOS(0x0/0x0), Protocol(0: 1->65535), Mode(sla)
+              Service role: standalone
+              Member sub interface:
+              Members:
+                1: Seq_num(1 vpn_isp1), alive, sla(0x1), cfg_order(0), cost(0), selected
+                2: Seq_num(2 vpn_isp2), alive, sla(0x1), cfg_order(1), cost(0), selected
+                3: Seq_num(3 vpn_mpls), alive, sla(0x1), cfg_order(2), cost(0), selected
+              Src address:
+                    10.0.1.0-10.0.1.255
+
+              Dst address:
+                    10.0.2.0-10.0.2.255
+
+            FGT-B1-1 #
+        """
+        log.info("Enter")
+        result = {'members': {}, 'mode':''}
+        members_flag = False         
+
+        if not self.ssh.connected:
+            self.ssh.connect()
+
+        self.run_op_mode_command("diagnose sys virtual-wan-link service {}\n".format(service))
+
+        for line in self.ssh.output.splitlines():
+            log.debug("line={}".format(line))
+
+            # Get mode
+            match_mode = re.search("(?:,\sMode\()(?P<mode>\S+)(?:\))", line)
+            if match_mode:
+                mode = match_mode.group('mode')
+                log.debug("found mode={}".format(mode))
+                result['mode']=mode
+         
+            # Get members details
+            if members_flag:
+                match_member = re.search("(?:\s+)(?P<order>\d+)(?::\sSeq_num\()(?P<seq>\d+)(?:\s\S+)?(?:\),\s)(?P<status>alive|dead)",line)
+                if match_member:
+                    order = match_member.group('order')
+                    seq = match_member.group('seq')
+                    status = match_member.group('status')
+                    log.debug("Found order={} seq={} status={}".format(order, seq, status))
+                    result['members'][order] = {}
+                    result['members'][order]['seq_num'] = seq
+                    result['members'][order]['status'] = status 
+
+            # Get members
+            match_member_section = re.search("\sMembers:$",line)
+            if match_member_section:
+                log.debug("found start of members section")
+                members_flag = True
+
+        return result
+
+ 
+         
+
+
+
 
     def get_session(self, filter={}):
         """
