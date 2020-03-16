@@ -497,8 +497,6 @@ class Fortigate(object):
                 total = match_total_session.group('total')
                 result['total'] = total
 
-                log.debug("src={} sport={} dest={}".format(src, sport, dest))
-                
         log.debug("result={}".format(result))
         return result
 
