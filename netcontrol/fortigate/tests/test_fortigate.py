@@ -85,8 +85,7 @@ class FGTTestCase(unittest.TestCase):
         self.fgt.ssh.mock(context='sdwan')
         self.fgt.trace_open(filename="fgt_tracefile.log")
         result = self.fgt.get_sdwan_service(service=1)
-        self.assertDictEqual(result,{'members': {'1': {'seq_num': '1', 'status': 'alive'}, '2': {'seq_num': '2', 'status': 'alive'}, '3': {'seq_num': '3', 'status': 'alive'}}, 'mode': 'sla'})
-        print ("sdwan = {}".format(result))
+        self.assertDictEqual(result,{'members': {'1': {'seq_num': '1', 'status': 'alive', 'sla': '0x1'}, '2': {'seq_num': '2', 'status': 'alive', 'sla': '0x1'}, '3': {'seq_num': '3', 'status': 'alive', 'sla': '0x1'}}, 'mode': 'sla'})
         self.fgt.close()
 
 if __name__ == '__main__':

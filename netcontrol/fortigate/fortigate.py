@@ -9,8 +9,6 @@ Driver for FortiGate
 from netcontrol.ssh.ssh import Ssh
 import logging as log
 import re
-import json
-
 
 class Fortigate(object):
     """
@@ -266,6 +264,7 @@ class Fortigate(object):
         log.info("Enter")
         result = {'members': {}, 'mode':''}
         members_flag = False         
+        mode = ''
 
         if not self.ssh.connected:
             self.ssh.connect()
@@ -293,6 +292,17 @@ class Fortigate(object):
                     result['members'][order] = {}
                     result['members'][order]['seq_num'] = seq
                     result['members'][order]['status'] = status 
+
+                    # If sla mode, get sla value
+                    if mode == 'sla':
+                        log.debug("sla mode, get sla value")
+                        match_sla_value = re.search("(?:,\ssla\()(?P<sla>0x[0-9a-z]+)(?:\),)",line)
+                        if match_sla_value:
+                            sla = match_sla_value.group('sla')
+                            log.debug("Found sla={}".format(sla))
+                            result['members'][order]['sla'] = sla
+                        else:
+                            log.error("Could not extract sla value from member")
 
             # Get members
             match_member_section = re.search("\s\sMembers:",line)
