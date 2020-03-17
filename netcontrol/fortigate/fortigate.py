@@ -145,7 +145,7 @@ class Fortigate(object):
         if not self.ssh.connected:
             self.ssh.connect()
 
-        self.run_op_mode_command("diagnose ipsec ike status\n")
+        self.run_op_mode_command("diagnose vpn ike status\n")
         # FGT-B1-1 #  diagnose vpn ike status
         #connection: 3/348
         #IKE SA: created 3/348  established 3/3  times 0/2083/3220 ms
