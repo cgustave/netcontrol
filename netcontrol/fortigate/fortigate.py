@@ -152,7 +152,7 @@ class Fortigate(object):
         #IPsec SA: created 3/348  established 3/3  times 0/2083/3220 ms
         #
         # FGT-B1-1 #
-        match_ike_sa = re.search("(?:IKE\sSA:\screated\s)(?P<created>\d+)(?:/\d+\s+established\s\d+/)(?P<established>\d+)", self.ssh.output)
+        match_ike_sa = re.search("(?:IKE\sSA:\screated\s)(?P<created>\d+)(?:/\d+\s+established\s)(?P<established>\d+)", self.ssh.output)
         if match_ike_sa:
             ike_sa_created = match_ike_sa.group('created')
             ike_sa_established = match_ike_sa.group('established')
@@ -162,7 +162,7 @@ class Fortigate(object):
         else:
             log.debug("Could not extract IKE SA numbers")
 
-        match_ipsec_sa = re.search("(?:IPsec\sSA:\screated\s)(?P<created>\d+)(?:/\d+\s+established\s\d+/)(?P<established>\d+)", self.ssh.output)
+        match_ipsec_sa = re.search("(?:IPsec\sSA:\screated\s)(?P<created>\d+)(?:/\d+\s+established\s)(?P<established>\d+)", self.ssh.output)
         if match_ipsec_sa:
             ipsec_sa_created = match_ipsec_sa.group('created')
             ipsec_sa_established = match_ipsec_sa.group('established')
