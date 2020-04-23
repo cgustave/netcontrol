@@ -77,7 +77,7 @@ class FGTTestCase(unittest.TestCase):
         self.fgt.ssh.mock(context='bgp_recursive_routes')
         self.fgt.trace_open(filename="fgt_tracefile.log")
         result = self.fgt.get_bgp_routes(vrf=0)
-        self.assertDictEqual(result, {'interface': ['sgwn_mpls1', 'sgwn_inet1', 'sgwn_inet2', '00', '03'], 'nexthop': ['10.255.0.1', '10.255.1.1', '10.255.2.1', '10.254.0.1', '10.254.1.2', '10.254.2.2', '10.254.0.2', '10.254.1.1', '10.254.2.1'],'recursive': 8, 'subnet': ['10.1.1.0/24', '10.2.1.0/24', '10.2.2.0/24'], 'total': 12})
+        self.assertDictEqual(result, {'interface': ['sgwn_mpls1', 'sgwn_inet1', 'sgwn_inet2'], 'nexthop': ['10.255.0.1', '10.255.1.1', '10.255.2.1', '10.254.0.1', '10.254.1.2', '10.254.2.2', '10.254.0.2', '10.254.1.1', '10.254.2.1'],'recursive': 8, 'subnet': ['10.1.1.0/24', '10.2.1.0/24', '10.2.2.0/24'], 'total': 12})
         self.fgt.close()
 
     #@unittest.skip  # no reason needed

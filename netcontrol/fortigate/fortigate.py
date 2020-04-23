@@ -326,7 +326,7 @@ class Fortigate(object):
                        result['interface'].append(interface)
 
                # Track recursive routes
-               match_nexthop = re.search("]\s+via\s+(?P<nexthop>[0-9.]+)\s+\(recursive\s.+\,\s+(?P<interface>\w+)",line)
+               match_nexthop = re.search("]\s+via\s+(?P<nexthop>[0-9.]+)\s+\(recursive\s.+\,\s+(?P<interface>\w+)\),",line)
                if match_nexthop:
                    nexthop = match_nexthop.group('nexthop')
                    interface = match_nexthop.group('interface')
