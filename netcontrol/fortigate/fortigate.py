@@ -265,6 +265,23 @@ class Fortigate(object):
 							[200/0] via 10.255.2.2, vpn_isp2, 00:02:54
 
         FGT-B1-1 #
+        
+        Case for recursive routes:
+        FGT-1B2-9 (customer) # get router info routing-table bgp
+
+		Routing table for VRF=0
+		B       10.1.1.0/24 [200/0] via 10.255.0.1, sgwn_mpls1, 05:02:33
+							[200/0] via 10.255.1.1, sgwn_inet1, 05:02:33
+							[200/0] via 10.255.2.1, sgwn_inet2, 05:02:33
+							[200/0] via 10.255.0.1, sgwn_mpls1, 05:02:33
+		B       10.2.1.0/24 [200/0] via 10.254.0.1 (recursive is directly connected, sgwn_mpls1), 00:28:01
+							[200/0] via 10.254.1.2 (recursive is directly connected, sgwn_inet1), 00:28:01
+							[200/0] via 10.254.2.2 (recursive is directly connected, sgwn_inet2), 00:28:01
+							[200/0] via 10.254.0.1 (recursive is directly connected, sgwn_mpls1), 00:28:01
+		B       10.2.2.0/24 [200/0] via 10.254.0.2 (recursive is directly connected, sgwn_mpls1), 03:14:43
+							[200/0] via 10.254.1.1 (recursive is directly connected, sgwn_inet1), 03:14:43
+							[200/0] via 10.254.2.1 (recursive is directly connected, sgwn_inet2), 03:14:43
+							[200/0] via 10.254.0.2 (recursive is directly connected, sgwn_mpls1), 03:14:43
        """
        log.info("Enter with vrf={}".format(vrf))
        result = { 'total' : {}, 'subnet' : [], 'nexthop' : [], 'interface' : [] }
@@ -277,6 +294,7 @@ class Fortigate(object):
        # Start checking routes when seeing "VRF=xxx"
        vrf_flag = False
        nb_route = 0
+       nb_recursive_route = 0
        for line in self.ssh.output.splitlines():
            log.debug("line={}".format(line)) 
            if not vrf_flag:
@@ -294,18 +312,34 @@ class Fortigate(object):
                    result['subnet'].append(subnet)
  
                # Look for nexthop and interface + count number of routes
+
+               # Track non recursive routes
                match_nexthop = re.search("]\s+via\s+(?P<nexthop>[0-9.]+),\s+(?P<interface>\w+)",line)
                if match_nexthop:
                    nexthop = match_nexthop.group('nexthop')
                    interface = match_nexthop.group('interface')
                    nb_route = nb_route + 1
-                   log.debug("found nexthop={} interface={} nb_route={}".format(nexthop, interface, nb_route))
+                   log.debug("found nexthop={} interface={} nb_route={} nb_recursive={}".format(nexthop, interface, nb_route, nb_recursive_route))
                    if nexthop not in result['nexthop']:
                        result['nexthop'].append(nexthop)
                    if interface not in result['interface']:
                        result['interface'].append(interface)
-       
+
+               # Track recursive routes
+               match_nexthop = re.search("]\s+via\s+(?P<nexthop>[0-9.]+)\s+\(recursive\s.+\,\s+(?P<interface>\w+)",line)
+               if match_nexthop:
+                   nexthop = match_nexthop.group('nexthop')
+                   interface = match_nexthop.group('interface')
+                   nb_route = nb_route + 1
+                   nb_recursive_route = nb_recursive_route + 1
+                   log.debug("found nexthop={} interface={} nb_route={} nb_recursive={}".format(nexthop, interface, nb_route, nb_recursive_route))
+                   if nexthop not in result['nexthop']:
+                       result['nexthop'].append(nexthop)
+                   if interface not in result['interface']:
+                       result['interface'].append(interface)
+
        result['total'] = nb_route        
+       result['recursive'] = nb_recursive_route
        log.debug("result={}".format(result))
        return result
       

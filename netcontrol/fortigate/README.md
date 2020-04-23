@@ -71,6 +71,23 @@ CLASSES
      |                                                       [200/0] via 10.255.2.2, vpn_isp2, 00:02:54
      |      
      |       FGT-B1-1 #
+     |       
+     |       Case for recursive routes:
+     |       FGT-1B2-9 (customer) # get router info routing-table bgp
+     |      
+     |               Routing table for VRF=0
+     |               B       10.1.1.0/24 [200/0] via 10.255.0.1, sgwn_mpls1, 05:02:33
+     |                                                       [200/0] via 10.255.1.1, sgwn_inet1, 05:02:33
+     |                                                       [200/0] via 10.255.2.1, sgwn_inet2, 05:02:33
+     |                                                       [200/0] via 10.255.0.1, sgwn_mpls1, 05:02:33
+     |               B       10.2.1.0/24 [200/0] via 10.254.0.1 (recursive is directly connected, sgwn_mpls1), 00:28:01
+     |                                                       [200/0] via 10.254.1.2 (recursive is directly connected, sgwn_inet1), 00:28:01
+     |                                                       [200/0] via 10.254.2.2 (recursive is directly connected, sgwn_inet2), 00:28:01
+     |                                                       [200/0] via 10.254.0.1 (recursive is directly connected, sgwn_mpls1), 00:28:01
+     |               B       10.2.2.0/24 [200/0] via 10.254.0.2 (recursive is directly connected, sgwn_mpls1), 03:14:43
+     |                                                       [200/0] via 10.254.1.1 (recursive is directly connected, sgwn_inet1), 03:14:43
+     |                                                       [200/0] via 10.254.2.1 (recursive is directly connected, sgwn_inet2), 03:14:43
+     |                                                       [200/0] via 10.254.0.2 (recursive is directly connected, sgwn_mpls1), 03:14:43
      |  
      |  get_ike_and_ipsec_sa_number(self)
      |      Returns a dictionary with the number of 'created' and 'connected' ike and ispec SA
