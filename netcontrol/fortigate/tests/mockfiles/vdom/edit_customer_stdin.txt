@@ -1,0 +1,5 @@
+FGT-1B2-9 (vdom) # edit customer
+current vf=customer:1
+
+FGT-1B2-9 (customer) #
+

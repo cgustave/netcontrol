@@ -80,6 +80,75 @@ class Fortigate(object):
 
             log.info("command={} output={}".format(command, self.ssh.output))
 
+    def enter_vdom(self, vdom=None):
+        """
+        Enters a specific vdom
+        Uses : end -> config vdom -> edit VDOM
+       
+        ex: 
+		FGT-1B2-9 # config vdom
+        FGT-1B2-9 (vdom) # edit customer
+        current vf=customer:1
+        FGT-1B2-9 (customer) #
+        """
+        log.info("Enter with vdom={}".format(str(vdom)))
+        result = False
+
+        if not vdom:
+            log.error("please provide vdom name")
+            raise SystemExit
+
+        if not self.ssh.connected:
+            self.ssh.connect()
+        
+        # Leave current vdom or global section
+        self.run_op_mode_command("end\n")
+        # Enter vdom
+        self.run_op_mode_command("config vdom\n")
+        self.run_op_mode_command("edit "+str(vdom)+"\n")
+
+        for line in self.ssh.output.splitlines():
+            log.debug("line={}".format(line))
+            match_vdom = re.search("\s\((?P<vd>\S+)\)\s", line)
+            if match_vdom:
+                vd = match_vdom.group('vd')
+                log.debug("Found vd={} in line={}".format(str(vd), line)) 
+                if vd == vdom:
+                    log.debug("Confirmed vdom prompt")
+                    result = True
+
+        return result
+
+    def enter_global(self):
+        """
+        Enters global section
+        Uses : end -> config global
+
+        ex:
+        FGT-1B2-9 # config global
+        FGT-1B2-9 (global) #
+        """
+        log.info("Enter")
+        result = False
+
+        if not self.ssh.connected:
+            self.ssh.connect()
+
+        # Leave current vdom or global section
+        self.run_op_mode_command("end\n")
+
+        # Enter global
+        self.run_op_mode_command("config global\n")
+
+        for line in self.ssh.output.splitlines():
+            log.debug("line={}".format(line))
+            match_global = re.search("\s\(global\)\s", line)
+            if match_global:
+               log.debug("Confirmed global prompt")
+               result = True
+
+        return result
+
     def get_status(self):
         """
         Returns a dictionary with FortiGate version, license status

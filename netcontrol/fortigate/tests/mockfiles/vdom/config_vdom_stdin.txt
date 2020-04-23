@@ -1,0 +1,4 @@
+FGT-1B2-9 # config vdom
+
+FGT-1B2-9 (vdom) #
+

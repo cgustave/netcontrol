@@ -33,6 +33,24 @@ CLASSES
      |  
      |  connect(self)
      |  
+     |  enter_global(self)
+     |      Enters global section
+     |      Uses : end -> config global
+     |      
+     |      ex:
+     |      FGT-1B2-9 # config global
+     |      FGT-1B2-9 (global) #
+     |  
+     |  enter_vdom(self, vdom=None)
+     |      Enters a specific vdom
+     |      Uses : end -> config vdom -> edit VDOM
+     |      
+     |      ex: 
+     |              FGT-1B2-9 # config vdom
+     |      FGT-1B2-9 (vdom) # edit customer
+     |      current vf=customer:1
+     |      FGT-1B2-9 (customer) #
+     |  
      |  get_bgp_routes(self, vrf='0')
      |      Returns information on BGP routes for the given VRF like :
      |      result = { 'total' = 6,

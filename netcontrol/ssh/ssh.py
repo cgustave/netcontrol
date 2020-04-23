@@ -367,6 +367,11 @@ class Ssh(object):
         While waiting for prompt, all output received is stored in the
         ssh.output for processing
 
+        Prompt may or may not have vdom so it may have 2 forms like
+        FGT-1B2-9 #  or  FGT-1B2-9 (vdom)  or even FGT-1B2-9 (global) #
+
+        for form with global or vdom, we would match once the first ( is found
+
         Returns True if prompt si found
         """
         log.info("Enter")
@@ -389,7 +394,7 @@ class Ssh(object):
 
                     # Store decoded lines in ssh.output
                     self.output += decoded_line+"\n"
-                    search_prompt = '(^[A-Za-z0-9@~\:_-]+\s*(?:\$|\#))\s?'
+                    search_prompt = '(^[A-Za-z0-9@~\:_-]+\s*(?:\$|\#|\())\s?'
                     match_prompt = re.search(search_prompt, decoded_line)
                     if match_prompt:
                         prompt = match_prompt.groups(0)[0]

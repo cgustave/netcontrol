@@ -88,5 +88,20 @@ class FGTTestCase(unittest.TestCase):
         self.assertDictEqual(result,{'members': {'1': {'seq_num': '1', 'status': 'alive', 'sla': '0x1'}, '2': {'seq_num': '2', 'status': 'alive', 'sla': '0x1'}, '3': {'seq_num': '3', 'status': 'alive', 'sla': '0x1'}}, 'mode': 'sla'})
         self.fgt.close()
 
+    def test_vdom(self):
+         self.fgt.ssh.mock(context='vdom')
+         self.fgt.trace_open(filename="fgt_tracefile.log")
+         result = self.fgt.enter_vdom(vdom='customer')
+         self.assertTrue (result)
+         self.fgt.close()
+
+    def test_global(self):
+        self.fgt.ssh.mock(context='vdom')
+        self.fgt.trace_open(filename="fgt_tracefile.log")
+        result = self.fgt.enter_global()
+        self.assertTrue (result)
+        self.fgt.close()
+
+
 if __name__ == '__main__':
     unittest.main() 
