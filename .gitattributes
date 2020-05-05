@@ -1,0 +1,4 @@
+*.txt linguist-vendored
+*.md linguist-vendored
+*.log linguist-vendored
+*.in  linguist-vendored
