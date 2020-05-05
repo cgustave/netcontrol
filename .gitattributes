@@ -1,4 +1,4 @@
-*.txt linguist-vendored
-*.md linguist-vendored
-*.log linguist-vendored
-*.in  linguist-vendored
+**/*.txt linguist-vendored=false
+**/*.md linguist-vendored=false
+**/*.log linguist-vendored=false
+**/*.in  linguist-vendored=false
