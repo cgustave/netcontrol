@@ -161,6 +161,7 @@ class Fortigate(object):
         log.info("Enter")
         result = {} 
         result['version'] = ""
+        result['license'] = ""
         found_version = False
         found_license = False
 
