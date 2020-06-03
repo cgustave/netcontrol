@@ -62,7 +62,7 @@ class Vm(object):
         self.private_key_file = private_key_file
         self.mock_context = ''
         self.ssh = Ssh(ip=ip, port=port, user=user, password=password,
-                       private_key_file='', debug=debug)
+                       private_key_file=private_key_file, debug=debug)
 
         # private class attributes
         self._statistics = {}  # Internal representation of statistics

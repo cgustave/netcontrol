@@ -131,6 +131,6 @@ CLASSES
      |      list of weak references to the object (if defined)
 
 FILE
-    /home/cgustave/github/python/netcontrol/netcontrol/vyos/vyos.py
+    /home/cgustave/github/python/packages/netcontrol/netcontrol/vyos/vyos.py
 
 

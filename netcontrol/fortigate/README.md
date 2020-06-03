@@ -222,6 +222,6 @@ CLASSES
      |      list of weak references to the object (if defined)
 
 FILE
-    /home/cgustave/github/python/netcontrol/netcontrol/fortigate/fortigate.py
+    /home/cgustave/github/python/packages/netcontrol/netcontrol/fortigate/fortigate.py
 
 

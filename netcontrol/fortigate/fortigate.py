@@ -37,9 +37,10 @@ class Fortigate(object):
         self.port = port
         self.user = user
         self.password = password
+        self.private_key_file = private_key_file
         self.moke_context = ''
         self.debug = debug
-        self.ssh = Ssh(ip=ip, port=port, user=user, password=password, private_key_file='', debug=debug)
+        self.ssh = Ssh(ip=ip, port=port, user=user, password=password, private_key_file=private_key_file, debug=debug)
 
         # private attributs
 

@@ -53,7 +53,7 @@ class Fpoc(object):
         self.moke_exception = ''
         self.moke_context = ''
         self.ssh = Ssh(ip=ip, port=port, user=user, password=password,
-                       private_key_file='', debug=debug)
+                       private_key_file=private_key_file, debug=debug)
 
     def connect(self):
         self.ssh.connect()

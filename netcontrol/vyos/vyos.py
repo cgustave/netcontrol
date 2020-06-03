@@ -105,7 +105,7 @@ class Vyos(object):
         self.moke_context = ''
         self.debug = debug
         self.ssh = Ssh(ip=ip, port=port, user=user, password=password,
-                       private_key_file='', debug=debug)
+                       private_key_file=private_key_file, debug=debug)
 
         # private attributs
         self._config = {}  # Internal representation of config

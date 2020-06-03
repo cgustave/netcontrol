@@ -119,6 +119,11 @@ CLASSES
      |      While waiting for prompt, all output received is stored in the
      |      ssh.output for processing
      |      
+     |      Prompt may or may not have vdom so it may have 2 forms like
+     |      FGT-1B2-9 #  or  FGT-1B2-9 (vdom)  or even FGT-1B2-9 (global) #
+     |      
+     |      for form with global or vdom, we would match once the first ( is found
+     |      
      |      Returns True if prompt si found
      |  
      |  shell_read(self)
@@ -174,6 +179,6 @@ CLASSES
      |      list of weak references to the object (if defined)
 
 FILE
-    /home/cgustave/github/python/netcontrol/netcontrol/ssh/ssh.py
+    /home/cgustave/github/python/packages/netcontrol/netcontrol/ssh/ssh.py
 
 

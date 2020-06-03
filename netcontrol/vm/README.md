@@ -72,6 +72,6 @@ CLASSES
      |      list of weak references to the object (if defined)
 
 FILE
-    /home/cgustave/github/python/netcontrol/netcontrol/vm/vm.py
+    /home/cgustave/github/python/packages/netcontrol/netcontrol/vm/vm.py
 
 
