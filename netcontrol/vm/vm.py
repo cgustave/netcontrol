@@ -245,33 +245,87 @@ class Vm(object):
         """
         Retrieve qemu processes from KVM server 
         Fills _vms and _vms_total attributs
+
+        Workaround 200824 : it has been seen that sometimes the output buffer
+        splits a line in 2 chunks so it is not possible to get all VM
+        attributes from the same line. To workaround this, we need to make sure
+        that each KVM line start contains the starting token and the ending
+        one (timestamp=). If the ending one is not there, lines need to be
+        concatenated in one before it is tokenized
         """
         log.info("Enter")
 
-        self.ssh.shell_send(["ps -xww | grep qemu-system-x86\n"])
+        self.ssh.shell_send(["ps -xww | grep qemu-system\n"])
         self._vms_total = {}
 
         # Prepare totals
         self._vms_total['cpu'] = 0
         self._vms_total['memory'] = 0
         self._vms_total['number'] = 0
+        full_line = ""
+        kvm_start = False
+        kvm_end = False
 
         for line in self.ssh.output.splitlines():
-            if line.find('qemu-system-x86_64'):
-                result = self._tokenize(line)
-                if result:
-                    self._vms.append(result)
 
-                    # Record total for all VMs
-                    if result['cpu']:
-                        # Count number of VMs based on the cpu token
-                        self._vms_total['number'] += 1 
-                        self._vms_total['cpu'] += int(result['cpu'])
-                        log.debug("vms_total_cpu={}".format(self._vms_total['cpu']))
+            log.debug("line={}".format(line))
 
-                    if result['memory']:
-                        self._vms_total['memory'] += int(result['memory'])
-                        log.debug("vms_total_memory={}".format(self._vms_total['memory']))
+            need_tokenize = False
+
+            # Looking for kvm process starting line (qemu-system-x86_64)
+            if line.find('qemu-system-x86_64') != -1:
+                log.debug("Found kvm process line start")
+                kvm_start = True
+                kvm_end = False
+
+            # Looking for kvm process ending line (\stimestamp=on)
+            if line.find('timestamp=on') != -1 :
+                log.debug("Found kvm process line end")
+                kvm_start = False
+                kvm_end = True
+
+            # Dealing with all possibilities
+            if kvm_start:
+
+                if kvm_end:
+                    log.debug("Full line seen")
+                    full_line = line 
+                    kvm_start = False
+                    kvm_end = False
+                    need_tokenize = True
+
+                else :
+                    log.warning("Start without end, line is split, first fragment seen")
+                    full_line = line
+
+            else:
+
+                if kvm_end:
+                     log.debug("End without start, last chunk of multiline seen, tokenize")
+                     full_line = full_line + line
+                     kvm_start = False
+                     kvm_end = False
+                     need_tokenize = True
+
+                else :
+                    log.debug("No start, no end, do nothing")
+
+            if need_tokenize:
+                result = self._tokenize(full_line)
+                full_line = ""
+                log.debug("Recording result")
+                self._vms.append(result)
+
+                # Record total for all VMs
+                if result['cpu']:
+                    # Count number of VMs based on the cpu token
+                    self._vms_total['number'] += 1 
+                    self._vms_total['cpu'] += int(result['cpu'])
+                    log.debug("vms_total_cpu={}".format(self._vms_total['cpu']))
+
+                if result['memory']:
+                    self._vms_total['memory'] += int(result['memory'])
+                    log.debug("vms_total_memory={}".format(self._vms_total['memory']))
 
     def _tokenize(self, line):
         """

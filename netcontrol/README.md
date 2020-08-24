@@ -1,12 +1,12 @@
-Help on package fortigate:
+Help on package vyos:
 
 NAME
-    fortigate
+    vyos
 
 PACKAGE CONTENTS
-    fortigate
+    vyos
 
 FILE
-    /home/cgustave/github/python/packages/netcontrol/netcontrol/fortigate/__init__.py
+    /home/cgustave/github/python/packages/netcontrol/netcontrol/vyos/__init__.py
 
 

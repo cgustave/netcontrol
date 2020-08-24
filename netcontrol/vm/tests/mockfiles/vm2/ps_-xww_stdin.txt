@@ -1,0 +1,98 @@
+    PID TTY      STAT   TIME COMMAND
+   3166 ?        Ss     0:00 /lib/systemd/systemd --user
+   3173 ?        S      0:00 (sd-pam)
+   3194 ?        S<sl   8:29 /usr/bin/pulseaudio --daemonize=no --log-target=journal
+   3198 ?        Sl     0:00 /usr/bin/gnome-keyring-daemon --daemonize --login
+   3201 ?        Ssl    0:00 xfce4-session
+   3208 ?        Ss     0:00 /usr/bin/dbus-daemon --session --address=systemd: --nofork --nopidfile --systemd-activation --syslog-only
+   3291 ?        Ss     0:00 /usr/bin/ssh-agent /usr/bin/im-launch startxfce4
+   3310 ?        Ssl    0:00 /usr/libexec/at-spi-bus-launcher
+   3316 ?        S      0:00 /usr/bin/dbus-daemon --config-file=/usr/share/defaults/at-spi2/accessibility.conf --nofork --print-address 3
+   3322 ?        Sl     0:00 /usr/lib/x86_64-linux-gnu/xfce4/xfconf/xfconfd
+   3327 ?        Sl     0:02 /usr/libexec/at-spi2-registryd --use-gnome-session
+   3330 ?        Sl     0:01 /usr/bin/xfce4-screensaver --no-daemon
+   3335 ?        Ssl    0:00 /usr/libexec/gvfsd
+   3340 ?        Sl     0:00 /usr/libexec/gvfsd-fuse /run/user/1000/gvfs -f -o big_writes
+   3352 ?        Sl     0:07 xfwm4 --replace
+   3356 ?        Ssl    0:02 xfsettingsd
+   3357 ?        Sl     0:11 xfce4-panel
+   3379 ?        Sl     2:21 /usr/lib/x86_64-linux-gnu/xfce4/panel/wrapper-2.0 /usr/lib/x86_64-linux-gnu/xfce4/panel/plugins/libwhiskermenu.so 1 16777223 whiskermenu Whisker Menu Show a menu to easily access installed applications
+   3383 ?        Sl     0:06 /usr/lib/x86_64-linux-gnu/xfce4/panel/wrapper-2.0 /usr/lib/x86_64-linux-gnu/xfce4/panel/plugins/libsystray.so 4 16777225 systray Notification Area Area where notification icons appear
+   3384 ?        Sl     3:52 /usr/lib/x86_64-linux-gnu/xfce4/panel/wrapper-2.0 /usr/lib/x86_64-linux-gnu/xfce4/panel/plugins/libcpugraph.so 9 16777226 cpugraph CPU Graph Graphical representation of the CPU load
+   3385 ?        Sl     0:00 /usr/lib/x86_64-linux-gnu/xfce4/panel/wrapper-2.0 /usr/lib/x86_64-linux-gnu/xfce4/panel/plugins/libscreenshooterplugin.so 8 16777227 screenshooter Screenshot Take screenshots of the entire screen, of the active window or of a region
+   3387 ?        Sl     0:01 /usr/lib/x86_64-linux-gnu/xfce4/panel/wrapper-2.0 /usr/lib/x86_64-linux-gnu/xfce4/panel/plugins/libxfce4powermanager.so 11 16777228 power-manager-plugin Power Manager Plugin Display the battery levels of your devices and control the brightness of your display
+   3391 ?        Sl     0:02 /usr/lib/x86_64-linux-gnu/xfce4/panel/wrapper-2.0 /usr/lib/x86_64-linux-gnu/xfce4/panel/plugins/libxkb.so 5 16777229 xkb Keyboard Layouts Keyboard layouts setup and switch plugin
+   3442 ?        Sl     0:00 Thunar --daemon
+   3447 ?        Sl     0:03 xfdesktop
+   3450 ?        Sl     0:04 jami-gnome --restore-last-window-state
+   3451 ?        Sl     0:44 nm-applet
+   3456 ?        Sl     0:00 xfce4-notes
+   3460 ?        Sl     0:13 megasync
+   3466 ?        Sl     0:00 xiccd
+   3473 ?        S      0:00 /usr/bin/python3 /usr/share/system-config-printer/applet.py
+   3475 ?        S      0:00 /opt/forticlient/fortitraylauncher
+   3477 ?        Sl     0:00 /usr/bin/python3 /usr/bin/blueman-applet
+   3490 ?        Sl     0:00 /usr/lib/policykit-1-gnome/polkit-gnome-authentication-agent-1
+   3493 ?        S      0:04 xscreensaver -no-splash
+   3505 ?        Sl     0:00 pasystray
+   3508 ?        Sl     0:00 update-notifier
+   3521 ?        Ssl    0:00 xfce4-power-manager
+   3523 ?        Ssl    0:00 xfce4-volumed
+   3540 ?        Ssl    0:00 /usr/lib/x86_64-linux-gnu/xfce4/notifyd/xfce4-notifyd
+   3568 ?        Ssl    0:00 /usr/libexec/gvfs-udisks2-volume-monitor
+   3576 ?        Ssl    0:00 /usr/libexec/gvfs-gphoto2-volume-monitor
+   3582 ?        Ssl    0:00 /usr/libexec/gvfs-afc-volume-monitor
+   3591 ?        SLl    1:43 /usr/lib/ring/dring
+   3592 ?        Ssl    0:00 /usr/libexec/gvfs-mtp-volume-monitor
+   3596 ?        Ssl    0:00 /usr/libexec/gvfs-goa-volume-monitor
+   3598 ?        Sl     0:00 /usr/bin/python3 /usr/bin/blueman-tray
+   3615 ?        Sl     0:00 /usr/libexec/gvfsd-trash --spawner :1.13 /org/gtk/gvfs/exec_spaw/0
+   3620 ?        Ssl    0:00 /usr/libexec/gvfsd-metadata
+   3634 ?        Ss     0:00 /usr/lib/bluetooth/obexd
+   3662 ?        Sl     0:12 /opt/forticlient/fortitray
+   3690 ?        SLl    0:09 /usr/lib/x86_64-linux-gnu/webkit2gtk-4.0/WebKitWebProcess 7 24
+   3691 ?        SLl    0:00 /usr/lib/x86_64-linux-gnu/webkit2gtk-4.0/WebKitNetworkProcess 8 24
+   3706 ?        Sl     0:00 /usr/libexec/gvfsd-network --spawner :1.13 /org/gtk/gvfs/exec_spaw/1
+   3729 ?        Sl     0:00 /usr/libexec/gvfsd-dnssd --spawner :1.13 /org/gtk/gvfs/exec_spaw/3
+   3881 ?        Sl     4:51 /usr/lib/thunderbird/thunderbird
+   3971 ?        SLs    0:00 /usr/bin/gpg-agent --supervised
+   3995 ?        Sl     2:59 /usr/share/teams/teams
+   3997 ?        S      0:00 /usr/share/teams/teams --type=zygote --no-sandbox
+   4031 ?        Sl     1:52 /usr/share/teams/teams --type=gpu-process --enable-features=SharedArrayBuffer --disable-features=SpareRendererForSitePerProcess --gpu-preferences=KAAAAAAAAACAAABAAQAAAAAAAAAAAGAAAAAAAAAAAAAIAAAAAAAAAAgAAAAAAAAA --service-request-channel-token=1187375553791156651
+   4058 ?        Sl     0:00 /usr/share/teams/teams --type=renderer --autoplay-policy=no-user-gesture-required --enable-features=SharedArrayBuffer --disable-features=SpareRendererForSitePerProcess --service-pipe-token=174539634438145503 --lang=en-US --app-path=/usr/share/teams/resources/app.asar --user-agent=Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) MicrosoftTeams-Preview/1.3.00.5153 Chrome/69.0.3497.128 Electron/4.2.12 Safari/537.36 --node-integration=false --webview-tag=false --no-sandbox --preload=/usr/share/teams/resources/app.asar/lib/renderer/notifications/preload_notifications.js --disable-remote-module --background-color=#fff --electron-shared-settings=eyJjci5jb21wYW55IjoiRWxlY3Ryb24iLCJjci5kdW1wcyI6IiIsImNyLmVuYWJsZWQiOmZhbHNlLCJjci5wcm9kdWN0IjoiRWxlY3Ryb24iLCJjci5zZXNzaW9uIjoiIiwiY3IudXJsIjoiIiwiY3IudmVyc2lvbiI6InY0LjIuMTIifQ== --num-raster-threads=2 --enable-main-frame-before-activation --service-request-channel-token=174539634438145503 --renderer-client-id=7 --shared-files=v8_context_snapshot_data:100,v8_natives_data:101 --msteams-process-type=notificationsManager
+   5839 ?        Sl     0:00 /usr/libexec/gvfsd-http --spawner :1.13 /org/gtk/gvfs/exec_spaw/4
+   5849 ?        Sl    21:35 /usr/lib/firefox/firefox https://userportal.myfortinet.com/
+   5957 ?        Sl     1:43 /usr/lib/firefox/firefox -contentproc -childID 2 -isForBrowser -prefsLen 6590 -prefMapSize 239332 -parentBuildID 20200720193547 -appdir /usr/lib/firefox/browser 5849 true tab
+   5990 ?        Sl     0:14 /usr/lib/firefox/firefox -contentproc -childID 3 -isForBrowser -prefsLen 7362 -prefMapSize 239332 -parentBuildID 20200720193547 -appdir /usr/lib/firefox/browser 5849 true tab
+   6627 ?        S      0:08 /usr/bin/mrxvt
+   6628 pts/0    Ss+    0:00 -bash
+   6770 ?        Sl     7:29 /usr/share/teams/teams --type=renderer --autoplay-policy=no-user-gesture-required --enable-features=SharedArrayBuffer --disable-features=SpareRendererForSitePerProcess --service-pipe-token=4132384265644711033 --lang=en-US --app-path=/usr/share/teams/resources/app.asar --user-agent=Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) MicrosoftTeams-Preview/1.3.00.5153 Chrome/69.0.3497.128 Electron/4.2.12 Safari/537.36 --node-integration=false --webview-tag=true --no-sandbox --preload=/usr/share/teams/resources/app.asar/lib/renderer/preload.js --disable-remote-module --background-color=#fff --electron-shared-settings=eyJjci5jb21wYW55IjoiRWxlY3Ryb24iLCJjci5kdW1wcyI6IiIsImNyLmVuYWJsZWQiOmZhbHNlLCJjci5wcm9kdWN0IjoiRWxlY3Ryb24iLCJjci5zZXNzaW9uIjoiIiwiY3IudXJsIjoiIiwiY3IudmVyc2lvbiI6InY0LjIuMTIifQ== --num-raster-threads=2 --enable-main-frame-before-activation --service-request-channel-token=4132384265644711033 --renderer-client-id=34 --shared-files=v8_context_snapshot_data:100,v8_natives_data:101 --msteams-process-type=mainWindow
+   6813 ?        Sl    15:37 /usr/share/teams/teams --type=renderer --autoplay-policy=no-user-gesture-required --enable-features=SharedArrayBuffer --disable-features=SpareRendererForSitePerProcess --service-pipe-token=1916647336127094239 --lang=en-US --app-path=/usr/share/teams/resources/app.asar --user-agent=Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) MicrosoftTeams-Preview/1.3.00.5153 Chrome/69.0.3497.128 Electron/4.2.12 Safari/537.36 --node-integration=false --webview-tag=false --no-sandbox --preload=/usr/share/teams/resources/app.asar/lib/pluginhost/preload.js --disable-remote-module --background-color=#fff --electron-shared-settings=eyJjci5jb21wYW55IjoiRWxlY3Ryb24iLCJjci5kdW1wcyI6IiIsImNyLmVuYWJsZWQiOmZhbHNlLCJjci5wcm9kdWN0IjoiRWxlY3Ryb24iLCJjci5zZXNzaW9uIjoiIiwiY3IudXJsIjoiIiwiY3IudmVyc2lvbiI6InY0LjIuMTIifQ== --num-raster-threads=2 --enable-main-frame-before-activation --service-request-channel-token=1916647336127094239 --renderer-client-id=38 --shared-files=v8_context_snapshot_data:100,v8_natives_data:101 --msteams-process-type=pluginHost
+   7119 ?        Sl     5:05 /usr/lib/firefox/firefox -contentproc -childID 9 -isForBrowser -prefsLen 10366 -prefMapSize 239332 -parentBuildID 20200720193547 -appdir /usr/lib/firefox/browser 5849 true tab
+  11809 ?        Sl     0:11 /usr/lib/firefox/firefox -contentproc -childID 13 -isForBrowser -prefsLen 10366 -prefMapSize 239332 -parentBuildID 20200720193547 -appdir /usr/lib/firefox/browser 5849 true tab
+  12051 ?        Sl     0:08 /usr/lib/firefox/firefox -contentproc -childID 15 -isForBrowser -prefsLen 10366 -prefMapSize 239332 -parentBuildID 20200720193547 -appdir /usr/lib/firefox/browser 5849 true tab
+  12108 ?        Sl     0:07 /usr/lib/firefox/firefox -contentproc -childID 16 -isForBrowser -prefsLen 10366 -prefMapSize 239332 -parentBuildID 20200720193547 -appdir /usr/lib/firefox/browser 5849 true tab
+  12231 ?        Sl     6:23 /usr/lib/firefox/firefox -contentproc -childID 17 -isForBrowser -prefsLen 10366 -prefMapSize 239332 -parentBuildID 20200720193547 -appdir /usr/lib/firefox/browser 5849 true tab
+  12768 ?        Ss     0:00 [lxc monitor] /home/cgustave/.local/share/lxc labvmstats
+  12914 pts/2    Ss     0:00 -bash
+  12973 pts/2    S+     0:00 lxc-attach labvmstats
+  13292 ?        Sl     0:06 /usr/lib/firefox/firefox -contentproc -childID 20 -isForBrowser -prefsLen 10366 -prefMapSize 239332 -parentBuildID 20200720193547 -appdir /usr/lib/firefox/browser 5849 true tab
+  14400 pts/4    Ss     0:00 -bash
+  15431 pts/4    Sl+    0:02 vi polling.py
+  15433 ?        Ssl    0:01 /usr/bin/python /home/cgustave/.vim/bundle/YouCompleteMe/python/ycm/../../third_party/ycmd/ycmd --port=45953 --options_file=/tmp/tmp58to1ugn --log=info --idle_suicide_seconds=1800 --stdout=/tmp/ycmd_45953_stdout_ngkcem3d.log --stderr=/tmp/ycmd_45953_stderr_9pmmtuwy.log
+  15476 ?        S      0:00 /usr/bin/python /home/cgustave/.vim/bundle/YouCompleteMe/third_party/ycmd/third_party/jedi_deps/jedi/jedi/evaluate/compiled/subprocess/__main__.py /home/cgustave/.vim/bundle/YouCompleteMe/third_party/ycmd/third_party/jedi_deps/parso 2.7.18
+  16007 ?        S      0:02 /usr/bin/mrxvt
+  16008 pts/5    Ss     0:00 -bash
+  20108 ?        Sl     0:04 /usr/lib/firefox/firefox -contentproc -childID 23 -isForBrowser -prefsLen 10366 -prefMapSize 239332 -parentBuildID 20200720193547 -appdir /usr/lib/firefox/browser 5849 true tab
+  20460 ?        S      0:00 /usr/bin/mrxvt
+  20461 pts/6    Ss     0:00 -bash
+  20483 pts/6    S+     0:00 ssh root@10.5.0.31
+  20485 ?        S      0:00 /usr/bin/ssh-agent -D -a /run/user/1000/keyring/.ssh
+  20581 ?        Sl     0:00 mousepad
+  20588 ?        Sl     0:00 /usr/libexec/dconf-service
+  20878 ?        Sl     0:00 /usr/lib/firefox/firefox -contentproc -childID 24 -isForBrowser -prefsLen 10366 -prefMapSize 239332 -parentBuildID 20200720193547 -appdir /usr/lib/firefox/browser 5849 true tab
+  21353 pts/7    Ss     0:00 -bash
+  21383 pts/7    Sl+    0:01 vi vm.py
+  21385 ?        Ssl    0:00 /usr/bin/python /home/cgustave/.vim/bundle/YouCompleteMe/python/ycm/../../third_party/ycmd/ycmd --port=32973 --options_file=/tmp/tmpcj7_o0p8 --log=info --idle_suicide_seconds=1800 --stdout=/tmp/ycmd_32973_stdout_ps11eflv.log --stderr=/tmp/ycmd_32973_stderr_s_tgohy8.log
+  21428 ?        S      0:00 /usr/bin/python /home/cgustave/.vim/bundle/YouCompleteMe/third_party/ycmd/third_party/jedi_deps/jedi/jedi/evaluate/compiled/subprocess/__main__.py /home/cgustave/.vim/bundle/YouCompleteMe/third_party/ycmd/third_party/jedi_deps/parso 2.7.18
+  21609 pts/5    R+     0:00 ps -xww

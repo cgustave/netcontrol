@@ -1,5 +1,5 @@
 #!/bin/bash
-export PYTHONPATH=${PYTHONPATH}:~/github/python/netcontrol:./tests
+export PYTHONPATH=${PYTHONPATH}:~/github/python/packages/netcontrol:./tests
 
 NAME=vm
 
