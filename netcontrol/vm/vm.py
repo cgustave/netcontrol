@@ -381,6 +381,16 @@ class Vm(object):
             vm['memory'] = memory
             vm['template'] = template
             return vm
+
+        elif memory_match and cpu_match and id_match:
+            # This case was seen with windown VM created without disk (stay in
+            # boot failure)
+            log.warning("tokenize succesful without template : id={} cpu={} memory={}".
+                        format(vm_id, cpu, memory))
+            vm['id'] = vm_id
+            vm['cpu'] = cpu
+            vm['memory'] = memory
+
         else:
             log.warning("tokenize failed : line={}".format(line))
 
