@@ -390,6 +390,7 @@ class Vm(object):
             vm['id'] = vm_id
             vm['cpu'] = cpu
             vm['memory'] = memory
+            return vm
 
         else:
             log.warning("tokenize failed : line={}".format(line))
