@@ -66,13 +66,13 @@ class Vm(object):
 
         # private class attributes
         self._statistics = {}  # Internal representation of statistics
-        self._vms = []         # Internal representation of each VMs 
+        self._vms = []         # Internal representation of each VMs
         self._vms_total = {}   # Total VMs statistics
 
     def connect(self):
         self.ssh.connect()
 
-    # Tracing wrapper on ssh 
+    # Tracing wrapper on ssh
     def trace_open(self, filename="tracefile.log"):
         self.ssh.trace_open(filename="tracefile.log")
 
@@ -243,7 +243,7 @@ class Vm(object):
 
     def _get_processes(self):
         """
-        Retrieve qemu processes from KVM server 
+        Retrieve qemu processes from KVM server
         Fills _vms and _vms_total attributs
 
         Workaround 200824 : it has been seen that sometimes the output buffer
@@ -289,7 +289,7 @@ class Vm(object):
 
                 if kvm_end:
                     log.debug("Full line seen")
-                    full_line = line 
+                    full_line = line
                     kvm_start = False
                     kvm_end = False
                     need_tokenize = True
@@ -317,13 +317,13 @@ class Vm(object):
                 self._vms.append(result)
 
                 # Record total for all VMs
-                if result['cpu']:
+                if 'cpu' in result:
                     # Count number of VMs based on the cpu token
-                    self._vms_total['number'] += 1 
+                    self._vms_total['number'] += 1
                     self._vms_total['cpu'] += int(result['cpu'])
                     log.debug("vms_total_cpu={}".format(self._vms_total['cpu']))
 
-                if result['memory']:
+                if 'memory' in result:
                     self._vms_total['memory'] += int(result['memory'])
                     log.debug("vms_total_memory={}".format(self._vms_total['memory']))
 
@@ -331,7 +331,7 @@ class Vm(object):
         """
         Tokenise ps lines has run into a dictionnary where the key is the option
         (the -xxxx). Only tokenize tokens we are interested in
-        
+
 
         return: dictionary like
         {
@@ -395,7 +395,8 @@ class Vm(object):
         else:
             log.warning("tokenize failed : line={}".format(line))
 
-        return  
+        # Need to return an empty dictionnary
+        return {}
 
     def dump_statistics(self):
         """
