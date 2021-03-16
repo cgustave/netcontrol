@@ -67,7 +67,25 @@ class VMctlTestCase(unittest.TestCase):
         json.loads(self.vm.get_vms_statistics())
         self.vm.close()
 
+    # bug seen on radon
+    def test_get_vm_statistics_case2(self):
+        self.vm.ssh.mock(context='vm3')
+        result = json.loads(self.vm.get_statistics())
+        log.debug("Result : {} len={}".format(result, len(str(result))))
+        self.assertEqual(len(str(result)),890)
 
+    # bug seen on radon : tokenize fails on Win10pro template
+    # VM was manually started by Stephane (SHA) : guest=SHA...
+    # tokenize failed vm_id=None cpu=4 => line=20777 ?        Sl   12314:32 qemu-system-x86_64 -enable-kvm -name guest=SHA04,
+    # manual VM need to be excluded
+
+    def test_total_vm_resources_case2(self):
+        self.vm.ssh.mock(context='vm3')
+        result = json.loads(self.vm.get_vms_statistics())
+        log.debug("Result : {}".format(result))
+        used_cpu = result['vms_total']['cpu']
+        log.debug("used_cpu = {}".format(used_cpu))
+        self.assertEqual(used_cpu, 46)
 
 if __name__ == '__main__':
     unittest.main() 

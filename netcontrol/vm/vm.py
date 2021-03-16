@@ -332,6 +332,8 @@ class Vm(object):
         Tokenise ps lines has run into a dictionnary where the key is the option
         (the -xxxx). Only tokenize tokens we are interested in
 
+        210316 : manually started vm need to be exculded (the id does not match
+        guest=\d+), seen on radon  
 
         return: dictionary like
         {
@@ -348,8 +350,9 @@ class Vm(object):
         memory = None
         template = None
 
-        # VM id
-        id_match = re.search("\sguest=(\d+)(?:,|\s)", line)
+        # VM id only digit if launched from labsetup
+        # other if launched manually from a user
+        id_match = re.search("\sguest=([A-Za-z0-9_\-\.\/\s]+)(?:,|\s)", line)
         if id_match:
             vm_id = id_match.groups(0)[0]
             log.debug("id={}".format(vm_id))
@@ -393,7 +396,7 @@ class Vm(object):
             return vm
 
         else:
-            log.warning("tokenize failed : line={}".format(line))
+            log.warning("tokenize failed (maybe a manually started VM) vm_id={} cpu={} memory={}".format(vm_id, cpu, memory))
 
         # Need to return an empty dictionnary
         return {}
