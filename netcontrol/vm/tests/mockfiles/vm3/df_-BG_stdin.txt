@@ -1,0 +1,12 @@
+Filesystem     1G-blocks  Used Available Use% Mounted on
+udev                 63G    0G       63G   0% /dev
+tmpfs                13G    2G       12G  11% /run
+/dev/sda2            28G    7G       20G  25% /
+tmpfs                63G    0G       63G   0% /dev/shm
+tmpfs                 1G    0G        1G   0% /run/lock
+tmpfs                63G    0G       63G   0% /sys/fs/cgroup
+/dev/sda1             1G    1G        1G   1% /boot/efi
+/dev/sda4         10477G  909G     9041G  10% /home
+tmpfs                13G    0G       13G   0% /run/user/0
+root@radon-trn:~# 
+

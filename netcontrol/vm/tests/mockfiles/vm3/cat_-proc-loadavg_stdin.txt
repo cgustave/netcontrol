@@ -1,0 +1,3 @@
+root@radon-trn:~# cat /proc/loadavg 
+5.08 4.32 4.19 4/773 32465
+root@radon-trn:~# 

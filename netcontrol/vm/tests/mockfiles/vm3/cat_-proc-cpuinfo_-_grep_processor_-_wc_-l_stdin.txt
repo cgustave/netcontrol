@@ -1,0 +1,3 @@
+root@radon-trn:~# cat /proc/cpuinfo | grep processor | wc -l
+24
+root@radon-trn:~# 
