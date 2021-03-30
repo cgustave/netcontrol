@@ -295,7 +295,7 @@ class Vm(object):
                     need_tokenize = True
 
                 else :
-                    log.warning("Start without end, line is split, first fragment seen")
+                    log.info("Start without end, line is split, first fragment seen")
                     full_line = line
 
             else:
