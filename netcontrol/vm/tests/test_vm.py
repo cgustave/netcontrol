@@ -41,7 +41,7 @@ class VMctlTestCase(unittest.TestCase):
         self.vm.dump_statistics()
         self.vm.close()
         # Dump is too long for a string comparison so checking the string length instead
-        self.assertEqual(len(str(result)),1026)
+        self.assertEqual(len(str(result)),1052)
 
     def test_get_vm_resources(self): 
         self.vm.ssh.mock(context='vm2')
@@ -72,7 +72,7 @@ class VMctlTestCase(unittest.TestCase):
         self.vm.ssh.mock(context='vm3')
         result = json.loads(self.vm.get_statistics())
         log.debug("Result : {} len={}".format(result, len(str(result))))
-        self.assertEqual(len(str(result)),890)
+        self.assertEqual(len(str(result)),915)
 
     # bug seen on radon : tokenize fails on Win10pro template
     # VM was manually started by Stephane (SHA) : guest=SHA...

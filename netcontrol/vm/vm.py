@@ -160,12 +160,14 @@ class Vm(object):
     def _get_memory(self):
         """
         Fills  self._statistics with memory load information
-        Using first key 'memory' and subkeys 'total' and 'free'
+        Using first key 'memory' and subkeys 'total', 'free' and available
+        Note : better to use available than free because of caches
         Unit : KB
         Ex:
             'memory': {
                 'total': ...
                 'free' : ...
+                'available': ...
             }
         """
         log.info("Enter")
@@ -180,6 +182,7 @@ class Vm(object):
         mem_total_match = re.search("MemTotal:\s+(\d+) kB", str(self.ssh.output))
         memory_total = 0
         memory_free = 0
+        memory_available = 0
         if mem_total_match:
             memory_total = mem_total_match.groups(0)[0]
             self._statistics['memory']['total'] = memory_total
@@ -189,8 +192,13 @@ class Vm(object):
             memory_free = mem_free_match.groups(0)[0]
             self._statistics['memory']['free'] = memory_free
 
-        log.debug("memory_total={}, memory_free={}".
-                  format(memory_total, memory_free))
+        mem_available_match = re.search("MemAvailable:\s+(\d+) kB", str(self.ssh.output))
+        if mem_available_match:
+            memory_available = mem_available_match.groups(0)[0]
+            self._statistics['memory']['available'] = memory_available
+
+        log.debug("memory_total={}, memory_free={}, memory_available={}".
+                  format(memory_total, memory_free, memory_available))
 
     def _get_disk(self):
         """
@@ -333,7 +341,7 @@ class Vm(object):
         (the -xxxx). Only tokenize tokens we are interested in
 
         210316 : manually started vm need to be exculded (the id does not match
-        guest=\d+), seen on radon  
+        guest=\d+), seen on radon
 
         return: dictionary like
         {

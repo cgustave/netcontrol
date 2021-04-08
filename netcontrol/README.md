@@ -1,12 +1,13 @@
-Help on package vyos:
+Help on package vm:
 
 NAME
-    vyos
+    vm
 
 PACKAGE CONTENTS
-    vyos
+    test5
+    vm
 
 FILE
-    /home/cgustave/github/python/packages/netcontrol/netcontrol/vyos/__init__.py
+    /home/cgustave/github/python/packages/netcontrol/netcontrol/vm/__init__.py
 
 
