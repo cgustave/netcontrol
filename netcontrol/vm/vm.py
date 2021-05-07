@@ -457,7 +457,7 @@ class Vm(object):
                     self._vms_disks_dict[id] = int(size)
                 else:
                     self._vms_disks_dict[id] = int(self._vms_disks_dict[id]) + int(size)
-                log.debug("XXX id={} size={} total={} ".format(id, size, self._vms_disks_dict[id] ))
+                log.debug("id={} size={} total={} ".format(id, size, self._vms_disks_dict[id] ))
 
     def dump_statistics(self):
         """
