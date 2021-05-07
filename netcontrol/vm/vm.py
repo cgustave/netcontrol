@@ -68,6 +68,9 @@ class Vm(object):
         self._statistics = {}  # Internal representation of statistics
         self._vms = []         # Internal representation of each VMs
         self._vms_total = {}   # Total VMs statistics
+        self._vms_disks = []   # Internal representation of each VM sdisks info
+        self._vms_disks_dict = {} # temp object
+
 
     def connect(self):
         self.ssh.connect()
@@ -105,9 +108,11 @@ class Vm(object):
         """
         log.info('Enter')
         self._get_processes()
+        self._get_vms_disk()
         result = {}
         result['vms'] = self._vms
         result['vms_total'] = self._vms_total
+        result['vms_disks'] = self._vms_disks
         return(json.dumps(result))
 
 
@@ -408,6 +413,51 @@ class Vm(object):
 
         # Need to return an empty dictionnary
         return {}
+
+    def _get_vms_disk(self, vmpath='/home/virtualMachines'):
+        """
+        Retrieve VM disk usage.
+        Retrieve all VMs disk usage located in vmpath.
+        Make sure to retrieve the provisioned disk size and not the current usage of a qcow
+        For this 'ls' or 'du' can't be used, however 'file' can do the job.
+        Ex: # for i in `virsh list | awk '{​​​​​​ print $2}​​​​​​'`;  do file /home/virtualMachines/$i/*; done
+        /home/virtualMachines/Name/*: cannot open `/home/virtualMachines/Name/*' (No such file or directory)
+        /home/virtualMachines/045/boot.qcow2:      QEMU QCOW Image (v3), 1073741824 bytes
+        /home/virtualMachines/045/datadrive.qcow2: QEMU QCOW Image (v3), 64424509440 bytes
+        /home/virtualMachines/008/win10.qcow2: QEMU QCOW Image (v2), has backing file (path /home/templates/Windows10/20201014/sop.qcow2), 85899345920 bytes
+        /home/virtualMachines/097/fmg.qcow2:     QEMU QCOW Image (v2), 2147483648 bytes
+        /home/virtualMachines/097/storage.qcow2: QEMU QCOW Image (v2), 85899345920 bytes
+        /home/virtualMachines/002/fortios.qcow2: QEMU QCOW Image (v3), 2147483648 bytes
+        ../..
+        Need to addition for each VM the size of each disks in bytes
+        """
+        log.info('Enter with vmpath={}'.format(vmpath))
+        cmd="for i in `virsh list | awk '{print $2}'`: do file "+vmpath+"/$i/* ; done"
+        self.ssh.shell_send([cmd+"\n"])
+        for line in self.ssh.output.splitlines():
+            log.debug("line={}".format(line))
+            self._extract_vms_disk(vmpath, line)
+        for id in self._vms_disks_dict:
+            size = self._vms_disks_dict[id]
+            self._vms_disks.append({'id': id, 'size': size})
+
+    def _extract_vms_disk(self, vmpath, line):
+        """
+        Parse output to get all vms disk consumtion
+        """
+        log.info("Enter with vmpath={} line={}".format(vmpath, line))
+        d_match = re.search(vmpath+"/(?P<id>[a-zA-Z0-9_\-\.\/s]+)/",line)
+        if d_match:
+            id = d_match.group("id")
+            log.debug("id={}".format(id))
+            s_match = re.search("(?P<size>\d+) bytes", line)
+            if s_match:
+                size = s_match.group("size")
+                if id not in self._vms_disks_dict:
+                    self._vms_disks_dict[id] = int(size)
+                else:
+                    self._vms_disks_dict[id] = int(self._vms_disks_dict[id]) + int(size)
+                log.debug("XXX id={} size={} total={} ".format(id, size, self._vms_disks_dict[id] ))
 
     def dump_statistics(self):
         """

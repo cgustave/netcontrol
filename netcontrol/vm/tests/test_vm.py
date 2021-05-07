@@ -26,7 +26,7 @@ class VMctlTestCase(unittest.TestCase):
 
     def test_connect(self):
         self.vm.connect()
-        pass 
+        pass
 
     def test_attributs_validation(self):
         self.assertTrue(self.vm.ip == '10.5.0.31')
@@ -43,13 +43,13 @@ class VMctlTestCase(unittest.TestCase):
         # Dump is too long for a string comparison so checking the string length instead
         self.assertEqual(len(str(result)),1052)
 
-    def test_get_vm_resources(self): 
+    def test_get_vm_resources(self):
         self.vm.ssh.mock(context='vm2')
         result = json.loads(self.vm.get_vms_statistics())
         log.debug("Result : {} len={}".format(result, len(str(result))))
         self.vm.dump_vms()
         self.vm.close()
-        self.assertEqual(len(str(result)),5503)
+        self.assertEqual(len(str(result)),5520)
 
     def test_total_vm_resources(self):
         self.vm.ssh.mock(context='vm2')
@@ -87,5 +87,11 @@ class VMctlTestCase(unittest.TestCase):
         log.debug("used_cpu = {}".format(used_cpu))
         self.assertEqual(used_cpu, 46)
 
+    def test_get_vms_disk(self):
+        self.vm.ssh.mock(context='vmd1')
+        self.vm._get_vms_disk()
+        result = json.loads(self.vm.get_vms_statistics())
+        log.debug("Result : {}".format(result))
+
 if __name__ == '__main__':
-    unittest.main() 
+    unittest.main()

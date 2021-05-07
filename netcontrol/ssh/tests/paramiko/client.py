@@ -8,7 +8,13 @@ Used for unittest
 #import paramiko
 
 import logging as log
-
+# create logger
+log.basicConfig(
+    format='%(asctime)s,%(msecs)3.3d %(levelname)-8s[%(module)-7.7s.\
+    %(funcName)-30.30s:%(lineno)5d]%(message)s',
+    datefmt='%Y%m%d:%H:%M:%S',
+    filename='debug.log',
+    level=log.DEBUG)
 
 log.basicConfig(
     format='%(asctime)s,%(msecs)3.3d %(levelname)-8s[%(module)-7.7s.%(funcName)-30.30s:%(lineno)5d] %(message)s',
@@ -93,7 +99,7 @@ class SSHClient():
         """Create a new SSHClient."""
         log.debug("Enter")
 
-        # Attributes 
+        # Attributes
         self.stdin = None
         self.stdout = None
         self.stderr = None
@@ -121,10 +127,10 @@ class SSHClient():
         # Raise exception for mockup if the exception attribute is set
         if self.exception:
             log.debug("raise exception=%s" % (self.exception))
-            raise self.exception 
+            raise self.exception
 
     def close(self):
-        """ 
+        """
         Close all opened files.
         Need to do it also for all filehandles opened on multiple exec_command
         Need to do it also for all filehandles opened during shell_read
@@ -132,7 +138,7 @@ class SSHClient():
         log.debug("Enter")
 
         # Close SSHClient files
-        for fh in self.openedfiles: 
+        for fh in self.openedfiles:
             try:
                 log.debug("closing SSHClient opened file {}".format(fh))
                 fh.close()
@@ -148,11 +154,11 @@ class SSHClient():
         """
         log.debug("Enter with command={} bufsize={} timeout={} get_pty={} environment={} context={}".
                   format(command, bufsize, timeout, get_pty, environment, self.context))
-        
+
         # Raise exception for mockup if the exception attribute is set
         if self.exception:
             log.debug("raise exception=%s" % (self.exception))
-            raise self.exception 
+            raise self.exception
 
         # some commands need to be translated so they can be used as filename
         # We replace / with - and 'space' with _ and | with -
@@ -161,12 +167,12 @@ class SSHClient():
 
         filename = "tests/mockfiles/"+self.context+"/"+tr_command+"_stdin.txt"
         try:
-            self.stdin  = open(filename, "r", encoding="utf8") 
+            self.stdin  = open(filename, "r", encoding="utf8")
         except Exception:
             log.warning("Could no open mockile {} using default/stdin.txt".format(filename))
-            self.stdin  = open("tests/mockfiles/default/stdin.txt", "r", encoding="utf8") 
+            self.stdin  = open("tests/mockfiles/default/stdin.txt", "r", encoding="utf8")
 
-        try:            
+        try:
             self.stdout = open("tests/mockfiles/"+self.context+"/"+tr_command+"_stdout.txt", "r", encoding="utf8")
         except Exception:
             self.stdout = open("tests/mockfiles/default/stdout.txt","r", encoding="utf8")
@@ -183,7 +189,7 @@ class SSHClient():
 
         return self.stdin, self.stdout, self.stderr
 
-    def invoke_shell(self, term='', width=0, height=0, width_pixels=0, 
+    def invoke_shell(self, term='', width=0, height=0, width_pixels=0,
                      height_pixels=0, environment=None):
         """
         Opens a shell on the remote server
@@ -192,10 +198,10 @@ class SSHClient():
         log.debug("Enters with term={}, width={}, height={}, width_pixels={} height_pixels={}, environment={}".
                   format(term, width, height, width_pixels, height_pixels, environment))
         return self.channel
-           
+
 
     ### The following functions are not part of paramiko's original packate ####
-    ### They are used to control the mocking environent when running unittest ### 
+    ### They are used to control the mocking environent when running unittest ###
 
     def mock(self, context='default', exception=None):
         """
@@ -235,7 +241,7 @@ class Channel():
             ``True`` if a `recv` call on this channel would immediately return
             at least one byte; ``False`` otherwise.
         """
-        return True 
+        return True
 
     def recv(self, nbytes):
         """
@@ -246,8 +252,8 @@ class Channel():
 
         :param int nbytes: maximum number of bytes to read.
         :return: received data, as a ``str``/``bytes``.
-        In mock condition, returns the output from the 
-        
+        In mock condition, returns the output from the
+
 
         :raises socket.timeout:
             if no data is ready before the timeout set by `settimeout`.
@@ -258,25 +264,25 @@ class Channel():
 
         # some commands need to be translated so they can be used as filename
         # We replace / with - and 'space' with _ and | with -
-        tr_command = self._send.translate(str.maketrans({"/": "-"," ": "_", "\\": "_", "'" : "_", "^" : "_", "|": "-"}))
-        log.debug("tr_command={}".format(tr_command))
+        tr_command = self._send.translate(str.maketrans({"/": "-"," ": "_", "\\": "_", "'" : "_", "^" : "_", "|": "-","{":"-","}":"-", "$":"-", "`":"_", ":":"_", "*":"_", ";":"_"}))
+        print("tr_command={}".format(tr_command))
 
         try:
             filename = "tests/mockfiles/"+self.context+"/"+tr_command+"_stdin.txt"
             log.debug("opening file={}".format(filename))
-            fh  = open(filename, "r", encoding="utf8") 
+            fh  = open(filename, "r", encoding="utf8")
             content = fh.read()
 
         except Exception as e:
-            print ("Exception={}".format(e))
+            print ("recv Exception={}".format(e))
             filename = "tests/mockfiles/default/stdin.txt"
             log.debug("opening file={}".format(filename))
             fh  = open(filename, "r", encoding="utf8")
             content = fh.read()
-       
+
         fh.close()
 
-        return content 
+        return content
 
     def send(self, s):
         """
@@ -300,7 +306,7 @@ class Channel():
         """
 
         self._send=s.strip('\n')
-       
+
 
     def send_ready(self):
         """
@@ -318,22 +324,19 @@ class Channel():
         SSHClient moke to set context in Channel class
         """
         log.debug("Enter with context={}".format(context))
-        
+
         if context:
             self.context = context
-        
+
     def close(self):
-        """ 
+        """
         Close all opened files.
         Need to do it also for all filehandles opened on multiple exec_command
         calls
         """
         log.debug("Enter")
-        for fh in self.openedfiles: 
+        for fh in self.openedfiles:
             try:
                 fh.close()
             except Exception as e:
                 log.debug(str(e))
-
-
-
