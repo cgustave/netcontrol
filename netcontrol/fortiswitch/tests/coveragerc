@@ -1,0 +1,16 @@
+# .coveragerc to control coverage.py
+[run]
+
+omit =
+
+	# no netcontrol init
+	*/netcontrol/netcontrol/__init__.py 
+
+    # Omit packages which are not ours
+    */venv/lib/python3.8/site-packages/*
+
+    # omit our sshctl package
+	../ssh/*
+
+	# omit the test file itself
+	tests/test_fortiswitch.py

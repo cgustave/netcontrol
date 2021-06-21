@@ -1,0 +1,13 @@
+SW10G1-2-D-10 # diagnose switch physical-ports summary port21
+
+
+  Portname    Status  Tpid  Vlan  Duplex  Speed  Flags         Discard
+  __________  ______  ____  ____  ______  _____  ____________  _________
+
+  port21      down    8100  1021  full    10G      ,  ,        none     
+
+  Flags: QS(802.1Q) QE(802.1Q-in-Q,external) QI(802.1Q-in-Q,internal)
+  TS(static trunk) TF(forti trunk) TL(lacp trunk); MD(mirror dst)
+  MI(mirror ingress) ME(mirror egress) MB(mirror ingress and egress) CF (Combo Fiber), CC (Combo Copper) LL(LoopBack Local) LR(LoopBack Remote)
+
+SW10G1-2-D-10 # 

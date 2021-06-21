@@ -77,7 +77,7 @@ class Fortigate(object):
         # issue command and capture output
         for command in commands:
             command = command + "\n"
-            self.run_op_mode_command(command)
+            self.(command)
 
             log.info("command={} output={}".format(command, self.ssh.output))
 
@@ -85,8 +85,8 @@ class Fortigate(object):
         """
         Enters a specific vdom
         Uses : end -> config vdom -> edit VDOM
-       
-        ex: 
+
+        ex:
 		FGT-1B2-9 # config vdom
         FGT-1B2-9 (vdom) # edit customer
         current vf=customer:1
@@ -101,7 +101,7 @@ class Fortigate(object):
 
         if not self.ssh.connected:
             self.ssh.connect()
-        
+
         # Leave current vdom or global section
         self.run_op_mode_command("end\n")
         # Enter vdom
@@ -113,7 +113,7 @@ class Fortigate(object):
             match_vdom = re.search("\s\((?P<vd>\S+)\)\s", line)
             if match_vdom:
                 vd = match_vdom.group('vd')
-                log.debug("Found vd={} in line={}".format(str(vd), line)) 
+                log.debug("Found vd={} in line={}".format(str(vd), line))
                 if vd == vdom:
                     log.debug("Confirmed vdom prompt")
                     result = True
@@ -160,7 +160,7 @@ class Fortigate(object):
                 }
         """
         log.info("Enter")
-        result = {} 
+        result = {}
         result['version'] = ""
         result['license'] = ""
         found_version = False
@@ -189,7 +189,7 @@ class Fortigate(object):
             log.debug("found license={}".format(license))
             if license == 'Valid':
                 result['license'] = True
-        
+
         if not found_version:
             log.error("Could not extract version")
 
@@ -207,7 +207,7 @@ class Fortigate(object):
         connection: 3/348
         IKE SA: created 3/348  established 3/3  times 0/2083/3220 ms
         IPsec SA: created 3/348  established 3/3  times 0/2083/3220 ms
-        For each line 'IKE SA' and 'IPsec SA' we look at 'x' in established x/y 
+        For each line 'IKE SA' and 'IPsec SA' we look at 'x' in established x/y
         ex : { 'ike': { 'created' : 3, 'established' : 3}, 'ipsec': { 'created' : 3, 'established' : 3}}
         """
         log.info("Enter")
@@ -253,7 +253,7 @@ class Fortigate(object):
                   'subnet' : ['10.0.0.0/24', '10.0.2.0/24'],
                   'nexthop' : ['10.255.0.253','10.255.1.253','10.255.2.253', '10.255.0.2','10.255.1.2','10.255.2.2'],
                   'interface' : ['vpn_mpls','vpn_isp1','vpn_isp2']
-                } 
+                }
 
        For :
 	    FGT-B1-1 # get router info routing-table bgp
@@ -267,7 +267,7 @@ class Fortigate(object):
 							[200/0] via 10.255.2.2, vpn_isp2, 00:02:54
 
         FGT-B1-1 #
-        
+
         Case for recursive routes:
         FGT-1B2-9 (customer) # get router info routing-table bgp
 
@@ -287,7 +287,7 @@ class Fortigate(object):
        """
        log.info("Enter with vrf={}".format(vrf))
        result = { 'total' : {}, 'subnet' : [], 'nexthop' : [], 'interface' : [] }
-    
+
        if not self.ssh.connected:
             self.ssh.connect()
 
@@ -298,21 +298,21 @@ class Fortigate(object):
        nb_route = 0
        nb_recursive_route = 0
        for line in self.ssh.output.splitlines():
-           log.debug("line={}".format(line)) 
+           log.debug("line={}".format(line))
            if not vrf_flag:
                match_vrf = re.search("Routing\stable\sfor\sVRF="+str(vrf),line)
                if match_vrf:
                    log.debug("Found VRF={} in line={}".format(str(vrf), line))
                    vrf_flag = True
            else:
- 
+
                # Look for a subnet
-               match_subnet = re.search("^(?:B\s+)(?P<subnet>[0-9./]+)", line) 
+               match_subnet = re.search("^(?:B\s+)(?P<subnet>[0-9./]+)", line)
                if match_subnet:
                    subnet = match_subnet.group('subnet')
                    log.debug("found subnet={}".format(subnet))
                    result['subnet'].append(subnet)
- 
+
                # Look for nexthop and interface + count number of routes
 
                # Track non recursive routes
@@ -340,14 +340,14 @@ class Fortigate(object):
                    if interface not in result['interface']:
                        result['interface'].append(interface)
 
-       result['total'] = nb_route        
+       result['total'] = nb_route
        result['recursive'] = nb_recursive_route
        log.debug("result={}".format(result))
        return result
-      
+
     def get_sdwan_service(self, service=1):
         """
-        Returns a dictionary with information from 
+        Returns a dictionary with information from
         diagnose sys viirtual-wan-link service <service>
             FGT-B1-1 # diagnose sys virtual-wan-link service 1
             Service(1): Address Mode(IPV4) flags=0x0
@@ -368,7 +368,7 @@ class Fortigate(object):
         """
         log.info("Enter")
         result = {'members': {}, 'mode':''}
-        members_flag = False         
+        members_flag = False
         mode = ''
 
         if not self.ssh.connected:
@@ -385,7 +385,7 @@ class Fortigate(object):
                 mode = match_mode.group('mode')
                 log.debug("found mode={}".format(mode))
                 result['mode']=mode
-         
+
             # Get members details
             if members_flag:
                 match_member = re.search("(?:\s+)(?P<order>\d+)(?::\sSeq_num\()(?P<seq>\d+)(?:\s\S+)?(?:\),\s)(?P<status>alive|dead)",line)
@@ -396,7 +396,7 @@ class Fortigate(object):
                     log.debug("Found order={} seq={} status={}".format(order, seq, status))
                     result['members'][order] = {}
                     result['members'][order]['seq_num'] = seq
-                    result['members'][order]['status'] = status 
+                    result['members'][order]['status'] = status
 
                     # If sla mode, get sla value
                     if mode == 'sla':
@@ -500,7 +500,7 @@ class Fortigate(object):
         allowed_keys = ['vd','sintf','dintf','src','nsrc','dst','proto','sport','nport','dport','policy','expire','duration','proto-state','session-state1','session-state2','ext-src','ext-dst','ext-src-negate','ext-dst-negate','negate']
 
         command_list = [ "diagnose sys session filter clear\n" ]
-        
+
         for key in filter:
             log.debug("key={} value={}".format(key, filter[key]))
             if key not in allowed_keys:
@@ -508,19 +508,18 @@ class Fortigate(object):
                 raise SystemExit
             else:
                 command_list.append("diagnose sys session filter "+key+" "+str(filter[key])+"\n")
-            
-        command_list.append("diagnose sys session list\n") 
-        self.ssh.shell_send(command_list)        
+
+        command_list.append("diagnose sys session list\n")
+        self.ssh.shell_send(command_list)
         result = self._session_analysis()
         return (result)
 
-        
+
     def run_op_mode_command(self, cmd):
         """
         Use netcontrol shell to send commands to vyos
-
         """
-        log.info("Enter run_op_mode_command with cmd={}".format(cmd))
+        log.info("Enter  with cmd={}".format(cmd))
         self.ssh.shell_send([cmd])
         return(self.ssh.output)
 
@@ -535,7 +534,7 @@ class Fortigate(object):
         # Parse and build session json
         for line in self.ssh.output.splitlines():
             log.debug("line={}".format(line))
-            
+
             # session info: proto=6 proto_state=01 duration=375 expire=3599 timeout=3600 flags=00000000 sockflag=00000000 sockport=0 av_idx=0 use=4
             match_session_info = re.search("^session\sinfo:\sproto=(?P<proto>\d+)\sproto_state=(?P<proto_state>\d+)\sduration=(?P<duration>\d+)\sexpire=(?P<expire>\d+)\stimeout=(?P<timeout>\d+)",line)
             if match_session_info:
@@ -548,7 +547,7 @@ class Fortigate(object):
                 result['proto'] = proto
                 result['proto_state'] = proto_state
                 result['duration'] = duration
-                result['expire'] = expire 
+                result['expire'] = expire
                 result['timeout'] = timeout
 
             # state=log local may_dirty
@@ -593,9 +592,9 @@ class Fortigate(object):
                 dport = match_ip.group('dport')
                 result['src'] = src
                 result['sport'] = sport
-                result['dest'] = dest 
+                result['dest'] = dest
                 log.debug("src={} sport={} dest={} dport={}".format(src,sport,dest,dport))
-                  
+
             # Total session (should be 1 ideally)
             match_total_session = re.search("^total\ssession\s(?P<total>\d+)", line)
             if match_total_session:
