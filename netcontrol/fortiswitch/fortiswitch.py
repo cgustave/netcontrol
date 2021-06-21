@@ -7,7 +7,7 @@ Access:
   - using ssh
 Fortiswitch control :
   - get_fsw_port_status (port: <port_name>)
-  - set_fsw_port_status (port: <port_name>, status: <up|down>)
+  - set_fsw_port_status (port: <port_name>, status: <up|down>)  
 """
 from netcontrol.ssh.ssh import Ssh
 import logging as log
