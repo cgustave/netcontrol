@@ -77,7 +77,7 @@ class Fortigate(object):
         # issue command and capture output
         for command in commands:
             command = command + "\n"
-            self.(command)
+            self.run_op_mode_command(command)
 
             log.info("command={} output={}".format(command, self.ssh.output))
 
@@ -519,7 +519,7 @@ class Fortigate(object):
         """
         Use netcontrol shell to send commands to vyos
         """
-        log.info("Enter  with cmd={}".format(cmd))
+        log.info("Enter with cmd={}".format(cmd))
         self.ssh.shell_send([cmd])
         return(self.ssh.output)
 
