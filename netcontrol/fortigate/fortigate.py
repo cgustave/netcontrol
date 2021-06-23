@@ -365,7 +365,7 @@ class Fortigate(object):
                     10.0.2.0-10.0.2.255
 
             FGT-B1-1 #
-            
+
         210623 : as of 6.4, command was changed to "config system sdwan". Add option version=6.4/6.2 for 6.2 compatibility
         """
         log.info("Enter with service={} version={}".format(service, version))
@@ -409,7 +409,7 @@ class Fortigate(object):
                         else:
                             log.error("Could not extract sla value from member")
             # Get members
-            match_member_section = re.search("\s\sMembers:",line)
+            match_member_section = re.search("\s\sMembers\(|:",line)
             if match_member_section:
                 log.debug("found start of members section")
                 members_flag = True
