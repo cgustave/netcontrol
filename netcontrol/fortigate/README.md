@@ -118,7 +118,7 @@ CLASSES
      |                  10.0.2.0-10.0.2.255
      |      
      |          FGT-B1-1 #
-     |          
+     |      
      |      210623 : as of 6.4, command was changed to "config system sdwan". Add option version=6.4/6.2 for 6.2 compatibility
      |  
      |  get_session(self, filter={})
