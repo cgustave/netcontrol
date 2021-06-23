@@ -45,7 +45,7 @@ CLASSES
      |      Enters a specific vdom
      |      Uses : end -> config vdom -> edit VDOM
      |      
-     |      ex: 
+     |      ex:
      |              FGT-1B2-9 # config vdom
      |      FGT-1B2-9 (vdom) # edit customer
      |      current vf=customer:1
@@ -57,7 +57,7 @@ CLASSES
      |                 'subnet' : ['10.0.0.0/24', '10.0.2.0/24'],
      |                 'nexthop' : ['10.255.0.253','10.255.1.253','10.255.2.253', '10.255.0.2','10.255.1.2','10.255.2.2'],
      |                 'interface' : ['vpn_mpls','vpn_isp1','vpn_isp2']
-     |               } 
+     |               }
      |      
      |      For :
      |           FGT-B1-1 # get router info routing-table bgp
@@ -71,7 +71,7 @@ CLASSES
      |                                                       [200/0] via 10.255.2.2, vpn_isp2, 00:02:54
      |      
      |       FGT-B1-1 #
-     |       
+     |      
      |       Case for recursive routes:
      |       FGT-1B2-9 (customer) # get router info routing-table bgp
      |      
@@ -96,11 +96,11 @@ CLASSES
      |      connection: 3/348
      |      IKE SA: created 3/348  established 3/3  times 0/2083/3220 ms
      |      IPsec SA: created 3/348  established 3/3  times 0/2083/3220 ms
-     |      For each line 'IKE SA' and 'IPsec SA' we look at 'x' in established x/y 
+     |      For each line 'IKE SA' and 'IPsec SA' we look at 'x' in established x/y
      |      ex : { 'ike': { 'created' : 3, 'established' : 3}, 'ipsec': { 'created' : 3, 'established' : 3}}
      |  
-     |  get_sdwan_service(self, service=1)
-     |      Returns a dictionary with information from 
+     |  get_sdwan_service(self, service='1', version='6.4')
+     |      Returns a dictionary with information from
      |      diagnose sys viirtual-wan-link service <service>
      |          FGT-B1-1 # diagnose sys virtual-wan-link service 1
      |          Service(1): Address Mode(IPV4) flags=0x0
@@ -118,6 +118,8 @@ CLASSES
      |                  10.0.2.0-10.0.2.255
      |      
      |          FGT-B1-1 #
+     |          
+     |      210623 : as of 6.4, command was changed to "config system sdwan". Add option version=6.4/6.2 for 6.2 compatibility
      |  
      |  get_session(self, filter={})
      |      Filter and retrieve a session from the session list

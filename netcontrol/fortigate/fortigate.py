@@ -345,7 +345,7 @@ class Fortigate(object):
        log.debug("result={}".format(result))
        return result
 
-    def get_sdwan_service(self, service=1):
+    def get_sdwan_service(self, service='1', version='6.4'):
         """
         Returns a dictionary with information from
         diagnose sys viirtual-wan-link service <service>
@@ -365,27 +365,28 @@ class Fortigate(object):
                     10.0.2.0-10.0.2.255
 
             FGT-B1-1 #
+            
+        210623 : as of 6.4, command was changed to "config system sdwan". Add option version=6.4/6.2 for 6.2 compatibility
         """
-        log.info("Enter")
+        log.info("Enter with service={} version={}".format(service, version))
         result = {'members': {}, 'mode':''}
         members_flag = False
         mode = ''
-
         if not self.ssh.connected:
             self.ssh.connect()
-
-        self.run_op_mode_command("diagnose sys virtual-wan-link service {}\n".format(service))
-
+        cmd = "diagnose sys sdwan service"
+        if version == '6.2':
+            log.debug("old 6.2 command required")
+            cmd = 'diagnose sys virtual-wan-link service'
+        self.run_op_mode_command("{} {}\n".format(cmd, service))
         for line in self.ssh.output.splitlines():
             log.debug("line={}".format(line))
-
             # Get mode
             match_mode = re.search("(?:,\sMode\()(?P<mode>\S+)(?:\))", line)
             if match_mode:
                 mode = match_mode.group('mode')
                 log.debug("found mode={}".format(mode))
                 result['mode']=mode
-
             # Get members details
             if members_flag:
                 match_member = re.search("(?:\s+)(?P<order>\d+)(?::\sSeq_num\()(?P<seq>\d+)(?:\s\S+)?(?:\),\s)(?P<status>alive|dead)",line)
@@ -397,7 +398,6 @@ class Fortigate(object):
                     result['members'][order] = {}
                     result['members'][order]['seq_num'] = seq
                     result['members'][order]['status'] = status
-
                     # If sla mode, get sla value
                     if mode == 'sla':
                         log.debug("sla mode, get sla value")
@@ -408,13 +408,11 @@ class Fortigate(object):
                             result['members'][order]['sla'] = sla
                         else:
                             log.error("Could not extract sla value from member")
-
             # Get members
             match_member_section = re.search("\s\sMembers:",line)
             if match_member_section:
                 log.debug("found start of members section")
                 members_flag = True
-
         return result
 
     def get_session(self, filter={}):
