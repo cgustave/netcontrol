@@ -23,17 +23,19 @@ CLASSES
         Vm
     
     class Vm(builtins.object)
-     |  Vm(ip='', port=22, user='root', password='fortinet', private_key_file='', mock=False, debug=0)
+     |  Vm(host_type='Linux', hypervisor_type='kvm', ip='', port=22, user='root', password='fortinet', private_key_file='', mock=False, debug=0)
      |  
      |  Using logger for debugging, log file named Vm.log'
      |  Default user : root
      |  Default password : fortinet
      |  Default ssh port : 22
      |  If given, the ssh key is prefered over password
+     |  host_type : Linux (default) or KVM
+     |  hypervisor_type : kvm (default) or esx
      |  
      |  Methods defined here:
      |  
-     |  __init__(self, ip='', port=22, user='root', password='fortinet', private_key_file='', mock=False, debug=0)
+     |  __init__(self, host_type='Linux', hypervisor_type='kvm', ip='', port=22, user='root', password='fortinet', private_key_file='', mock=False, debug=0)
      |      Constructor
      |  
      |  close(self)
@@ -49,6 +51,7 @@ CLASSES
      |  
      |  get_statistics(self)
      |      Get server CPU, MEMORY and DISK usage
+     |      Commands to run depends on host_type
      |      Return: json
      |  
      |  get_vms_statistics(self)

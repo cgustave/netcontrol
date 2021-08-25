@@ -1,0 +1,10 @@
+[root@uranium:~] df -m
+Filesystem 1M-blocks    Used Available Use% Mounted on
+NFS41          28032    8744     19287  31% /vmfs/volumes/Farm2-nfs
+VMFS-5       1899008 1880057     18951  99% /vmfs/volumes/datastore-Uranium
+vfat             249     174        75  70% /vmfs/volumes/69f4af7a-8fef67ee-19a8-73d14778d37d
+vfat            4094      32      4061   1% /vmfs/volumes/58f72d54-99c8b477-1ff9-d4ae52e8199a
+vfat             249     175        74  70% /vmfs/volumes/42497372-e8f357aa-1697-4021215e5aa2
+vfat             285     262        23  92% /vmfs/volumes/58f72d4b-3d836623-207e-d4ae52e8199a
+[root@uranium:~] 
+

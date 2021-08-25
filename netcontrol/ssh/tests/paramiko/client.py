@@ -265,7 +265,7 @@ class Channel():
         # some commands need to be translated so they can be used as filename
         # We replace / with - and 'space' with _ and | with -
         tr_command = self._send.translate(str.maketrans({"/": "-"," ": "_", "\\": "_", "'" : "_", "^" : "_", "|": "-","{":"-","}":"-", "$":"-", "`":"_", ":":"_", "*":"_", ";":"_"}))
-        print("tr_command={}".format(tr_command))
+        log.debug("tr_command={}".format(tr_command))
 
         try:
             filename = "tests/mockfiles/"+self.context+"/"+tr_command+"_stdin.txt"

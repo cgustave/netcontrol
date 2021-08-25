@@ -1,0 +1,4 @@
+[root@neutron:~] cat /proc/cpuinfo | grep processor | wc -l
+48
+[root@neutron:~] 
+

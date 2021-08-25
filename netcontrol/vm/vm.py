@@ -32,9 +32,11 @@ class Vm(object):
     Default password : fortinet
     Default ssh port : 22
     If given, the ssh key is prefered over password
+    host_type : Linux (default) or KVM
+    hypervisor_type : kvm (default) or esx
     '''
 
-    def __init__(self, ip='', port=22, user='root', password='fortinet',
+    def __init__(self, host_type='Linux', hypervisor_type='kvm', ip='', port=22, user='root', password='fortinet',
                  private_key_file='', mock=False, debug=0):
         '''
         Constructor
@@ -51,10 +53,12 @@ class Vm(object):
             self.debug = True
             log.basicConfig(level='DEBUG')
 
-        log.info("Enter with ip={}, port={}, user={}, password={}, private_key_file={}, debug={}".
-                 format(ip, port, user, password, private_key_file, debug))
+        log.info("Enter with host_type={} hypervisor_type={} ip={}, port={}, user={}, password={}, private_key_file={}, debug={}".
+                 format(host_type, hypervisor_type, ip, port, user, password, private_key_file, debug))
 
         # public class attributs
+        self.host_type = host_type
+        self.hypervisor_type = hypervisor_type
         self.ip = ip
         self.port = port
         self.user = user
@@ -63,14 +67,12 @@ class Vm(object):
         self.mock_context = ''
         self.ssh = Ssh(ip=ip, port=port, user=user, password=password,
                        private_key_file=private_key_file, debug=debug)
-
         # private class attributes
         self._statistics = {}  # Internal representation of statistics
         self._vms = []         # Internal representation of each VMs
         self._vms_total = {}   # Total VMs statistics
         self._vms_disks = []   # Internal representation of each VM sdisks info
         self._vms_disks_dict = {} # temp object
-
 
     def connect(self):
         self.ssh.connect()
@@ -91,15 +93,19 @@ class Vm(object):
     def get_statistics(self):
         """
         Get server CPU, MEMORY and DISK usage
+        Commands to run depends on host_type
         Return: json
         """
         log.info('Enter')
         self._get_nbcpu()
         self._get_loadavg()
-        self._get_memory()
-        self._get_disk()
+        if self.host_type == 'Linux':
+            self._get_memory_kvm()
+            self._get_disk_kvm()
+        elif self.host_type == 'ESX':
+            self._get_memory_esx()
+            self._get_disk_esx()
         return(json.dumps(self._statistics))
-
 
     def get_vms_statistics(self):
         """
@@ -107,18 +113,22 @@ class Vm(object):
         Return: json
         """
         log.info('Enter')
-        self._get_processes()
-        self._get_vms_disk()
+        if self.hypervisor_type == 'kvm':
+            self._get_processes_kvm()
+            self._get_vms_disk_kvm()
+        elif self.hypervisor_type == 'esx':
+            log.warning("currently not yet supported")
+            # TODO
         result = {}
         result['vms'] = self._vms
         result['vms_total'] = self._vms_total
         result['vms_disks'] = self._vms_disks
         return(json.dumps(result))
 
-
     def _get_nbcpu(self):
         """
         Fills self._statistics with the number of CPU on the server
+        Same command used for for Linux and ESX system
         """
         log.info("Enter")
 
@@ -142,29 +152,38 @@ class Vm(object):
                 '5mn': ...
                 '15mn': ...
             }
+        Different commands for Linux system (cat /proc/loadavg) and ESX (uptime)
         """
         log.info("Enter")
-
-        # load average (1mn 5mn 15mn) typical output :
-        # 13.14 13.65 13.96 20/1711 38763
-        self.ssh.shell_send(["cat /proc/loadavg\n"])
-        load_match = re.search("(\d+\.?\d?\d?)\s+(\d+\.?\d?\d?)\s+(\d+\.?\d?\d?)",
-                               str(self.ssh.output))
+        load_1mn = ""
+        load_5mn = ""
+        load_15mn = ""
+        log.debug("host_type={}".format(self.host_type))
+        if self.host_type == 'Linux':
+            cmd = "cat /proc/loadavg\n"
+            # load average (1mn 5mn 15mn) typical output :
+            # 13.14 13.65 13.96 20/1711 38763
+        elif self.host_type == 'ESX':
+            cmd = "uptime\n"
+            #  9:43:24 up 141 days, 03:33:10, load average: 0.06, 0.07, 0.07
+        self.ssh.shell_send([cmd])
+        load_match = re.search("(\d+\.?\d?\d?)\,?\s+(\d+\.?\d?\d?)\,?\s+(\d+\.?\d?\d?)", str(self.ssh.output))
         if load_match:
             load_1mn = load_match.groups(0)[0]
             load_5mn = load_match.groups(0)[1]
             load_15mn = load_match.groups(0)[2]
-            log.debug("load_1mn={}, load_5mn={}, load_15mn={}".
-                      format(load_1mn, load_5mn, load_15mn))
-
             self._statistics['load'] = {}
             self._statistics['load']['1mn'] = load_1mn
             self._statistics['load']['5mn'] = load_5mn
             self._statistics['load']['15mn'] = load_15mn
+            log.debug("load_1mn={} load_5mn={} load_15mn={}".format(load_1mn, load_5mn, load_15mn))
+        else:
+            log.error("Could not extract system load for type={}".format(self.host_type))
 
-    def _get_memory(self):
+    def _get_memory_kvm(self):
         """
         Fills  self._statistics with memory load information
+        Using cat /proc/meminfo
         Using first key 'memory' and subkeys 'total', 'free' and available
         Note : better to use available than free because of caches
         Unit : KB
@@ -176,36 +195,78 @@ class Vm(object):
             }
         """
         log.info("Enter")
-
         # Memory load typical output (skip unecessary lines):
         # MemTotal:       264097732 kB
         # MemFree:         5160488 kB
         # MemAvailable:   108789520 kB
-
         self._statistics['memory'] = {}
         self.ssh.shell_send(["cat /proc/meminfo\n"])
-        mem_total_match = re.search("MemTotal:\s+(\d+) kB", str(self.ssh.output))
         memory_total = 0
         memory_free = 0
         memory_available = 0
+        mem_total_match = re.search("MemTotal:\s+(\d+) kB", str(self.ssh.output))
         if mem_total_match:
             memory_total = mem_total_match.groups(0)[0]
             self._statistics['memory']['total'] = memory_total
-
         mem_free_match = re.search("MemFree:\s+(\d+) kB", str(self.ssh.output))
         if mem_free_match:
             memory_free = mem_free_match.groups(0)[0]
             self._statistics['memory']['free'] = memory_free
-
         mem_available_match = re.search("MemAvailable:\s+(\d+) kB", str(self.ssh.output))
         if mem_available_match:
             memory_available = mem_available_match.groups(0)[0]
             self._statistics['memory']['available'] = memory_available
-
         log.debug("memory_total={}, memory_free={}, memory_available={}".
                   format(memory_total, memory_free, memory_available))
 
-    def _get_disk(self):
+    def _get_memory_esx(self):
+        """
+        Fills  self._statistics with memory load information
+        Using memstats -r comp-stats
+        Unit : KB
+        Ex:
+            'memory': {
+                'total': ...
+                'free' : ...
+                'available': ...
+            }
+        """
+        log.info("Enter")
+        # command has several values : total, minFree, free and some others.
+        # use 'total', 'free' and compute available as total - free
+        # this is how % is shown in vcenter for free so it matches
+        self._statistics['memory'] = {}
+        self.ssh.shell_send(["memstats -r comp-stats\n"])
+        memory_total = 0
+        memory_free = 0
+        memory_available = 0
+        for line in self.ssh.output.splitlines():
+            log.debug("line={}".format(line))
+            mem_re = "(?P<total>\d+)\s+"\
+                   + "(?P<discarded>\d+)\s+"\
+                   + "(?P<managedByMemMap>\d+)\s+"\
+                   + "(?P<reliableMem>\d+)\s+"\
+                   + "(?P<kernelCode>\d+)\s+"\
+                   + "(?P<critical>\d+)\s+"\
+                   + "(?P<dataAndHeap>\d+)\s+"\
+                   + "(?P<rsvdLow>\d+)\s+"\
+                   + "(?P<managedByMemSched>\d+)\s+"\
+                   + "(?P<minFree>\d+)\s+"\
+                   + "(?P<vmkClientConsumed>\d+)\s+"\
+                   + "(?P<otherConsumed>\d+)\s+"\
+                   + "(?P<free>\d+)\s+"
+            match_memory = re.search(mem_re, line)
+            if match_memory:
+                memory_total = int(match_memory.group('total'))
+                memory_free = int(match_memory.group('free'))
+                memory_available = memory_total - memory_free
+                log.debug("memory_total={} memory_free={} computed memory_available={}"\
+                          .format(memory_total, memory_free, memory_available))
+                self._statistics['memory']['total'] = memory_total
+                self._statistics['memory']['free'] = memory_free
+                self._statistics['memory']['available'] = memory_available
+
+    def _get_disk_kvm(self):
         """
         Fills self._statistics with disk usage information
         The goal is to get the remaining free space on the /home
@@ -229,10 +290,8 @@ class Vm(object):
         # tmpfs                              26G    1G       26G   1% /run
         # /dev/sda1                          10G    4G        5G  45% /
         # /dev/sda6                        1751G 1167G      496G  71% /home
-
         self.ssh.shell_send(["df -BG\n"])
         self._statistics['disk'] = {}
-
         for line in self.ssh.output.splitlines():
             log.debug("line={}".format(line))
             home_re = "(?P<dev>[A-Za-z0-9\/]+)(?:\s+)(\d+)G\s+(?P<used>\d+)G\s+"\
@@ -240,21 +299,70 @@ class Vm(object):
                     + "(?P<mounted>[A-Za-z0-9\/]+)"
             home_match = re.search(home_re, line)
             if home_match:
+                dev = home_match.group('dev')
+                used = home_match.group('used')
+                available = home_match.group('available')
+                used_percent = home_match.group('used_percent')
+                mounted = home_match.group('mounted')
                 log.debug("dev={} used={} available={} used_percent={} mounted={}".
-                          format(home_match.group('dev'),
-                                 home_match.group('used'),
-                                 home_match.group('available'),
-                                 home_match.group('used_percent'),
-                                 home_match.group('mounted')))
+                          format(dev, used, available, used_percent, mounted))
+                self._statistics['disk'][mounted] = {}
+                self._statistics['disk'][mounted]['dev'] = dev
+                self._statistics['disk'][mounted]['used'] = used
+                self._statistics['disk'][mounted]['available'] = available
+                self._statistics['disk'][mounted]['used_percent'] = used_percent
 
-                self._statistics['disk'][home_match.group('mounted')] = {}
-                self._statistics['disk'][home_match.group('mounted')]['dev'] = home_match.group('dev')
-                self._statistics['disk'][home_match.group('mounted')]['used'] = home_match.group('used')
-                self._statistics['disk'][home_match.group('mounted')]['available'] = home_match.group('available')
-                self._statistics['disk'][home_match.group('mounted')]['used_percent'] = home_match.group('used_percent')
+    def _get_disk_esx(self):
+        """
+        Fills self._statistics with disk usage information
+        The goal is to get the remaining free space on the /home
+        Using first key 'disk', subkeys 'home', subkeys 'used' 'available'
+        'used_percent'
+        Unit is in MB
+        Ex :
+            'disk': {
+                <mount>': {               # <mount> could be /home or others
+                    'dev' : xxx           # dev is the Filesystem
+                    'used': xxx (in G)
+                    'used_percent' : xxx (in percent)
+                    'available': xxx (in G)
+                }
+            }
+        """
+        log.info("Enter")
+        # Typical output (skip unessary lines)
+        # not esx does not support -BG options
+        # [root@uranium:~] df -m
+        # Filesystem 1M-blocks    Used Available Use% Mounted on
+        # NFS41          28032    8744     19287  31% /vmfs/volumes/Farm2-nfs
+        # VMFS-5       1899008 1880057     18951  99% /vmfs/volumes/datastore-Uranium
+        # vfat             249     174        75  70% /vmfs/volumes/69f4af7a-8fef67ee-19a8-73d14778d37d
+        # vfat            4094      32      4061   1% /vmfs/volumes/58f72d54-99c8b477-1ff9-d4ae52e8199a
+        # vfat             249     175        74  70% /vmfs/volumes/42497372-e8f357aa-1697-4021215e5aa2
+        # vfat             285     262        23  92% /vmfs/volumes/58f72d4b-3d836623-207e-d4ae52e8199a
+        self.ssh.shell_send(["df -m\n"])
+        self._statistics['disk'] = {}
+        for line in self.ssh.output.splitlines():
+            log.debug("line={}".format(line))
+            datastore_re = "(?P<dev>[A-Za-z0-9\/-]+)(?:\s+)(\d+)\s+(?P<used>\d+)\s+"\
+                    + "(?P<available>\d+)\s+(?P<used_percent>\d+)%\s+"\
+                    + "(?P<mounted>[A-Za-z0-9\/]+)"
+            datastore_match = re.search(datastore_re, line)
+            if datastore_match:
+                dev = datastore_match.group('dev')
+                used = datastore_match.group('used')
+                available = datastore_match.group('available')
+                used_percent = datastore_match.group('used_percent')
+                mounted = datastore_match.group('mounted')
+                log.debug("dev={} used={} available={} used_percent={} mounted={}".
+                          format(dev, used, available, used_percent, mounted))
+                self._statistics['disk'][mounted] = {}
+                self._statistics['disk'][mounted]['dev'] = dev
+                self._statistics['disk'][mounted]['used'] = used
+                self._statistics['disk'][mounted]['available'] = available
+                self._statistics['disk'][mounted]['used_percent'] = used_percent
 
-
-    def _get_processes(self):
+    def _get_processes_kvm(self):
         """
         Retrieve qemu processes from KVM server
         Fills _vms and _vms_total attributs
@@ -267,10 +375,8 @@ class Vm(object):
         concatenated in one before it is tokenized
         """
         log.info("Enter")
-
         self.ssh.shell_send(["ps -xww | grep qemu-system\n"])
         self._vms_total = {}
-
         # Prepare totals
         self._vms_total['cpu'] = 0
         self._vms_total['memory'] = 0
@@ -278,64 +384,50 @@ class Vm(object):
         full_line = ""
         kvm_start = False
         kvm_end = False
-
         for line in self.ssh.output.splitlines():
-
             log.debug("line={}".format(line))
-
             need_tokenize = False
-
             # Looking for kvm process starting line (qemu-system-x86_64)
             if line.find('qemu-system-x86_64') != -1:
                 log.debug("Found kvm process line start")
                 kvm_start = True
                 kvm_end = False
-
             # Looking for kvm process ending line (\stimestamp=on)
             if line.find('timestamp=on') != -1 :
                 log.debug("Found kvm process line end")
                 kvm_start = False
                 kvm_end = True
-
             # Dealing with all possibilities
             if kvm_start:
-
                 if kvm_end:
                     log.debug("Full line seen")
                     full_line = line
                     kvm_start = False
                     kvm_end = False
                     need_tokenize = True
-
                 else :
                     log.info("Start without end, line is split, first fragment seen")
                     full_line = line
-
             else:
-
                 if kvm_end:
                      log.debug("End without start, last chunk of multiline seen, tokenize")
                      full_line = full_line + line
                      kvm_start = False
                      kvm_end = False
                      need_tokenize = True
-
                 else :
                     log.debug("No start, no end, do nothing")
-
             if need_tokenize:
                 result = self._tokenize(full_line)
                 full_line = ""
                 log.debug("Recording result")
                 self._vms.append(result)
-
                 # Record total for all VMs
                 if 'cpu' in result:
                     # Count number of VMs based on the cpu token
                     self._vms_total['number'] += 1
                     self._vms_total['cpu'] += int(result['cpu'])
                     log.debug("vms_total_cpu={}".format(self._vms_total['cpu']))
-
                 if 'memory' in result:
                     self._vms_total['memory'] += int(result['memory'])
                     log.debug("vms_total_memory={}".format(self._vms_total['memory']))
@@ -414,7 +506,7 @@ class Vm(object):
         # Need to return an empty dictionnary
         return {}
 
-    def _get_vms_disk(self, vmpath='/home/virtualMachines'):
+    def _get_vms_disk_kvm(self, vmpath='/home/virtualMachines'):
         """
         Retrieve VM disk usage.
         Retrieve all VMs disk usage located in vmpath.
