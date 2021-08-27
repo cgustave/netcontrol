@@ -73,6 +73,9 @@ class Vm(object):
         self._vms_total = {}   # Total VMs statistics
         self._vms_disks = []   # Internal representation of each VM sdisks info
         self._vms_disks_dict = {} # temp object
+        self._vms_esx_id_map = {} # wid to vm_name mapping
+        self._vms_esx_cpu = {}    # dict of vm_id containing nb_cpu
+        self._vms_esx_memory = {} # dict of vm_id containing memory size
 
     def connect(self):
         self.ssh.connect()
@@ -117,8 +120,9 @@ class Vm(object):
             self._get_processes_kvm()
             self._get_vms_disk_kvm()
         elif self.hypervisor_type == 'esx':
-            log.warning("currently not yet supported")
-            # TODO
+            self._build_vms_esx_cpu()
+            self._build_vms_esx_memory()
+            self._get_processes_esx()
         result = {}
         result['vms'] = self._vms
         result['vms_total'] = self._vms_total
@@ -139,7 +143,7 @@ class Vm(object):
         nb_cpu_match = re.search("(\d+)\n", str(self.ssh.output))
         if nb_cpu_match:
             nb_cpu = nb_cpu_match.groups(0)[0]
-            log.debug("np_cpu={}".format(nb_cpu))
+            log.debug("nb_cpu={}".format(nb_cpu))
             self._statistics['nb_cpu'] = nb_cpu
 
     def _get_loadavg(self):
@@ -362,6 +366,129 @@ class Vm(object):
                 self._statistics['disk'][mounted]['available'] = available
                 self._statistics['disk'][mounted]['used_percent'] = used_percent
 
+    def _get_processes_esx(self):
+        """
+        Retrieve esxi process from 'esxcli process list' to fill _vms and _vms_total attributs
+        Sample of 1 process:
+            root@uranium:~] esxcli vm process list
+            uranium-esx36 [knagaraju] FGT_VM64_ESXI
+               World ID: 2557323
+               Process ID: 0
+               VMX Cartel ID: 2557322  <<< to store
+               UUID: cc cf 7f af 0f 3d 45 23-8a 69 1f 43 4e c2 97 56
+               Display Name: uranium-esx36 [knagaraju] FGT_VM64_ESXI
+               Config File: /vmfs/volumes/58f72d53-3d2f86ee-e2b8-d4ae52e8199a/machines/uranium-esx36 [knagaraju] FGT_VM64_ESXI/uranium-esx36 [knagaraju] FGT_VM64_ESXI.vmx
+        Note: the vmid used in other commands is the "World ID" (need to be extracted)
+        We use Display name as VM id
+        """
+        log.info("Enter")
+        self.ssh.shell_send(["esxcli vm process list\n"])
+        self._vms = []
+        self._vms_total = {}
+        self._vms_total['cpu'] = 0
+        self._vms_total['memory'] = 0
+        self._vms_total['number'] = 0
+        self._vms_esx_id_map = {}
+        esx_start = False
+        esx_end = False
+        esx_line = 0
+        vm_name = ""
+        vm_memory = 0
+        ret = True
+        for line in self.ssh.output.splitlines():
+            if esx_start:
+                esx_line = esx_line + 1
+            log.debug("esx_line={} line={}".format(esx_line, line))
+            if esx_line == 1:
+                match_name = re.search("(?P<vm_name>\S+)\s\[(?P<create_user>\S+)\]\s(?P<template>\S+)", line)
+                if match_name:
+                    vm_name = match_name.group('vm_name')
+                    create_user = match_name.group('create_user')
+                    template = match_name.group('template')
+                    self._vms_total['number'] += 1
+                    log.debug("Found new vm_name={} create_user={} template={} total_number={}".format(vm_name, create_user, template, self._vms_total['number']))
+            if esx_start:
+                match_esxid = re.search("VMX\sCartel\sID:\s(?P<vm_esxid>\d+)", line)
+                if match_esxid:
+                    vm_esxid = match_esxid.group('vm_esxid')
+                    log.debug("Found {} vm_esxid={}".format(vm_name, vm_esxid))
+                    self._vms_esx_id_map[vm_esxid] = vm_name
+                    if vm_esxid in self._vms_esx_memory:
+                        vm_memory = self._vms_esx_memory[vm_esxid]
+                        # TODO build vms_total['memory']
+                    else:
+                        log.error("Could not find vm memory for vm_esxi={}".format(vm_esxid))
+                        ret = False
+            if (not esx_start and (line.find('esxcli vm process list') != -1) or (line == "")):
+                log.debug("Found esx process line start")
+                esx_start = True
+                exx_end = False
+                esx_line = 0
+            if (esx_start and (line.find('Config File') != -1)):
+                log.debug("Found esx process line end")
+                esx_end = True
+                esx_start = False
+                vm = {}
+                vm['id'] = vm_name
+                vm['cpu'] = 0
+                vm['memory'] = vm_memory
+                vm['template'] = template
+                if vm_name in self._vms_esx_cpu:
+                    vm['cpu'] = self._vms_esx_cpu[vm_name]
+                    # TODO build vms_total['cpu']
+                else:
+                    log.error("Could not find nb of cpu for vm_name={}".format(vm_name))
+                    ret = False
+                self._vms.append(vm)
+        return ret
+
+    def _build_vms_esx_cpu(self):
+        """
+        To be run before _get_process_cpu_esx
+        Update self._vms_esx_cpu with number of CPUs by VM using 'ps -u | grep vcpu'
+        One line per cpu by vm so keep the last line and add +1
+        sample:
+        7446209  7446202  vmx-vcpu-0:neutron-esx04 [spathak] FGT_VM64_ESXI        <- 1 cpu
+        7872663  7872656  vmx-vcpu-0:neutron-esx06 [atsakiridis] FGT_VM64_ESXI    <- 1 cpu
+        5087640  5087630  vmx-vcpu-0:neutron-esx01 [apasta] FMG_VM64_ESXI
+        5087641  5087630  vmx-vcpu-1:neutron-esx01 [apasta] FMG_VM64_ESXI
+        5087642  5087630  vmx-vcpu-2:neutron-esx01 [apasta] FMG_VM64_ESXI
+        5087643  5087630  vmx-vcpu-3:neutron-esx01 [apasta] FMG_VM64_ESXI         <- 4 cpus
+        """
+        log.info("Enter")
+        self._vms_esx_cpu = {}
+        self.ssh.shell_send(["ps -u\n"])
+        for line in self.ssh.output.splitlines():
+            log.debug("line={}".format(line))
+            match = re.search("\d+\s+\d+\s+vmx-vcpu-(?P<cpu>\d+):(?P<vm_id>\S+)",line)
+            if match:
+                cpu = match.group('cpu')
+                vm_id = match.group('vm_id')
+                log.debug("found vm_id={} cpu={}".format(vm_id, cpu))
+                self._vms_esx_cpu[vm_id] = int(cpu) + 1
+
+    def _build_vms_esx_memory(self):
+        """
+        To be run before _get_process_cpu_esx
+        Update self._vms_esx_memory with VM memory using 'memstats -r vm-stats'
+        sample:
+                   name b   schedGrp parSchedGroup   worldGrp memSizeLimit    memSize        min        max   minLimit     shares   ovhdResv       ovhd   allocTgt   consumed balloonTgt  ballooned    swapTgt    swapped     mapped     active     zipped   zipSaved     shared       zero sharedSaved useReliableMem swapScope
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+       vm.48361 n     125647             4      48361      2097152    2097152          0         -1         -1         -3      48072      40392    2084412    2053692          0          0          0          0    2066432      20968          0          0      14076      10204       12740              n         1
+        using field 5 (worldGrp) and 6 (memSizeLimit)
+        """
+        log.info("Enter")
+        self._vms_esx_memory = {}
+        self.ssh.shell_send(["memstats -r vm-stats\n"])
+        for line in self.ssh.output.splitlines():
+            log.debug("line={}".format(line))
+            match = re.search("vm\.\d+\s+\S+\s+\d+\s+\d+\s+(?P<esxid>\d+)\s+(?P<memory>\d+)\s",line)
+            if match:
+                esxid = match.group('esxid')
+                memory = match.group('memory')
+                log.debug("found esxid={} memory={}".format(esxid, memory))
+                self._vms_esx_memory[esxid] = memory
+
     def _get_processes_kvm(self):
         """
         Retrieve qemu processes from KVM server
@@ -377,7 +504,6 @@ class Vm(object):
         log.info("Enter")
         self.ssh.shell_send(["ps -xww | grep qemu-system\n"])
         self._vms_total = {}
-        # Prepare totals
         self._vms_total['cpu'] = 0
         self._vms_total['memory'] = 0
         self._vms_total['number'] = 0
@@ -550,6 +676,8 @@ class Vm(object):
                 else:
                     self._vms_disks_dict[id] = int(self._vms_disks_dict[id]) + int(size)
                 log.debug("id={} size={} total={} ".format(id, size, self._vms_disks_dict[id] ))
+
+
 
     def dump_statistics(self):
         """
