@@ -91,11 +91,11 @@ class VMctlTestCase(unittest.TestCase):
         log.debug("Result : {} len={}".format(result, len(str(result))))
         #self.vm.dump_vms()
         #self.vm.dump_vms_total()
-        self.vm.close()
+        #self.vm.close()
         self.assertTrue(result["vms_total"]["cpu"], "71")
         self.assertTrue(result["vms_total"]["memory"], "131072000")
         self.assertTrue(result["vms_total"]["number"], "35")
-        self.assertEqual(len(str(result)),3050)
+        self.assertEqual(len(str(result)), 2696)
 
     #@unittest.skip
     def test_total_vm_resources(self):

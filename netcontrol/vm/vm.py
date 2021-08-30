@@ -429,19 +429,39 @@ class Vm(object):
                 esx_end = True
                 esx_start = False
                 vm = {}
-                vm['id'] = vm_name
-                vm['cpu'] = 0
-                vm['memory'] = vm_memory
-                vm['template'] = template
-                if vm_name in self._vms_esx_cpu:
-                    vm['cpu'] = self._vms_esx_cpu[vm_name]
-                    self._vms_total['cpu'] += vm['cpu']
-                    log.debug("vms_total_cpu={}".format(self._vms_total['cpu']))
+                instance = self._get_vm_instance_from_name(name=vm_name)
+                if re.search('\d+', instance):
+                    vm['id'] = instance
+                    vm['cpu'] = 0
+                    vm['memory'] = vm_memory
+                    vm['template'] = template
+                    if vm_name in self._vms_esx_cpu:
+                        vm['cpu'] = self._vms_esx_cpu[vm_name]
+                        self._vms_total['cpu'] += vm['cpu']
+                        log.debug("vms_total_cpu={}".format(self._vms_total['cpu']))
+                    else:
+                        log.error("Could not find nb of cpu for vm_name={}".format(vm_name))
+                        ret = False
+                    self._vms.append(vm)
                 else:
-                    log.error("Could not find nb of cpu for vm_name={}".format(vm_name))
+                    log.warning("got unexpected instance format instance={}".format(instance))
                     ret = False
-                self._vms.append(vm)
         return ret
+
+    def _get_vm_instance_from_name(self,name=""):
+        """
+        VM instance is like 001, 011, 122 and so on.
+        It should be extracted from server name (ex: uranium-tam-esx42)
+        """
+        log.info("Enter with name={}".format(name))
+        match_inst = re.search("(?P<inst>\d+)$", name)
+        if match_inst:
+            inst = match_inst.group('inst')
+            result = str(inst).zfill(3)
+            log.debug("formatted instance result={}".format(result))
+        else:
+            log.warning("Could not extract formatted instance from name={}".format(name))
+        return result
 
     def _build_vms_esx_cpu(self):
         """
