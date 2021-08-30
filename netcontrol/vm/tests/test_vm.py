@@ -90,7 +90,7 @@ class VMctlTestCase(unittest.TestCase):
         result = json.loads(self.vm.get_vms_statistics())
         log.debug("Result : {} len={}".format(result, len(str(result))))
         #self.vm.dump_vms()
-        self.vm.dump_vms_total()
+        #self.vm.dump_vms_total()
         self.vm.close()
         self.assertTrue(result["vms_total"]["cpu"], "71")
         self.assertTrue(result["vms_total"]["memory"], "131072000")
