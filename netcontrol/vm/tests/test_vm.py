@@ -24,19 +24,19 @@ class VMctlTestCase(unittest.TestCase):
         self.vm = Vm(ip='10.5.0.31', port='22', user='root',
                             password='fortinet', debug=True)
 
-    @unittest.skip
+    #@unittest.skip
     def test_connect(self):
         self.vm.connect()
         pass
 
-    @unittest.skip
+    #@unittest.skip
     def test_attributs_validation(self):
         self.assertTrue(self.vm.ip == '10.5.0.31')
         self.assertTrue(self.vm.port == '22')
         self.assertTrue(self.vm.user == 'root')
         self.assertTrue(self.vm.password == 'fortinet')
 
-    @unittest.skip
+    #@unittest.skip
     def test_get_statistics_kvm(self):
         self.vm.ssh.mock(context='kvm_vm1')
         result = json.loads(self.vm.get_statistics())
@@ -52,7 +52,7 @@ class VMctlTestCase(unittest.TestCase):
         self.assertTrue(result["load"]["15mn"], "13.96")
         self.assertEqual(len(str(result)), 1052)
 
-    @unittest.skip
+    #@unittest.skip
     def test_get_statistics_esx(self):
         self.vm.host_type = 'ESX'
         self.vm.hypervisor_type = 'esx'
@@ -70,7 +70,7 @@ class VMctlTestCase(unittest.TestCase):
         self.assertTrue(result["load"]['15mn'], "0.07")
         self.assertEqual(len(str(result)), 762)
 
-    @unittest.skip
+    #@unittest.skip
     def test_get_vm_resources_kvm(self):
         self.vm.ssh.mock(context='kvm_vm2')
         result = json.loads(self.vm.get_vms_statistics())
@@ -90,14 +90,14 @@ class VMctlTestCase(unittest.TestCase):
         result = json.loads(self.vm.get_vms_statistics())
         log.debug("Result : {} len={}".format(result, len(str(result))))
         #self.vm.dump_vms()
+        self.vm.dump_vms_total()
         self.vm.close()
-        #self.assertTrue(result["vms_total"]["cpu"], "77")
-        #self.assertTrue(result["vms_total"]["memory"], "182272")
-        #self.assertTrue(result["vms_total"]["number"], "55")
-        #self.assertEqual(len(str(result)),7829)
+        self.assertTrue(result["vms_total"]["cpu"], "71")
+        self.assertTrue(result["vms_total"]["memory"], "131072000")
+        self.assertTrue(result["vms_total"]["number"], "35")
+        self.assertEqual(len(str(result)),3050)
 
-
-    @unittest.skip
+    #@unittest.skip
     def test_total_vm_resources(self):
         self.vm.ssh.mock(context='kvm_vm2')
         result = json.loads(self.vm.get_vms_statistics())
@@ -106,7 +106,7 @@ class VMctlTestCase(unittest.TestCase):
         log.debug("used_cpu = {}".format(used_cpu))
         self.assertEqual(used_cpu, 77)
 
-    @unittest.skip
+    #@unittest.skip
     def test_trace_file(self):
         self.vm.trace_open(filename="vm_tracefile.log")
         self.vm.trace_write("\ntracefile test\n")
@@ -116,7 +116,7 @@ class VMctlTestCase(unittest.TestCase):
         self.vm.close()
 
     # bug seen on radon
-    @unittest.skip
+    #@unittest.skip
     def test_get_vm_statistics_case2(self):
         self.vm.ssh.mock(context='kvm_vm3')
         result = json.loads(self.vm.get_statistics())
@@ -128,7 +128,7 @@ class VMctlTestCase(unittest.TestCase):
     # tokenize failed vm_id=None cpu=4 => line=20777 ?        Sl   12314:32 qemu-system-x86_64 -enable-kvm -name guest=SHA04,
     # manual VM need to be excluded
 
-    @unittest.skip
+    #@unittest.skip
     def test_total_vm_resources_case2(self):
         self.vm.ssh.mock(context='kvm_vm3')
         result = json.loads(self.vm.get_vms_statistics())
@@ -137,7 +137,7 @@ class VMctlTestCase(unittest.TestCase):
         log.debug("used_cpu = {}".format(used_cpu))
         self.assertEqual(used_cpu, 46)
 
-    @unittest.skip
+    #@unittest.skip
     def test_get_vms_disk_kvm(self):
         self.vm.ssh.mock(context='kvm_vmd1')
         self.vm._get_vms_disk_kvm()

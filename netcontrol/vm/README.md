@@ -49,6 +49,9 @@ CLASSES
      |  dump_vms(self)
      |      For debugging purpose, returns a formated json of self._vms
      |  
+     |  dump_vms_total(self)
+     |      For debugging purpose, returns a formated json of self._vms_total
+     |  
      |  get_statistics(self)
      |      Get server CPU, MEMORY and DISK usage
      |      Commands to run depends on host_type

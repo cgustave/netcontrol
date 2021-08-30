@@ -415,7 +415,7 @@ class Vm(object):
                     self._vms_esx_id_map[vm_esxid] = vm_name
                     if vm_esxid in self._vms_esx_memory:
                         vm_memory = self._vms_esx_memory[vm_esxid]
-                        # TODO build vms_total['memory']
+                        self._vms_total['memory'] += int(vm_memory)
                     else:
                         log.error("Could not find vm memory for vm_esxi={}".format(vm_esxid))
                         ret = False
@@ -435,7 +435,8 @@ class Vm(object):
                 vm['template'] = template
                 if vm_name in self._vms_esx_cpu:
                     vm['cpu'] = self._vms_esx_cpu[vm_name]
-                    # TODO build vms_total['cpu']
+                    self._vms_total['cpu'] += vm['cpu']
+                    log.debug("vms_total_cpu={}".format(self._vms_total['cpu']))
                 else:
                     log.error("Could not find nb of cpu for vm_name={}".format(vm_name))
                     ret = False
@@ -693,6 +694,13 @@ class Vm(object):
        """
        log.info('Enter')
        print(json.dumps(self._vms, indent=4, sort_keys=True))
+
+    def dump_vms_total(self):
+        """
+        For debugging purpose, returns a formated json of self._vms_total
+        """
+        log.info('Enter')
+        print(json.dumps(self._vms_total, indent=4, sort_keys=True))
 
 
 """
