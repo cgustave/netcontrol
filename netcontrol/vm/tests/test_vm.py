@@ -40,17 +40,17 @@ class VMctlTestCase(unittest.TestCase):
     def test_get_statistics_kvm(self):
         self.vm.ssh.mock(context='kvm_vm1')
         result = json.loads(self.vm.get_statistics())
-        log.debug("Result : {} len={}".format(result, len(str(result))))
+        #log.debug("Result : {} len={}".format(result, len(str(result))))
         #self.vm.dump_statistics()
         self.vm.close()
-        self.assertTrue(result["nb_cpu"], "64")
-        self.assertTrue(result["memory"]['available'], "106462376")
-        self.assertTrue(result["memory"]['free'], "16434672")
-        self.assertTrue(result["memory"]['total'], "264097732")
-        self.assertTrue(result["load"]["1mn"], "13.14")
-        self.assertTrue(result["load"]["5mn"], "13.65")
-        self.assertTrue(result["load"]["15mn"], "13.96")
-        self.assertEqual(len(str(result)), 1052)
+        self.assertEqual(result["nb_cpu"], 64)
+        self.assertEqual(result["memory"]['available'], 106462376)
+        self.assertEqual(result["memory"]['free'], 16434672)
+        self.assertEqual(result["memory"]['total'], 264097732)
+        self.assertEqual(result["load"]["1mn"], "13.14")
+        self.assertEqual(result["load"]["5mn"], "13.65")
+        self.assertEqual(result["load"]["15mn"], "13.96")
+        self.assertEqual(len(str(result)), 1044)
 
     #@unittest.skip
     def test_get_statistics_esx(self):
@@ -58,17 +58,17 @@ class VMctlTestCase(unittest.TestCase):
         self.vm.hypervisor_type = 'esx'
         self.vm.ssh.mock(context='esx_vm1')
         result = json.loads(self.vm.get_statistics())
-        log.debug("Result : {} len={}".format(result, len(str(result))))
+        #log.debug("Result : {} len={}".format(result, len(str(result))))
         #self.vm.dump_statistics()
         self.vm.close()
-        self.assertTrue(result["nb_cpu"], "48")
-        self.assertTrue(result["memory"]['available'], "21157676")
-        self.assertTrue(result["memory"]['free'], "247251176")
-        self.assertTrue(result["memory"]['total'], "268408852")
-        self.assertTrue(result["load"]['1mn'], "0.06")
-        self.assertTrue(result["load"]['5mn'], "0.07")
-        self.assertTrue(result["load"]['15mn'], "0.07")
-        self.assertEqual(len(str(result)), 762)
+        self.assertEqual(result["nb_cpu"], 48)
+        self.assertEqual(result["memory"]['available'], 21157676)
+        self.assertEqual(result["memory"]['free'], 247251176)
+        self.assertEqual(result["memory"]['total'], 268408852)
+        self.assertEqual(result["load"]['1mn'], "0.06")
+        self.assertEqual(result["load"]['5mn'], "0.07")
+        self.assertEqual(result["load"]['15mn'], "0.07")
+        self.assertEqual(len(str(result)), 760)
 
     #@unittest.skip
     def test_get_vm_resources_kvm(self):
@@ -77,10 +77,10 @@ class VMctlTestCase(unittest.TestCase):
         log.debug("Result : {} len={}".format(result, len(str(result))))
         #self.vm.dump_vms()
         self.vm.close()
-        self.assertTrue(result["vms_total"]["cpu"], "77")
-        self.assertTrue(result["vms_total"]["memory"], "182272")
-        self.assertTrue(result["vms_total"]["number"], "55")
-        self.assertEqual(len(str(result)),7829)
+        self.assertEqual(result["vms_total"]["cpu"], 77)
+        self.assertEqual(result["vms_total"]["memory"], 182272)
+        self.assertEqual(result["vms_total"]["number"], 55)
+        self.assertEqual(len(str(result)), 7609)
 
     #@unittest.skip
     def test_get_vm_resources_esx(self):
@@ -92,10 +92,11 @@ class VMctlTestCase(unittest.TestCase):
         #self.vm.dump_vms()
         #self.vm.dump_vms_total()
         #self.vm.close()
-        self.assertTrue(result["vms_total"]["cpu"], "71")
-        self.assertTrue(result["vms_total"]["memory"], "131072000")
-        self.assertTrue(result["vms_total"]["number"], "35")
-        self.assertEqual(len(str(result)), 2696)
+        #print("result={}".format(result))
+        self.assertEqual(result["vms_total"]["cpu"], 71)
+        self.assertEqual(result["vms_total"]["memory"], 128000)
+        self.assertEqual(result["vms_total"]["number"], 35)
+        self.assertEqual(len(str(result)), 2518)
 
     #@unittest.skip
     def test_total_vm_resources(self):
@@ -121,7 +122,7 @@ class VMctlTestCase(unittest.TestCase):
         self.vm.ssh.mock(context='kvm_vm3')
         result = json.loads(self.vm.get_statistics())
         log.debug("Result : {} len={}".format(result, len(str(result))))
-        self.assertEqual(len(str(result)),915)
+        self.assertEqual(len(str(result)), 907)
 
     # bug seen on radon : tokenize fails on Win10pro template
     # VM was manually started by Stephane (SHA) : guest=SHA...

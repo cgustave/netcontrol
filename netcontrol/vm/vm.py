@@ -142,7 +142,7 @@ class Vm(object):
         # This is the first line with a single number in the line
         nb_cpu_match = re.search("(\d+)\n", str(self.ssh.output))
         if nb_cpu_match:
-            nb_cpu = nb_cpu_match.groups(0)[0]
+            nb_cpu = int(nb_cpu_match.groups(0)[0])
             log.debug("nb_cpu={}".format(nb_cpu))
             self._statistics['nb_cpu'] = nb_cpu
 
@@ -210,15 +210,15 @@ class Vm(object):
         memory_available = 0
         mem_total_match = re.search("MemTotal:\s+(\d+) kB", str(self.ssh.output))
         if mem_total_match:
-            memory_total = mem_total_match.groups(0)[0]
+            memory_total = int(mem_total_match.groups(0)[0])
             self._statistics['memory']['total'] = memory_total
         mem_free_match = re.search("MemFree:\s+(\d+) kB", str(self.ssh.output))
         if mem_free_match:
-            memory_free = mem_free_match.groups(0)[0]
+            memory_free = int(mem_free_match.groups(0)[0])
             self._statistics['memory']['free'] = memory_free
         mem_available_match = re.search("MemAvailable:\s+(\d+) kB", str(self.ssh.output))
         if mem_available_match:
-            memory_available = mem_available_match.groups(0)[0]
+            memory_available = int(mem_available_match.groups(0)[0])
             self._statistics['memory']['available'] = memory_available
         log.debug("memory_total={}, memory_free={}, memory_available={}".
                   format(memory_total, memory_free, memory_available))
@@ -414,7 +414,7 @@ class Vm(object):
                     log.debug("Found {} vm_esxid={}".format(vm_name, vm_esxid))
                     self._vms_esx_id_map[vm_esxid] = vm_name
                     if vm_esxid in self._vms_esx_memory:
-                        vm_memory = self._vms_esx_memory[vm_esxid]
+                        vm_memory = int(int(self._vms_esx_memory[vm_esxid]) / 1024)
                         self._vms_total['memory'] += int(vm_memory)
                     else:
                         log.error("Could not find vm memory for vm_esxi={}".format(vm_esxid))
@@ -596,7 +596,6 @@ class Vm(object):
         }
         """
         log.info("Enter with line={}".format(line))
-
         vm_id = None
         cpu = None
         memory = None
@@ -612,13 +611,13 @@ class Vm(object):
         # Number of CPU assigned to the VM
         cpu_match = re.search("\s-smp\s(\d+)(?:,|\s)", line)
         if cpu_match:
-            cpu = cpu_match.groups(0)[0]
+            cpu = int(cpu_match.groups(0)[0])
             log.debug("cpu={}".format(cpu))
 
         # Allocated memory in Mb
         memory_match = re.search("\s-m\s(\d+)(?:,|\s)", line)
         if memory_match:
-            memory = memory_match.groups(0)[0]
+            memory = int(memory_match.groups(0)[0])
             log.debug("memory={}".format(memory))
 
         # Running template
