@@ -92,7 +92,7 @@ class Vyos(object):
             self.debug = True
             log.basicConfig(level='DEBUG')
 
-        log.info("Constructor with ip={}, port={}, user={}, password={}, private_key_file={}, traffic_policy={}, debug={}".
+        log.debug("Constructor with ip={}, port={}, user={}, password={}, private_key_file={}, traffic_policy={}, debug={}".
                  format(ip, port, user, password, private_key_file, traffic_policy, debug))
 
         # public attributs
@@ -135,7 +135,7 @@ class Vyos(object):
         'bandwidth in mbps (only mbps supported) -'0' means no limitation
         """
 
-        log.info("Enter")
+        log.debug("Enter")
 
         # default values
         network_delay = 0
@@ -151,7 +151,7 @@ class Vyos(object):
         # issue command and capture output
         self.run_op_mode_command("show configuration commands | grep network-emulator\n")
 
-        log.info("output={}".format(self.ssh.output))
+        log.debug("output={}".format(self.ssh.output))
         # Ex of output (all or some lines may be missing if not defined
         # set traffic-policy network-emulator WAN burst '15k'
         # set traffic-policy network-emulator WAN network-delay '100'
@@ -167,35 +167,35 @@ class Vyos(object):
         match_delay = re.search(search_delay, str(self.ssh.output))
         if match_delay:
             network_delay = match_delay.group(1)
-            log.info("match network_delay={}".format(network_delay))
+            log.debug("match network_delay={}".format(network_delay))
 
         # packet-corruption
         search_corruption = "(?:network-emulator\s"+self.traffic_policy+"\spacket-corruption\s')(\d+)'"
         match_corruption = re.search(search_corruption, str(self.ssh.output))
         if match_corruption:
             packet_corruption = match_corruption.groups(0)[0]
-            log.info("match packet_corruption={}".format(packet_corruption))
+            log.debug("match packet_corruption={}".format(packet_corruption))
 
         # packet-loss
         search_loss = "(?:network-emulator\s"+self.traffic_policy+"\spacket-loss\s')(\d+)'"
         match_loss = re.search(search_loss, str(self.ssh.output))
         if match_loss:
             packet_loss = match_loss.groups(0)[0]
-            log.info("match packet_loss={}".format(packet_loss))
+            log.debug("match packet_loss={}".format(packet_loss))
 
         # packet-reordering
         search_reorder = "(?:network-emulator\s"+self.traffic_policy+"\spacket-reordering\s')(\d+)'"
         match_reorder = re.search(search_reorder, str(self.ssh.output))
         if match_reorder:
             packet_reordering = match_reorder.groups(0)[0]
-            log.info("match packet_reordering={}".format(packet_reordering))
+            log.debug("match packet_reordering={}".format(packet_reordering))
 
         # Bandwidth
         search_bandwidth = "(?:network-emulator\s"+self.traffic_policy+"\sbandwidth\s')(\d+)"
         match_bandwidth = re.search(search_bandwidth, str(self.ssh.output))
         if match_bandwidth:
             bandwidth = match_bandwidth.groups(0)[0]
-            log.info("match bandwidth={}".format(bandwidth))
+            log.debug("match bandwidth={}".format(bandwidth))
 
         # apply values
         self._config['network_delay'] = network_delay
@@ -238,12 +238,12 @@ class Vyos(object):
         flag_configured = False
         command_list = []
 
-        log.info("Enter with network_delay={} packet_loss={} packet_reordering={} packet_corruption={} bandwidth={}".
+        log.debug("Enter with network_delay={} packet_loss={} packet_reordering={} packet_corruption={} bandwidth={}".
                  format(network_delay, packet_loss, packet_reordering, packet_corruption, bandwidth))
 
         # Process delay
         if (network_delay):
-            log.info('processing network_delay=%s' % (network_delay))
+            log.debug('processing network_delay=%s' % (network_delay))
             flag_configured = True
             # ex : set traffic-policy network-emulator WAN network-delay 80
             cmd = "set traffic-policy network-emulator "+self.traffic_policy+" network-delay "+str(network_delay)+"\n"
@@ -251,7 +251,7 @@ class Vyos(object):
 
         # Process packet_loss
         if (packet_loss):
-            log.info('processing packet_loss=%s' % (packet_loss))
+            log.debug('processing packet_loss=%s' % (packet_loss))
             flag_configured = True
             # set traffic-policy network-emulator WAN packet-loss 0
             cmd = "set traffic-policy network-emulator "+self.traffic_policy+" packet-loss "+str(packet_loss)+"\n"
@@ -259,7 +259,7 @@ class Vyos(object):
 
         # Process packet_corruption
         if (packet_corruption):
-            log.info('processing packet_corruption=%s' % (packet_corruption))
+            log.debug('processing packet_corruption=%s' % (packet_corruption))
             flag_configured = True
             # set traffic-policy network-emulator WAN packet-corruption 0
             cmd = "set traffic-policy network-emulator "+self.traffic_policy+" packet-corruption "+str(packet_corruption)+"\n"
@@ -267,7 +267,7 @@ class Vyos(object):
 
         # Process packet reordering
         if (packet_reordering):
-            log.info('processing packet_reordering=%s' % (packet_reordering))
+            log.debug('processing packet_reordering=%s' % (packet_reordering))
             flag_configured = True
             # set traffic-policy network-emulator WAN packet-reordering 2
             cmd = "set traffic-policy network-emulator "+self.traffic_policy+" packet-reordering "+str(packet_reordering)+"\n"
@@ -275,13 +275,13 @@ class Vyos(object):
 
         # Process bandwidth
         if (str(bandwidth)):
-            log.info('processing bandwidth=%s' % (bandwidth))
+            log.debug('processing bandwidth=%s' % (bandwidth))
             flag_configured = True
 
             # a value '0' means the config statement should be removed
             # value '0' is not supported in vyos configuration
             if (str(bandwidth) == '0'):
-                log.info('need config statement removal')
+                log.debug('need config statement removal')
                 cmd = "delete traffic-policy network-emulator "+self.traffic_policy+" bandwidth"+"\n"
                 command_list.append(cmd)
 
@@ -330,7 +330,7 @@ class Vyos(object):
         Use netcontrol shell to send commands to vyos
 
         """
-        log.info("Enter run_op_mode_command with cmd={}".format(cmd))
+        log.debug("Enter run_op_mode_command with cmd={}".format(cmd))
         self.ssh.shell_send([cmd])
         return(self.ssh.output)
 

@@ -40,7 +40,7 @@ class Fpoc(object):
             filename='debug.log',
             level=log.NOTSET)
 
-        log.info("Constructor with ip={}, port={}, user={}, password={}, private_key_file={}, debug={}".
+        log.debug("Constructor with ip={}, port={}, user={}, password={}, private_key_file={}, debug={}".
                  format(ip, port, user, password, private_key_file, debug))
 
         # public class attributs
@@ -79,7 +79,7 @@ class Fpoc(object):
         is the port name for the device in FortiPoc
         """
 
-        log.info("Enter with device={} link={} status={}".
+        log.debug("Enter with device={} link={} status={}".
                  format(device, link, status))
 
         # sanity checks
@@ -135,7 +135,7 @@ class Fpoc(object):
                 ...
 
         """
-        log.info("Enter with device={}".format(device))
+        log.debug("Enter with device={}".format(device))
 
         if not self.ssh.connected:
             self.ssh.connect()

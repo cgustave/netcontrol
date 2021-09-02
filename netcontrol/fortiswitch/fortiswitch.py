@@ -30,7 +30,7 @@ class Fortiswitch(object):
             datefmt='%Y%m%d:%H:%M:%S',
             filename='debug.log',
             level=log.NOTSET)
-        log.info("Constructor with ip={}, port={}, user={}, password={}, private_key_file={}, debug={}".
+        log.debug("Constructor with ip={}, port={}, user={}, password={}, private_key_file={}, debug={}".
                  format(ip, port, user, password, private_key_file, debug))
         self.ip = ip
         self.port = port
@@ -70,7 +70,7 @@ class Fortiswitch(object):
               next
           end
         """
-        log.info("Enter with port={} status={}".
+        log.debug("Enter with port={} status={}".
                  format(port, status))
         # sanity checks
         if (status != 'up') and (status != 'down'):
@@ -111,7 +111,7 @@ class Fortiswitch(object):
 
         SW10G1-2-D-10 #
         """
-        log.info("Enter with port={}".format(port))
+        log.debug("Enter with port={}".format(port))
         if (port == ''):
             print("port is missing")
             return("ERROR: port missing")
@@ -133,6 +133,6 @@ class Fortiswitch(object):
         """
         Use netcontrol shell to send commands
         """
-        log.info("Enter  with cmd={}".format(cmd))
+        log.debug("Enter  with cmd={}".format(cmd))
         self.ssh.shell_send([cmd])
         return(self.ssh.output)

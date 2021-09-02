@@ -53,7 +53,7 @@ class Vm(object):
             self.debug = True
             log.basicConfig(level='DEBUG')
 
-        log.info("Enter with host_type={} hypervisor_type={} ip={}, port={}, user={}, password={}, private_key_file={}, debug={}".
+        log.debug("Enter with host_type={} hypervisor_type={} ip={}, port={}, user={}, password={}, private_key_file={}, debug={}".
                  format(host_type, hypervisor_type, ip, port, user, password, private_key_file, debug))
 
         # public class attributs
@@ -99,7 +99,7 @@ class Vm(object):
         Commands to run depends on host_type
         Return: json
         """
-        log.info('Enter')
+        log.debug('Enter')
         self._get_nbcpu()
         self._get_loadavg()
         if self.host_type == 'Linux':
@@ -115,7 +115,7 @@ class Vm(object):
         Get server VMS related statistics
         Return: json
         """
-        log.info('Enter')
+        log.debug('Enter')
         if self.hypervisor_type == 'kvm':
             self._get_processes_kvm()
             self._get_vms_disk_kvm()
@@ -134,7 +134,7 @@ class Vm(object):
         Fills self._statistics with the number of CPU on the server
         Same command used for for Linux and ESX system
         """
-        log.info("Enter")
+        log.debug("Enter")
 
         self.ssh.shell_send(["cat /proc/cpuinfo | grep processor | wc -l\n"])
         log.debug("output={}".format(self.ssh.output))
@@ -158,7 +158,7 @@ class Vm(object):
             }
         Different commands for Linux system (cat /proc/loadavg) and ESX (uptime)
         """
-        log.info("Enter")
+        log.debug("Enter")
         load_1mn = ""
         load_5mn = ""
         load_15mn = ""
@@ -198,7 +198,7 @@ class Vm(object):
                 'available': ...
             }
         """
-        log.info("Enter")
+        log.debug("Enter")
         # Memory load typical output (skip unecessary lines):
         # MemTotal:       264097732 kB
         # MemFree:         5160488 kB
@@ -235,7 +235,7 @@ class Vm(object):
                 'available': ...
             }
         """
-        log.info("Enter")
+        log.debug("Enter")
         # command has several values : total, minFree, free and some others.
         # use 'total', 'free' and compute available as total - free
         # this is how % is shown in vcenter for free so it matches
@@ -287,7 +287,7 @@ class Vm(object):
                 }
             }
         """
-        log.info("Enter")
+        log.debug("Enter")
         # Typical output (skip unessary lines):
         # Filesystem                   1G-blocks  Used Available Use% Mounted on
         # udev                              126G    0G      126G   0% /dev
@@ -333,7 +333,7 @@ class Vm(object):
                 }
             }
         """
-        log.info("Enter")
+        log.debug("Enter")
         # Typical output (skip unessary lines)
         # not esx does not support -BG options
         # [root@uranium:~] df -m
@@ -381,7 +381,7 @@ class Vm(object):
         Note: the vmid used in other commands is the "World ID" (need to be extracted)
         We use Display name as VM id
         """
-        log.info("Enter")
+        log.debug("Enter")
         self.ssh.shell_send(["esxcli vm process list\n"])
         self._vms = []
         self._vms_total = {}
@@ -453,7 +453,7 @@ class Vm(object):
         VM instance is like 001, 011, 122 and so on.
         It should be extracted from server name (ex: uranium-tam-esx42)
         """
-        log.info("Enter with name={}".format(name))
+        log.debug("Enter with name={}".format(name))
         match_inst = re.search("(?P<inst>\d+)$", name)
         if match_inst:
             inst = match_inst.group('inst')
@@ -476,7 +476,7 @@ class Vm(object):
         5087642  5087630  vmx-vcpu-2:neutron-esx01 [apasta] FMG_VM64_ESXI
         5087643  5087630  vmx-vcpu-3:neutron-esx01 [apasta] FMG_VM64_ESXI         <- 4 cpus
         """
-        log.info("Enter")
+        log.debug("Enter")
         self._vms_esx_cpu = {}
         self.ssh.shell_send(["ps -u\n"])
         for line in self.ssh.output.splitlines():
@@ -498,7 +498,7 @@ class Vm(object):
        vm.48361 n     125647             4      48361      2097152    2097152          0         -1         -1         -3      48072      40392    2084412    2053692          0          0          0          0    2066432      20968          0          0      14076      10204       12740              n         1
         using field 5 (worldGrp) and 6 (memSizeLimit)
         """
-        log.info("Enter")
+        log.debug("Enter")
         self._vms_esx_memory = {}
         self.ssh.shell_send(["memstats -r vm-stats\n"])
         for line in self.ssh.output.splitlines():
@@ -522,7 +522,7 @@ class Vm(object):
         one (timestamp=). If the ending one is not there, lines need to be
         concatenated in one before it is tokenized
         """
-        log.info("Enter")
+        log.debug("Enter")
         self.ssh.shell_send(["ps -xww | grep qemu-system\n"])
         self._vms_total = {}
         self._vms_total['cpu'] = 0
@@ -553,7 +553,7 @@ class Vm(object):
                     kvm_end = False
                     need_tokenize = True
                 else :
-                    log.info("Start without end, line is split, first fragment seen")
+                    log.debug("Start without end, line is split, first fragment seen")
                     full_line = line
             else:
                 if kvm_end:
@@ -595,7 +595,7 @@ class Vm(object):
             'template': ...
         }
         """
-        log.info("Enter with line={}".format(line))
+        log.debug("Enter with line={}".format(line))
         vm_id = None
         cpu = None
         memory = None
@@ -669,7 +669,7 @@ class Vm(object):
         ../..
         Need to addition for each VM the size of each disks in bytes
         """
-        log.info('Enter with vmpath={}'.format(vmpath))
+        log.debug('Enter with vmpath={}'.format(vmpath))
         cmd="for i in `virsh list --all | awk '{print $2}'`; do file "+vmpath+"/$i/* ; done"
         self.ssh.shell_send([cmd+"\n"])
         for line in self.ssh.output.splitlines():
@@ -683,7 +683,7 @@ class Vm(object):
         """
         Parse output to get all vms disk consumtion
         """
-        log.info("Enter with vmpath={} line={}".format(vmpath, line))
+        log.debug("Enter with vmpath={} line={}".format(vmpath, line))
         d_match = re.search(vmpath+"/(?P<id>[a-zA-Z0-9_\-\.\/s]+)/",line)
         if d_match:
             id = d_match.group("id")
@@ -704,21 +704,21 @@ class Vm(object):
         For debugging purpose, returns a formated json of
         self._statistics
         """
-        log.info('Enter')
+        log.debug('Enter')
         print(json.dumps(self._statistics, indent=4, sort_keys=True))
 
     def dump_vms(self):
        """
        For debugging purpose, returns a formated json of self._vms
        """
-       log.info('Enter')
+       log.debug('Enter')
        print(json.dumps(self._vms, indent=4, sort_keys=True))
 
     def dump_vms_total(self):
         """
         For debugging purpose, returns a formated json of self._vms_total
         """
-        log.info('Enter')
+        log.debug('Enter')
         print(json.dumps(self._vms_total, indent=4, sort_keys=True))
 
 

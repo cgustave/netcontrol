@@ -29,7 +29,7 @@ class Fortigate(object):
             self.debug = True
             log.basicConfig(level='DEBUG')
 
-        log.info("Constructor with ip={}, port={}, user={}, password={}, private_key_file={}, debug={}".
+        log.debug("Constructor with ip={}, port={}, user={}, password={}, private_key_file={}, debug={}".
                  format(ip, port, user, password, private_key_file, debug))
 
         # public attributs
@@ -68,7 +68,7 @@ class Fortigate(object):
           ex : myFgt.cli(commands=['exec date', 'exec time'])
           ex : myFgt.cli(commands=['get system status'])
         """
-        log.info("Enter with commands={}".format(commands))
+        log.debug("Enter with commands={}".format(commands))
 
         # Send command
         if not self.ssh.connected:
@@ -79,7 +79,7 @@ class Fortigate(object):
             command = command + "\n"
             self.run_op_mode_command(command)
 
-            log.info("command={} output={}".format(command, self.ssh.output))
+            log.debug("command={} output={}".format(command, self.ssh.output))
 
     def enter_vdom(self, vdom=None):
         """
@@ -92,7 +92,7 @@ class Fortigate(object):
         current vf=customer:1
         FGT-1B2-9 (customer) #
         """
-        log.info("Enter with vdom={}".format(str(vdom)))
+        log.debug("Enter with vdom={}".format(str(vdom)))
         result = False
 
         if not vdom:
@@ -129,7 +129,7 @@ class Fortigate(object):
         FGT-1B2-9 # config global
         FGT-1B2-9 (global) #
         """
-        log.info("Enter")
+        log.debug("Enter")
         result = False
 
         if not self.ssh.connected:
@@ -159,7 +159,7 @@ class Fortigate(object):
                    'license' = True|false
                 }
         """
-        log.info("Enter")
+        log.debug("Enter")
         result = {}
         result['version'] = ""
         result['license'] = ""
@@ -210,7 +210,7 @@ class Fortigate(object):
         For each line 'IKE SA' and 'IPsec SA' we look at 'x' in established x/y
         ex : { 'ike': { 'created' : 3, 'established' : 3}, 'ipsec': { 'created' : 3, 'established' : 3}}
         """
-        log.info("Enter")
+        log.debug("Enter")
         result = {'ike': {}, 'ipsec' : {} }
 
         if not self.ssh.connected:
@@ -285,7 +285,7 @@ class Fortigate(object):
 							[200/0] via 10.254.2.1 (recursive is directly connected, sgwn_inet2), 03:14:43
 							[200/0] via 10.254.0.2 (recursive is directly connected, sgwn_mpls1), 03:14:43
        """
-       log.info("Enter with vrf={}".format(vrf))
+       log.debug("Enter with vrf={}".format(vrf))
        result = { 'total' : {}, 'subnet' : [], 'nexthop' : [], 'interface' : [] }
 
        if not self.ssh.connected:
@@ -368,7 +368,7 @@ class Fortigate(object):
 
         210623 : as of 6.4, command was changed to "config system sdwan". Add option version=6.4/6.2 for 6.2 compatibility
         """
-        log.info("Enter with service={} version={}".format(service, version))
+        log.debug("Enter with service={} version={}".format(service, version))
         result = {'members': {}, 'mode':''}
         members_flag = False
         mode = ''
@@ -492,7 +492,7 @@ class Fortigate(object):
             FGT-CGUSTAVE #
 
         """
-        log.info("Enter with filter={}".format(filter))
+        log.debug("Enter with filter={}".format(filter))
 
         result = {}
         allowed_keys = ['vd','sintf','dintf','src','nsrc','dst','proto','sport','nport','dport','policy','expire','duration','proto-state','session-state1','session-state2','ext-src','ext-dst','ext-src-negate','ext-dst-negate','negate']
@@ -517,7 +517,7 @@ class Fortigate(object):
         """
         Use netcontrol shell to send commands to vyos
         """
-        log.info("Enter with cmd={}".format(cmd))
+        log.debug("Enter with cmd={}".format(cmd))
         self.ssh.shell_send([cmd])
         return(self.ssh.output)
 
@@ -526,7 +526,7 @@ class Fortigate(object):
         Returns a json reflecting the session
         Takes self.ssh.output as input
         """
-        log.info("Enter")
+        log.debug("Enter")
         result = {}
 
         # Parse and build session json

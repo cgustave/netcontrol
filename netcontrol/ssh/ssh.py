@@ -108,7 +108,7 @@ class Ssh(object):
 
         Returns ssh object itself to allow methods chaining
         """
-        log.info("Enter")
+        log.debug("Enter")
 
         # Moking : position request for exception if asked
         if self.mock_exception:
@@ -189,7 +189,7 @@ class Ssh(object):
         session is close.
         This should be supported by any ssh devices
         """
-        log.info("Enter with type={}".format(type))
+        log.debug("Enter with type={}".format(type))
 
         if type == 'command':
             self.commands(commands)
@@ -210,7 +210,7 @@ class Ssh(object):
 
         returns True if commands are sent succesfully
         """
-        log.info("Enter with commands={}".format(commands))
+        log.debug("Enter with commands={}".format(commands))
 
         self.output = ''
         result_flag = False
@@ -278,7 +278,7 @@ class Ssh(object):
 
         returns True if the prompt was found
         """
-        log.info("Enter with [prompt={} maxround={}]".format(self._prompt, self._maxround))
+        log.debug("Enter with [prompt={} maxround={}]".format(self._prompt, self._maxround))
 
         result_flag = False
         read_block = ""
@@ -375,7 +375,7 @@ class Ssh(object):
 
         Returns True if prompt si found
         """
-        log.info("Enter")
+        log.debug("Enter")
         prompt = ""
         round = 1
         found = False
@@ -411,7 +411,7 @@ class Ssh(object):
 
         Returns True upon success
         """
-        log.info("Enter with commands={}".format(commands))
+        log.debug("Enter with commands={}".format(commands))
 
         self.output = ''
         ssh_error = False
@@ -476,7 +476,7 @@ class Ssh(object):
         Opens a new ssh channel for data
         Opens also the ssh session if needed
         """
-        log.info("Enter")
+        log.debug("Enter")
 
         if not self.connected:
             self.connect()
@@ -494,7 +494,7 @@ class Ssh(object):
         Sends data on an already opened channel
         Use shell_read to get the data output (including the ones sent here)
         """
-        log.info("Enter with data={}".format(data))
+        log.debug("Enter with data={}".format(data))
 
         if not self._channel:
             log.debug("Channel is not opened, opening")
@@ -517,7 +517,7 @@ class Ssh(object):
         Faster then shell_read
         Returns the received data or empty string if no data
         """
-        log.info("Enter")
+        log.debug("Enter")
 
         read_block = ""
 
