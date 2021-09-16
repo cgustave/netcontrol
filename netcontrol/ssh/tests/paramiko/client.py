@@ -254,7 +254,6 @@ class Channel():
         :return: received data, as a ``str``/``bytes``.
         In mock condition, returns the output from the
 
-
         :raises socket.timeout:
             if no data is ready before the timeout set by `settimeout`.
 
@@ -264,7 +263,9 @@ class Channel():
 
         # some commands need to be translated so they can be used as filename
         # We replace / with - and 'space' with _ and | with -
-        tr_command = self._send.translate(str.maketrans({"/": "-"," ": "_", "\\": "_", "'" : "_", "^" : "_", "|": "-","{":"-","}":"-", "$":"-", "`":"_", ":":"_", "*":"_", ";":"_"}))
+        tr_command = self._send.translate(str.\
+            maketrans({"/": "-"," ": "_", "\\": "_", "'" : "_", "^" : "_", "|": "-","{":"-","}":"-", "$":"-", "`":"_",\
+                       ":":"_", "*":"_", ";":"_", "(":"_", ")":"_", "=":"_", ",":"-", "\"":"-"}))
         log.debug("tr_command={}".format(tr_command))
 
         try:

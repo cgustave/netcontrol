@@ -50,7 +50,7 @@ class VMctlTestCase(unittest.TestCase):
         self.assertEqual(result["load"]["1mn"], "13.14")
         self.assertEqual(result["load"]["5mn"], "13.65")
         self.assertEqual(result["load"]["15mn"], "13.96")
-        self.assertEqual(len(str(result)), 1044)
+        self.assertEqual(len(str(result)), 1194)
 
     #@unittest.skip
     def test_get_statistics_esx(self):
@@ -58,8 +58,8 @@ class VMctlTestCase(unittest.TestCase):
         self.vm.hypervisor_type = 'esx'
         self.vm.ssh.mock(context='esx_vm1')
         result = json.loads(self.vm.get_statistics())
-        #log.debug("Result : {} len={}".format(result, len(str(result))))
-        #self.vm.dump_statistics()
+        log.debug("Result : {} len={}".format(result, len(str(result))))
+        self.vm.dump_statistics()
         self.vm.close()
         self.assertEqual(result["nb_cpu"], 48)
         self.assertEqual(result["memory"]['available'], 21157676)
@@ -68,19 +68,29 @@ class VMctlTestCase(unittest.TestCase):
         self.assertEqual(result["load"]['1mn'], "0.06")
         self.assertEqual(result["load"]['5mn'], "0.07")
         self.assertEqual(result["load"]['15mn'], "0.07")
-        self.assertEqual(len(str(result)), 760)
+        self.assertEqual(len(str(result)), 856)
 
     #@unittest.skip
     def test_get_vm_resources_kvm(self):
         self.vm.ssh.mock(context='kvm_vm2')
         result = json.loads(self.vm.get_vms_statistics())
-        log.debug("Result : {} len={}".format(result, len(str(result))))
-        #self.vm.dump_vms()
-        self.vm.close()
+        log.debug("KVM result : {} len={}".format(result, len(str(result))))
+        self.vm.dump_vms()
+        self.vm.dump_vms_total()
+        #self.vm.close()
         self.assertEqual(result["vms_total"]["cpu"], 77)
         self.assertEqual(result["vms_total"]["memory"], 182272)
         self.assertEqual(result["vms_total"]["number"], 55)
-        self.assertEqual(len(str(result)), 7609)
+        self.assertEqual(len(str(result)), 8569)
+
+    #@unittest.skip
+    def test_build_vms_esx_disk(self):
+        self.vm.host_type = 'ESX'
+        self.vm.hypervisor_type = 'esx'
+        self.vm.ssh.mock(context='esx_vm1')
+        self.vm._build_vms_esx_disk()
+        result = json.loads(self.vm.get_vms_statistics())
+        log.debug("Result : {} len={}".format(result, len(str(result))))
 
     #@unittest.skip
     def test_get_vm_resources_esx(self):
@@ -89,14 +99,14 @@ class VMctlTestCase(unittest.TestCase):
         self.vm.ssh.mock(context='esx_vm1')
         result = json.loads(self.vm.get_vms_statistics())
         log.debug("Result : {} len={}".format(result, len(str(result))))
-        #self.vm.dump_vms()
-        #self.vm.dump_vms_total()
+        self.vm.dump_vms()
+        self.vm.dump_vms_total()
         #self.vm.close()
-        #print("result={}".format(result))
+        print("result={}".format(result))
         self.assertEqual(result["vms_total"]["cpu"], 71)
         self.assertEqual(result["vms_total"]["memory"], 128000)
         self.assertEqual(result["vms_total"]["number"], 35)
-        self.assertEqual(len(str(result)), 2518)
+        self.assertEqual(len(str(result)), 3601)
 
     #@unittest.skip
     def test_total_vm_resources(self):
@@ -122,7 +132,7 @@ class VMctlTestCase(unittest.TestCase):
         self.vm.ssh.mock(context='kvm_vm3')
         result = json.loads(self.vm.get_statistics())
         log.debug("Result : {} len={}".format(result, len(str(result))))
-        self.assertEqual(len(str(result)), 907)
+        self.assertEqual(len(str(result)), 1042)
 
     # bug seen on radon : tokenize fails on Win10pro template
     # VM was manually started by Stephane (SHA) : guest=SHA...

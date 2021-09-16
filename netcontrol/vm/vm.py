@@ -71,11 +71,12 @@ class Vm(object):
         self._statistics = {}  # Internal representation of statistics
         self._vms = []         # Internal representation of each VMs
         self._vms_total = {}   # Total VMs statistics
-        self._vms_disks = []   # Internal representation of each VM sdisks info
+        self._vms_disks = []   # Internal representation of each VM disks info
         self._vms_disks_dict = {} # temp object
         self._vms_esx_id_map = {} # wid to vm_name mapping
         self._vms_esx_cpu = {}    # dict of vm_id containing nb_cpu
         self._vms_esx_memory = {} # dict of vm_id containing memory size
+        self._vms_esx_disks = {}  # dict of vm_id containing disk size in
 
     def connect(self):
         self.ssh.connect()
@@ -122,6 +123,7 @@ class Vm(object):
         elif self.hypervisor_type == 'esx':
             self._build_vms_esx_cpu()
             self._build_vms_esx_memory()
+            self._build_vms_esx_disk()
             self._get_processes_esx()
         result = {}
         result['vms'] = self._vms
@@ -315,6 +317,8 @@ class Vm(object):
                 self._statistics['disk'][mounted]['used'] = used
                 self._statistics['disk'][mounted]['available'] = available
                 self._statistics['disk'][mounted]['used_percent'] = used_percent
+                self._statistics['disk'][mounted]['type'] = 'KVM'
+
 
     def _get_disk_esx(self):
         """
@@ -365,6 +369,8 @@ class Vm(object):
                 self._statistics['disk'][mounted]['used'] = used
                 self._statistics['disk'][mounted]['available'] = available
                 self._statistics['disk'][mounted]['used_percent'] = used_percent
+                self._statistics['disk'][mounted]['type'] = 'ESXI'
+
 
     def _get_processes_esx(self):
         """
@@ -388,6 +394,7 @@ class Vm(object):
         self._vms_total['cpu'] = 0
         self._vms_total['memory'] = 0
         self._vms_total['number'] = 0
+        self._vms_total['disk'] = 0
         self._vms_esx_id_map = {}
         esx_start = False
         esx_end = False
@@ -441,6 +448,14 @@ class Vm(object):
                         log.debug("vms_total_cpu={}".format(self._vms_total['cpu']))
                     else:
                         log.error("Could not find nb of cpu for vm_name={}".format(vm_name))
+                        ret = False
+                    if vm_name in self._vms_esx_disks:
+                        vm['disk'] = self._vms_esx_disks[vm_name]
+                        vm['type'] = 'ESXI'
+                        self._vms_total['disk'] += vm['disk']
+                        log.debug("vms_total_disk={}".format(self._vms_total['disk']))
+                    else:
+                        log.error("Could not find disk size for vm_name={}".format(vm_name))
                         ret = False
                     self._vms.append(vm)
                 else:
@@ -670,18 +685,62 @@ class Vm(object):
         Need to addition for each VM the size of each disks in bytes
         """
         log.debug('Enter with vmpath={}'.format(vmpath))
-        cmd="for i in `virsh list --all | awk '{print $2}'`; do file "+vmpath+"/$i/* ; done"
+        cmd = "for i in `virsh list --all | awk '{print $2}'`; do file "+vmpath+"/$i/* ; done"
         self.ssh.shell_send([cmd+"\n"])
         for line in self.ssh.output.splitlines():
             log.debug("line={}".format(line))
             self._extract_vms_disk(vmpath, line)
         for id in self._vms_disks_dict:
             size = self._vms_disks_dict[id]
-            self._vms_disks.append({'id': id, 'size': size})
+            self._vms_disks.append({'id': id, 'size': size, 'type': 'KVM'})
+
+    def _build_vms_esx_disk(self):
+        """
+        Parse datastore, retrieve disk usage for each VM.
+        build self._vms_esx_disks using vm name as a key
+        du -h /vmfs/volumes/datastore-Uranium/machines
+        sample:
+        [root@uranium:~] du -h /vmfs/volumes/datastore-Uranium/machines
+        4.9G    /vmfs/volumes/datastore-Uranium/machines/uranium-esx81 [melkhatib] FGT_VM64_ESXI
+        90.1G   /vmfs/volumes/datastore-Uranium/machines/uranium-esx51 [lpizziniaco] FPOC-17_VM64_ESXI
+        20.5G   /vmfs/volumes/datastore-Uranium/machines/uranium-FSA-esx42 [panchals] FSA_VM64_ESXI
+        12.6G   /vmfs/volumes/datastore-Uranium/machines/uranium-esx37 [emete] Debian9_ESXI
+        Result to be provided in MB
+        """
+        log.debug("Enter")
+        cmd = "(p=`ls -1 /vmfs/volumes/* | grep datastore | sed s/:$//`; du -h $p/machines) | awk '// { print $1 \", \" $2}'"
+        self.ssh.shell_send([cmd+"\n"])
+        for line in self.ssh.output.splitlines():
+            log.debug("line={}".format(line))
+            match_vm = re.search("(?P<size>\d+\.?\d+?)(?P<unit>G|M|K|T),\s(?P<machine>\S+)", line)
+            if match_vm:
+                size = match_vm.group('size')
+                unit = match_vm.group('unit')
+                machine = match_vm.group('machine')
+                log.debug("Found size={} unit={} machine={}".format(size, unit, machine))
+                # get machine id from full name ex: /vmfs/volumes/datastore-Neutron/machines/neutron-esx36
+                match_name = re.search("machines\/(?P<name>\S+)$", machine)
+                if match_name:
+                    name = match_name.group('name')
+                    log.debug("Found name={}".format(name))
+                    if unit == 'G':
+                        value = int(float(size) * 1024)
+                    elif unit == 'M':
+                        value = int(float(size))
+                    elif unit == 'T':
+                        value == int(float(size) * 1024 * 1024)
+                    else:
+                        log.error("Unexpected disk size unit={} on esx machine={}".format(unit, name))
+                        value = 0
+                    self._vms_esx_disks[name] = value
+                    log.debug("name={} disk size={}".format(name, value))
+                else:
+                    log.debug("Could not extract machine name from machine={}".format(machine))
+
 
     def _extract_vms_disk(self, vmpath, line):
         """
-        Parse output to get all vms disk consumtion
+        Parse output to get all vms disk consumption
         """
         log.debug("Enter with vmpath={} line={}".format(vmpath, line))
         d_match = re.search(vmpath+"/(?P<id>[a-zA-Z0-9_\-\.\/s]+)/",line)
@@ -695,9 +754,7 @@ class Vm(object):
                     self._vms_disks_dict[id] = int(size)
                 else:
                     self._vms_disks_dict[id] = int(self._vms_disks_dict[id]) + int(size)
-                log.debug("id={} size={} total={} ".format(id, size, self._vms_disks_dict[id] ))
-
-
+                log.debug("id={} file size={} disk total={} ".format(id, size, self._vms_disks_dict[id] ))
 
     def dump_statistics(self):
         """
