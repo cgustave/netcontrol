@@ -52,6 +52,9 @@ CLASSES
      |  dump_vms_total(self)
      |      For debugging purpose, returns a formated json of self._vms_total
      |  
+     |  format_instance(self, id='')
+     |      Common format for VM id  (3 digit format, ex: 001 or 032 or 121 or 002)
+     |  
      |  get_statistics(self)
      |      Get server CPU, MEMORY and DISK usage
      |      Commands to run depends on host_type

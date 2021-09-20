@@ -445,7 +445,7 @@ class Vm(object):
                     if vm_name in self._vms_esx_cpu:
                         vm['cpu'] = self._vms_esx_cpu[vm_name]
                         self._vms_total['cpu'] += vm['cpu']
-                        log.debug("vms_total_cpu={}".format(self._vms_total['cpu']))
+                        log.debug("vm_name={} instance={} vms_total_cpu={}".format(vm_name, instance, self._vms_total['cpu']))
                     else:
                         log.error("Could not find nb of cpu for vm_name={}".format(vm_name))
                         ret = False
@@ -453,7 +453,7 @@ class Vm(object):
                         vm['disk'] = self._vms_esx_disks[vm_name]
                         vm['type'] = 'ESXI'
                         self._vms_total['disk'] += vm['disk']
-                        log.debug("vms_total_disk={}".format(self._vms_total['disk']))
+                        log.debug("vm_name={} instance={} vms_total_disk={}".format(vm_name, instance, self._vms_total['disk']))
                     else:
                         log.error("Could not find disk size for vm_name={}".format(vm_name))
                         ret = False
@@ -706,6 +706,7 @@ class Vm(object):
         20.5G   /vmfs/volumes/datastore-Uranium/machines/uranium-FSA-esx42 [panchals] FSA_VM64_ESXI
         12.6G   /vmfs/volumes/datastore-Uranium/machines/uranium-esx37 [emete] Debian9_ESXI
         Result to be provided in MB
+        Should be run before _get_processes_esx
         """
         log.debug("Enter")
         cmd = "(p=`ls -1 /vmfs/volumes/* | grep datastore | sed s/:$//`; du -h $p/machines) | awk '// { print $1 \", \" $2}'"
@@ -736,6 +737,14 @@ class Vm(object):
                         value = 0
                     self._vms_esx_disks[name] = value
                     log.debug("name={} disk size={}".format(name, value))
+                    match = re.search("esx(?P<id>\d+)", name)
+                    if match:
+                        id = match.group('id')
+                        fid = self.format_instance(id=id)
+                        size = value * 1024 * 1024
+                        self._vms_disks.append({'id': fid, 'size': size, 'type': 'ESX'})
+                    else:
+                        log.warning("No disk for name={} fid={}".format(name, fid))
                 else:
                     log.debug("Could not extract machine name from machine={}".format(machine))
 
@@ -758,6 +767,18 @@ class Vm(object):
                     self._vms_disks_dict[id] = int(self._vms_disks_dict[id]) + int(size)
                 log.debug("id={} file size={} disk total={} ".format(id, size, self._vms_disks_dict[id] ))
 
+    def format_instance(self, id=''):
+        """
+        Common format for VM id  (3 digit format, ex: 001 or 032 or 121 or 002)
+        """
+        log.debug("Enter with id={}".format(id))
+        result = id
+        try:
+            result = str(id).zfill(3)
+        except:
+            log.debug("Could not format id={}".format(id))
+        return result
+
     def dump_statistics(self):
         """
         For debugging purpose, returns a formated json of
@@ -779,6 +800,8 @@ class Vm(object):
         """
         log.debug('Enter')
         print(json.dumps(self._vms_total, indent=4, sort_keys=True))
+
+
 
 
 """

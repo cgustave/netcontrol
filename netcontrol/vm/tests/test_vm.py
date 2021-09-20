@@ -91,6 +91,9 @@ class VMctlTestCase(unittest.TestCase):
         self.vm._build_vms_esx_disk()
         result = json.loads(self.vm.get_vms_statistics())
         log.debug("Result : {} len={}".format(result, len(str(result))))
+        self.assertEqual(result['vms_disks'][0]['id'], '025')
+        self.assertEqual(result['vms_disks'][0]['size'], 3006267392)
+        self.assertEqual(result['vms_disks'][0]['type'], 'ESX')
 
     #@unittest.skip
     def test_get_vm_resources_esx(self):
@@ -106,7 +109,6 @@ class VMctlTestCase(unittest.TestCase):
         self.assertEqual(result["vms_total"]["cpu"], 71)
         self.assertEqual(result["vms_total"]["memory"], 128000)
         self.assertEqual(result["vms_total"]["number"], 35)
-        self.assertEqual(len(str(result)), 3601)
 
     #@unittest.skip
     def test_total_vm_resources(self):
@@ -154,6 +156,9 @@ class VMctlTestCase(unittest.TestCase):
         self.vm._get_vms_disk_kvm()
         result = json.loads(self.vm.get_vms_statistics())
         log.debug("Result : {}".format(result))
+        self.assertEqual(result['vms_disks'][0]['id'], '045')
+        self.assertEqual(result['vms_disks'][0]['size'], 65498251264)
+        self.assertEqual(result['vms_disks'][0]['type'], 'KVM')
 
 if __name__ == '__main__':
     unittest.main()
