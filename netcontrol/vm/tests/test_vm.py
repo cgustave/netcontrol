@@ -93,7 +93,7 @@ class VMctlTestCase(unittest.TestCase):
         log.debug("Result : {} len={}".format(result, len(str(result))))
         self.assertEqual(result['vms_disks'][0]['id'], '025')
         self.assertEqual(result['vms_disks'][0]['size'], 3006267392)
-        self.assertEqual(result['vms_disks'][0]['type'], 'ESX')
+        self.assertEqual(result['vms_disks'][0]['type'], 'ESXI')
 
     #@unittest.skip
     def test_get_vm_resources_esx(self):

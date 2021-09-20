@@ -742,7 +742,7 @@ class Vm(object):
                         id = match.group('id')
                         fid = self.format_instance(id=id)
                         size = value * 1024 * 1024
-                        self._vms_disks.append({'id': fid, 'size': size, 'type': 'ESX'})
+                        self._vms_disks.append({'id': fid, 'size': size, 'type': 'ESXI'})
                     else:
                         log.warning("No disk for name={} fid={}".format(name, fid))
                 else:
