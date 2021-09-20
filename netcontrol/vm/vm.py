@@ -729,6 +729,8 @@ class Vm(object):
                         value = int(float(size))
                     elif unit == 'T':
                         value == int(float(size) * 1024 * 1024)
+                    elif unit == 'K':
+                        value == int(float(size) / 1024)
                     else:
                         log.error("Unexpected disk size unit={} on esx machine={}".format(unit, name))
                         value = 0
