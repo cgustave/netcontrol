@@ -652,9 +652,9 @@ class Vm(object):
             return vm
 
         elif memory_match and cpu_match and id_match:
-            # This case was seen with windown VM created without disk (stay in
+            # This case was seen with windows VM created without disk (stay in
             # boot failure)
-            log.warning("tokenize succesful without template : id={} cpu={} memory={}".
+            log.debug("tokenize succesful without template : id={} cpu={} memory={}".
                         format(vm_id, cpu, memory))
             vm['id'] = vm_id
             vm['cpu'] = cpu
