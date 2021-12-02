@@ -1,0 +1,16 @@
+[root@cobalt:~] (p=`ls -1 /vmfs/volumes/* | grep datastore | sed s/:$//`; du -h $p/machines) | awk '// { print $1 ", " $2}'
+23.3G, /vmfs/volumes/datastore-Cobalt/machines/cobalt-esx01
+36.7G, /vmfs/volumes/datastore-Cobalt/machines/cobalt-esx02
+23.2G, /vmfs/volumes/datastore-Cobalt/machines/cobalt-esx04
+23.2G, /vmfs/volumes/datastore-Cobalt/machines/cobalt-esx03
+23.2G, /vmfs/volumes/datastore-Cobalt/machines/cobalt-esx05
+23.2G, /vmfs/volumes/datastore-Cobalt/machines/cobalt-esx06
+23.2G, /vmfs/volumes/datastore-Cobalt/machines/cobalt-esx07
+23.2G, /vmfs/volumes/datastore-Cobalt/machines/cobalt-esx08
+23.2G, /vmfs/volumes/datastore-Cobalt/machines/cobalt-esx09
+23.2G, /vmfs/volumes/datastore-Cobalt/machines/cobalt-esx10
+23.2G, /vmfs/volumes/datastore-Cobalt/machines/cobalt-esx11
+23.2G, /vmfs/volumes/datastore-Cobalt/machines/cobalt-esx12
+292.2G, /vmfs/volumes/datastore-Cobalt/machines
+[root@cobalt:~] 
+

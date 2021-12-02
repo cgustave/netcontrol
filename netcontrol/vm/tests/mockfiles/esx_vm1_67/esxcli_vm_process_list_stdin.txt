@@ -1,0 +1,98 @@
+[root@cobalt:~] esxcli vm process list
+cobalt-esx01 [lblossier] FPOC-17_VM64_ESXI
+   World ID: 2116463
+   Process ID: 0
+   VMX Cartel ID: 2116447
+   UUID: 42 05 30 7a 06 82 d6 aa-bf 32 70 aa 00 54 29 1e
+   Display Name: cobalt-esx01 [lblossier] FPOC-17_VM64_ESXI
+   Config File: /vmfs/volumes/61a6692f-98a11461-c459-b07b25d47eb0/machines/cobalt-esx01 [lblossier] FPOC-17_VM64_ESXI/cobalt-esx01 [lblossier] FPOC-17_VM64_ESXI.vmx
+
+cobalt-esx02 [lblossier] FPOC-17_VM64_ESXI
+   World ID: 2116464
+   Process ID: 0
+   VMX Cartel ID: 2116448
+   UUID: 42 05 63 f3 24 81 ab c4-66 82 92 36 50 60 24 87
+   Display Name: cobalt-esx02 [lblossier] FPOC-17_VM64_ESXI
+   Config File: /vmfs/volumes/61a6692f-98a11461-c459-b07b25d47eb0/machines/cobalt-esx02 [lblossier] FPOC-17_VM64_ESXI/cobalt-esx02 [lblossier] FPOC-17_VM64_ESXI.vmx
+
+cobalt-esx10 [lblossier] FPOC-17_VM64_ESXI
+   World ID: 2116465
+   Process ID: 0
+   VMX Cartel ID: 2116449
+   UUID: 42 05 dd 88 80 45 68 64-5c df a2 80 b7 5c 82 86
+   Display Name: cobalt-esx10 [lblossier] FPOC-17_VM64_ESXI
+   Config File: /vmfs/volumes/61a6692f-98a11461-c459-b07b25d47eb0/machines/cobalt-esx10 [lblossier] FPOC-17_VM64_ESXI/cobalt-esx10 [lblossier] FPOC-17_VM64_ESXI.vmx
+
+cobalt-esx05 [lblossier] FPOC-17_VM64_ESXI
+   World ID: 2116475
+   Process ID: 0
+   VMX Cartel ID: 2116452
+   UUID: 42 05 b1 84 71 f0 97 74-4f b2 e2 c2 6c 9d 13 19
+   Display Name: cobalt-esx05 [lblossier] FPOC-17_VM64_ESXI
+   Config File: /vmfs/volumes/61a6692f-98a11461-c459-b07b25d47eb0/machines/cobalt-esx05 [lblossier] FPOC-17_VM64_ESXI/cobalt-esx05 [lblossier] FPOC-17_VM64_ESXI.vmx
+
+cobalt-esx07 [lblossier] FPOC-17_VM64_ESXI
+   World ID: 2116479
+   Process ID: 0
+   VMX Cartel ID: 2116456
+   UUID: 42 05 58 5e 18 f7 5a 95-a9 38 02 ef b6 e7 21 d4
+   Display Name: cobalt-esx07 [lblossier] FPOC-17_VM64_ESXI
+   Config File: /vmfs/volumes/61a6692f-98a11461-c459-b07b25d47eb0/machines/cobalt-esx07 [lblossier] FPOC-17_VM64_ESXI/cobalt-esx07 [lblossier] FPOC-17_VM64_ESXI.vmx
+
+cobalt-esx06 [lblossier] FPOC-17_VM64_ESXI
+   World ID: 2116482
+   Process ID: 0
+   VMX Cartel ID: 2116454
+   UUID: 42 05 e5 ef eb 32 bd 0c-c4 66 13 3c 14 d4 2a 1a
+   Display Name: cobalt-esx06 [lblossier] FPOC-17_VM64_ESXI
+   Config File: /vmfs/volumes/61a6692f-98a11461-c459-b07b25d47eb0/machines/cobalt-esx06 [lblossier] FPOC-17_VM64_ESXI/cobalt-esx06 [lblossier] FPOC-17_VM64_ESXI.vmx
+
+cobalt-esx12 [lblossier] FPOC-17_VM64_ESXI
+   World ID: 2116487
+   Process ID: 0
+   VMX Cartel ID: 2116457
+   UUID: 42 05 73 e0 03 a7 1f 8a-c0 89 23 77 0b a1 ef 48
+   Display Name: cobalt-esx12 [lblossier] FPOC-17_VM64_ESXI
+   Config File: /vmfs/volumes/61a6692f-98a11461-c459-b07b25d47eb0/machines/cobalt-esx12 [lblossier] FPOC-17_VM64_ESXI/cobalt-esx12 [lblossier] FPOC-17_VM64_ESXI.vmx
+
+cobalt-esx03 [lblossier] FPOC-17_VM64_ESXI
+   World ID: 2116491
+   Process ID: 0
+   VMX Cartel ID: 2116458
+   UUID: 42 05 2e 51 70 bd fb fb-c6 68 39 6b f2 c6 86 88
+   Display Name: cobalt-esx03 [lblossier] FPOC-17_VM64_ESXI
+   Config File: /vmfs/volumes/61a6692f-98a11461-c459-b07b25d47eb0/machines/cobalt-esx03 [lblossier] FPOC-17_VM64_ESXI/cobalt-esx03 [lblossier] FPOC-17_VM64_ESXI.vmx
+
+cobalt-esx11 [lblossier] FPOC-17_VM64_ESXI
+   World ID: 2116495
+   Process ID: 0
+   VMX Cartel ID: 2116459
+   UUID: 42 05 45 e5 6a 50 2e 96-aa 63 c6 55 fd 90 00 0b
+   Display Name: cobalt-esx11 [lblossier] FPOC-17_VM64_ESXI
+   Config File: /vmfs/volumes/61a6692f-98a11461-c459-b07b25d47eb0/machines/cobalt-esx11 [lblossier] FPOC-17_VM64_ESXI/cobalt-esx11 [lblossier] FPOC-17_VM64_ESXI.vmx
+
+cobalt-esx04 [lblossier] FPOC-17_VM64_ESXI
+   World ID: 2116499
+   Process ID: 0
+   VMX Cartel ID: 2116461
+   UUID: 42 05 cd c9 c8 65 a4 fb-e6 21 5e e7 ac d5 98 0e
+   Display Name: cobalt-esx04 [lblossier] FPOC-17_VM64_ESXI
+   Config File: /vmfs/volumes/61a6692f-98a11461-c459-b07b25d47eb0/machines/cobalt-esx04 [lblossier] FPOC-17_VM64_ESXI/cobalt-esx04 [lblossier] FPOC-17_VM64_ESXI.vmx
+
+cobalt-esx08 [lblossier] FPOC-17_VM64_ESXI
+   World ID: 2116503
+   Process ID: 0
+   VMX Cartel ID: 2116460
+   UUID: 42 05 51 bd a3 12 54 9b-92 68 0b f2 b7 ad 1f 9e
+   Display Name: cobalt-esx08 [lblossier] FPOC-17_VM64_ESXI
+   Config File: /vmfs/volumes/61a6692f-98a11461-c459-b07b25d47eb0/machines/cobalt-esx08 [lblossier] FPOC-17_VM64_ESXI/cobalt-esx08 [lblossier] FPOC-17_VM64_ESXI.vmx
+
+cobalt-esx09 [lblossier] FPOC-17_VM64_ESXI
+   World ID: 2116507
+   Process ID: 0
+   VMX Cartel ID: 2116462
+   UUID: 42 05 02 1a 45 c2 47 3a-e0 ea 5c ea 3f 2f c2 79
+   Display Name: cobalt-esx09 [lblossier] FPOC-17_VM64_ESXI
+   Config File: /vmfs/volumes/61a6692f-98a11461-c459-b07b25d47eb0/machines/cobalt-esx09 [lblossier] FPOC-17_VM64_ESXI/cobalt-esx09 [lblossier] FPOC-17_VM64_ESXI.vmx
+[root@cobalt:~] 
+

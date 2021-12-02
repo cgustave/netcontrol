@@ -1,0 +1,10 @@
+[root@cobalt:~] df -m
+Filesystem 1M-blocks   Used Available Use% Mounted on
+NFS41          28032   8761     19271  31% /vmfs/volumes/Farm2-nfs
+VMFS-6       5484544 309177   5175367   6% /vmfs/volumes/datastore-Cobalt
+vfat             285    173       112  61% /vmfs/volumes/61a6691f-191eb92b-509a-b07b25d47eb0
+vfat            4094     12      4082   0% /vmfs/volumes/61a66930-bfb7ccc3-2eec-b07b25d47eb0
+vfat             249    148       101  59% /vmfs/volumes/203c0b72-8e7179de-22d8-8afc932d7861
+vfat             249      0       249   0% /vmfs/volumes/cfca7b75-33a97518-c4d2-ce8d221d13bc
+[root@cobalt:~] 
+
