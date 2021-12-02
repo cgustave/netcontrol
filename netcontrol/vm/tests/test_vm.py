@@ -53,7 +53,7 @@ class VMctlTestCase(unittest.TestCase):
         self.assertEqual(len(str(result)), 1194)
 
     #@unittest.skip
-    def test_get_statistics_esx(self):
+    def test_get_statistics_esx_v60(self):
         self.vm.host_type = 'ESX'
         self.vm.hypervisor_type = 'esx'
         self.vm.ssh.mock(context='esx_vm1')
@@ -62,13 +62,31 @@ class VMctlTestCase(unittest.TestCase):
         self.vm.dump_statistics()
         self.vm.close()
         self.assertEqual(result["nb_cpu"], 48)
-        self.assertEqual(result["memory"]['available'], 21157676)
-        self.assertEqual(result["memory"]['free'], 247251176)
+        self.assertEqual(result["memory"]['available'], 14121952)
+        self.assertEqual(result["memory"]['free'], 14121952)
         self.assertEqual(result["memory"]['total'], 268408852)
         self.assertEqual(result["load"]['1mn'], "0.06")
         self.assertEqual(result["load"]['5mn'], "0.07")
         self.assertEqual(result["load"]['15mn'], "0.07")
-        self.assertEqual(len(str(result)), 856)
+        self.assertEqual(len(str(result)), 855)
+
+    #@unittest.skip
+    def test_get_statistics_esx_v67(self):
+        self.vm.host_type = 'ESX'
+        self.vm.hypervisor_type = 'esx'
+        self.vm.ssh.mock(context='esx_vm1_67')
+        result = json.loads(self.vm.get_statistics())
+        log.debug("Result : {} len={}".format(result, len(str(result))))
+        self.vm.dump_statistics()
+        self.vm.close()
+        self.assertEqual(result["nb_cpu"], 128)
+        self.assertEqual(result["memory"]['available'], 620054120)
+        self.assertEqual(result["memory"]['free'], 620054120)
+        self.assertEqual(result["memory"]['total'], 804484624)
+        self.assertEqual(result["load"]['1mn'], "0.05")
+        self.assertEqual(result["load"]['5mn'], "0.05")
+        self.assertEqual(result["load"]['15mn'], "0.05")
+        self.assertEqual(len(str(result)), 858)
 
     #@unittest.skip
     def test_get_vm_resources_kvm(self):
@@ -96,7 +114,7 @@ class VMctlTestCase(unittest.TestCase):
         self.assertEqual(result['vms_disks'][0]['type'], 'ESXI')
 
     #@unittest.skip
-    def test_get_vm_resources_esx(self):
+    def test_get_vm_resources_esx_v60(self):
         self.vm.host_type = 'ESX'
         self.vm.hypervisor_type = 'esx'
         self.vm.ssh.mock(context='esx_vm1')
@@ -109,6 +127,21 @@ class VMctlTestCase(unittest.TestCase):
         self.assertEqual(result["vms_total"]["cpu"], 71)
         self.assertEqual(result["vms_total"]["memory"], 128000)
         self.assertEqual(result["vms_total"]["number"], 35)
+
+    #@unittest.skip
+    def test_get_vm_resources_esx_v67(self):
+        self.vm.host_type = 'ESX'
+        self.vm.hypervisor_type = 'esx'
+        self.vm.ssh.mock(context='esx_vm1_67')
+        result = json.loads(self.vm.get_vms_statistics())
+        log.debug("Result : {} len={}".format(result, len(str(result))))
+        self.vm.dump_vms()
+        self.vm.dump_vms_total()
+        #self.vm.close()
+        print("result={}".format(result))
+        self.assertEqual(result["vms_total"]["cpu"], 48)
+        self.assertEqual(result["vms_total"]["memory"], 196608)
+        self.assertEqual(result["vms_total"]["number"], 12)
 
     #@unittest.skip
     def test_total_vm_resources(self):

@@ -205,6 +205,7 @@ class Vm(object):
         # MemTotal:       264097732 kB
         # MemFree:         5160488 kB
         # MemAvailable:   108789520 kB
+        # Note: MemAvailable considers the swap that we don't want to use so use MemTotal-MemFree for used
         self._statistics['memory'] = {}
         self.ssh.shell_send(["cat /proc/meminfo\n"])
         memory_total = 0
@@ -236,36 +237,64 @@ class Vm(object):
                 'free' : ...
                 'available': ...
             }
+        211202: format changed in vers. 6.7 compare to 6.0 ('critical' removed)
         """
         log.debug("Enter")
         # command has several values : total, minFree, free and some others.
-        # use 'total', 'free' and compute available as total - free
+        # use 'total', 'free' and consider available as free (we don't use it anyway)
         # this is how % is shown in vcenter for free so it matches
         self._statistics['memory'] = {}
         self.ssh.shell_send(["memstats -r comp-stats\n"])
         memory_total = 0
         memory_free = 0
         memory_available = 0
-        for line in self.ssh.output.splitlines():
-            log.debug("line={}".format(line))
-            mem_re = "(?P<total>\d+)\s+"\
+
+        # Memory regexp for version 6.0.0 and 6.7.0
+        mem_re_v60 = "(?P<total>\d+)\s+"\
                    + "(?P<discarded>\d+)\s+"\
                    + "(?P<managedByMemMap>\d+)\s+"\
                    + "(?P<reliableMem>\d+)\s+"\
                    + "(?P<kernelCode>\d+)\s+"\
                    + "(?P<critical>\d+)\s+"\
                    + "(?P<dataAndHeap>\d+)\s+"\
+                   + "(?P<buddyOvhd>\d+)\s+"\
                    + "(?P<rsvdLow>\d+)\s+"\
                    + "(?P<managedByMemSched>\d+)\s+"\
                    + "(?P<minFree>\d+)\s+"\
                    + "(?P<vmkClientConsumed>\d+)\s+"\
                    + "(?P<otherConsumed>\d+)\s+"\
                    + "(?P<free>\d+)\s+"
-            match_memory = re.search(mem_re, line)
+
+        mem_re_v67 = "(?P<total>\d+)\s+"\
+                   + "(?P<discarded>\d+)\s+"\
+                   + "(?P<managedByMemMap>\d+)\s+"\
+                   + "(?P<reliableMem>\d+)\s+"\
+                   + "(?P<kernelCode>\d+)\s+"\
+                   + "(?P<dataAndHeap>\d+)\s+"\
+                   + "(?P<buddyOvhd>\d+)\s+"\
+                   + "(?P<rsvdLow>\d+)\s+"\
+                   + "(?P<managedByMemSched>\d+)\s+"\
+                   + "(?P<minFree>\d+)\s+"\
+                   + "(?P<vmkClientConsumed>\d+)\s+"\
+                   + "(?P<otherConsumed>\d+)\s+"\
+                   + "(?P<free>\d+)\s+"
+
+        esx_vers = '6.7'
+        for line in self.ssh.output.splitlines():
+            log.debug("line={}".format(line))
+            # 'critical' is the marker of the 6.0 version
+            match_version = re.search("critical", line)
+            if match_version:
+                esx_vers = '6.0'
+                log.debug("found 6.0 like version")
+            if esx_vers == '6.7':
+                match_memory = re.search(mem_re_v67, line)
+            else:
+                match_memory = re.search(mem_re_v60, line)
             if match_memory:
                 memory_total = int(match_memory.group('total'))
                 memory_free = int(match_memory.group('free'))
-                memory_available = memory_total - memory_free
+                memory_available = memory_free
                 log.debug("memory_total={} memory_free={} computed memory_available={}"\
                           .format(memory_total, memory_free, memory_available))
                 self._statistics['memory']['total'] = memory_total
