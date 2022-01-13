@@ -193,5 +193,23 @@ class VMctlTestCase(unittest.TestCase):
         self.assertEqual(result['vms_disks'][0]['size'], 65498251264)
         self.assertEqual(result['vms_disks'][0]['type'], 'KVM')
 
+    #empty vm list {} causing a failure
+    #@unittest.skip
+    def test_get_vm_statistics_case3(self):
+        self.vm.ssh.mock(context='kvm_vm4')
+        result = json.loads(self.vm.get_statistics())
+        log.debug("Result : {} len={}".format(result, len(str(result))))
+
+    #@unittest.skip
+    def test_get_vm_resources_kvm(self):
+        self.vm.ssh.mock(context='kvm_vm4')
+        result = json.loads(self.vm.get_vms_statistics())
+        log.debug("KVM result : {} len={}".format(result, len(str(result))))
+        self.vm.dump_vms()
+        self.vm.dump_vms_total()
+        #self.vm.close()
+
+
+
 if __name__ == '__main__':
     unittest.main()

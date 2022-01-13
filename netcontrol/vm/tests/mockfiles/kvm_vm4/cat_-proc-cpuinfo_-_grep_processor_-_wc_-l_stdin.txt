@@ -1,0 +1,4 @@
+root@hannibal:~# cat /proc/cpuinfo | grep processor | wc -l
+128
+root@hannibal:~# 
+

@@ -1,0 +1,4 @@
+root@hannibal:~#  cat /proc/loadavg 
+8.81 8.92 9.30 6/2137 707276
+root@hannibal:~# 
+

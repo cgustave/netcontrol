@@ -1,0 +1,21 @@
+root@hannibal:~# df -BG
+Filesystem     1G-blocks  Used Available Use% Mounted on
+udev                378G    0G      378G   0% /dev
+tmpfs                76G    1G       76G   1% /run
+/dev/sda2            30G    7G       22G  24% /
+tmpfs               378G    0G      378G   0% /dev/shm
+tmpfs                 1G    0G        1G   0% /run/lock
+tmpfs               378G    0G      378G   0% /sys/fs/cgroup
+/dev/sda1             1G    1G        1G   2% /boot/efi
+/dev/sda3          5291G  753G     4272G  15% /home
+/dev/loop1            1G    1G        0G 100% /snap/core18/2253
+/dev/loop2            1G    1G        0G 100% /snap/core20/1242
+/dev/loop0            1G    1G        0G 100% /snap/core18/2128
+/dev/loop3            1G    1G        0G 100% /snap/lxd/21029
+/dev/loop4            1G    1G        0G 100% /snap/lxd/21835
+/dev/loop5            1G    1G        0G 100% /snap/snapd/14066
+/dev/loop6            1G    1G        0G 100% /snap/core20/1270
+/dev/loop7            1G    1G        0G 100% /snap/snapd/14295
+tmpfs                76G    0G       76G   0% /run/user/0
+root@hannibal:~# 
+

@@ -1,0 +1,64 @@
+root@hannibal:~# for i in `virsh list --all | awk '{print $2}'` ; do file /home/virtualMachines/$i/* ;done
+/home/virtualMachines/Name/*: cannot open `/home/virtualMachines/Name/*' (No such file or directory)
+/home/virtualMachines/001/fortios.qcow2: QEMU QCOW2 Image (v3), 2147483648 bytes
+/home/virtualMachines/001/logdisk.qcow2: QEMU QCOW2 Image (v2), 17179869184 bytes
+/home/virtualMachines/002/boot.qcow2:      QEMU QCOW2 Image (v3), 1073741824 bytes
+/home/virtualMachines/002/datadrive.qcow2: QEMU QCOW2 Image (v3), 64424509440 bytes
+/home/virtualMachines/003/fortipoc-1.7.qcow2: QEMU QCOW2 Image (v2), has backing file (path /home/templates/fortipoc/fortipoc-1.7.25.qcow2), 85899345920 bytes
+/home/virtualMachines/003/storage.qcow2:      QEMU QCOW2 Image (v2), 64424509440 bytes
+/home/virtualMachines/004/fmg.qcow2:     QEMU QCOW2 Image (v2), 2147483648 bytes
+/home/virtualMachines/004/storage.qcow2: QEMU QCOW2 Image (v2), 85899345920 bytes
+/home/virtualMachines/005/faz.qcow2:     QEMU QCOW2 Image (v2), 2147483648 bytes
+/home/virtualMachines/005/logdisk.qcow2: QEMU QCOW2 Image (v2), 85899345920 bytes
+/home/virtualMachines/006/win10.qcow2: QEMU QCOW2 Image (v2), has backing file (path /home/templates/Windows10/20210630/sop.qcow2), 85899345920 bytes
+/home/virtualMachines/007/fortios.qcow2: QEMU QCOW2 Image (v3), 2147483648 bytes
+/home/virtualMachines/007/logdisk.qcow2: QEMU QCOW2 Image (v2), 17179869184 bytes
+/home/virtualMachines/008/fortios.qcow2: QEMU QCOW2 Image (v3), 2147483648 bytes
+/home/virtualMachines/008/logdisk.qcow2: QEMU QCOW2 Image (v2), 17179869184 bytes
+/home/virtualMachines/009/fmg.qcow2:     QEMU QCOW2 Image (v2), 2147483648 bytes
+/home/virtualMachines/009/storage.qcow2: QEMU QCOW2 Image (v2), 85899345920 bytes
+/home/virtualMachines/011/fortios.qcow2: QEMU QCOW2 Image (v3), 2147483648 bytes
+/home/virtualMachines/011/logdisk.qcow2: QEMU QCOW2 Image (v2), 17179869184 bytes
+/home/virtualMachines/012/fmg.qcow2:     QEMU QCOW2 Image (v2), 2147483648 bytes
+/home/virtualMachines/012/storage.qcow2: QEMU QCOW2 Image (v2), 85899345920 bytes
+/home/virtualMachines/015/fmg.qcow2:     QEMU QCOW2 Image (v2), 4300210176 bytes
+/home/virtualMachines/015/storage.qcow2: QEMU QCOW2 Image (v2), 85899345920 bytes
+/home/virtualMachines/016/win2016.qcow2: QEMU QCOW2 Image (v2), has backing file (path /home/templates/Windows2016/20201017/sop.qcow2), 85899345920 bytes
+/home/virtualMachines/020/fmg.qcow2:     QEMU QCOW2 Image (v2), 2147483648 bytes
+/home/virtualMachines/020/storage.qcow2: QEMU QCOW2 Image (v2), 85899345920 bytes
+/home/virtualMachines/021/fmg.qcow2:     QEMU QCOW2 Image (v2), 2147483648 bytes
+/home/virtualMachines/021/storage.qcow2: QEMU QCOW2 Image (v2), 85899345920 bytes
+/home/virtualMachines/022/ISE-2.4.0.357-virtual-SNS3515-Small-200GBHD-16GBRAM-12CPU-disk1.qcow2: DOS/MBR boot sector
+/home/virtualMachines/022/ise-2.4.0:                                                             QEMU QCOW2 Image (v3), 214748364800 bytes
+/home/virtualMachines/022/ise-2.4.0.357.SPA.x86_64.iso:                                          symbolic link to /home/proserv_images/ise-2.4.0.357.SPA.x86_64.iso
+/home/virtualMachines/022/us2004-orig.qcow2:                                                     QEMU QCOW2 Image (v2), has backing file (path /home/templates/Ubuntu20.04_svr/20210114/sop.qcow2), 85899345920 bytes
+/home/virtualMachines/022/us2004.qcow2:                                                          symbolic link to ISE-2.4.0.357-virtual-SNS3515-Small-200GBHD-16GBRAM-12CPU-disk1.qcow2
+/home/virtualMachines/024/us2004.qcow2: QEMU QCOW2 Image (v2), has backing file (path /home/templates/Ubuntu20.04_svr/20210114/sop.qcow2), 85899345920 bytes
+/home/virtualMachines/025/fortipoc-1.7.qcow2: QEMU QCOW2 Image (v2), has backing file (path /home/templates/fortipoc/fortipoc-1.7.25.qcow2), 85899345920 bytes
+/home/virtualMachines/025/storage.qcow2:      QEMU QCOW2 Image (v2), 64424509440 bytes
+/home/virtualMachines/029/boot.qcow2: QEMU QCOW2 Image (v2), 34359738368 bytes
+/home/virtualMachines/030/win10.qcow2: QEMU QCOW2 Image (v2), has backing file (path /home/templates/Windows10/20210630/sop.qcow2), 85899345920 bytes
+/home/virtualMachines/031/win10.qcow2: QEMU QCOW2 Image (v2), has backing file (path /home/templates/Windows10/20210630/sop.qcow2), 85899345920 bytes
+/home/virtualMachines/033/fmg.qcow2:     QEMU QCOW2 Image (v2), 2147483648 bytes
+/home/virtualMachines/033/storage.qcow2: QEMU QCOW2 Image (v2), 85899345920 bytes
+/home/virtualMachines/039/win2016.qcow2: QEMU QCOW2 Image (v2), has backing file (path /home/templates/Windows2016/20201017/sop.qcow2), 85899345920 bytes
+/home/virtualMachines/042/fortipoc-1.8.qcow2: QEMU QCOW2 Image (v2), has backing file (path /home/templates/fortipoc/fortipoc_1.8.rc.0.employee.qcow2), 85899345920 bytes
+/home/virtualMachines/042/storage.qcow2:      QEMU QCOW2 Image (v2), 64424509440 bytes
+/home/virtualMachines/048/faz.qcow2:     QEMU QCOW2 Image (v2), 2147483648 bytes
+/home/virtualMachines/048/logdisk.qcow2: QEMU QCOW2 Image (v2), 85899345920 bytes
+/home/virtualMachines/060/fmg.qcow2:     QEMU QCOW2 Image (v2), 2147483648 bytes
+/home/virtualMachines/060/storage.qcow2: QEMU QCOW2 Image (v2), 85899345920 bytes
+/home/virtualMachines/061/fortios.qcow2: QEMU QCOW2 Image (v3), 2147483648 bytes
+/home/virtualMachines/061/logdisk.qcow2: QEMU QCOW2 Image (v2), 17179869184 bytes
+/home/virtualMachines/062/fortios.qcow2: QEMU QCOW2 Image (v3), 2147483648 bytes
+/home/virtualMachines/062/logdisk.qcow2: QEMU QCOW2 Image (v2), 17179869184 bytes
+/home/virtualMachines/063/fortios.qcow2: QEMU QCOW2 Image (v3), 2147483648 bytes
+/home/virtualMachines/063/logdisk.qcow2: QEMU QCOW2 Image (v2), 17179869184 bytes
+/home/virtualMachines/017/fmg.qcow2:     QEMU QCOW2 Image (v2), 2147483648 bytes
+/home/virtualMachines/017/storage.qcow2: QEMU QCOW2 Image (v2), 85899345920 bytes
+/home/virtualMachines/018/fortimail-kvm.qcow2: QEMU QCOW2 Image (v3), 308280832 bytes
+/home/virtualMachines/018/stor250.qcow2:       QEMU QCOW2 Image (v3), 268435456000 bytes
+/home/virtualMachines/064/fortipoc-1.8.qcow2: QEMU QCOW2 Image (v2), has backing file (path /home/templates/fortipoc/fortipoc_1.8.rc.0.employee.qcow2), 85899345920 bytes
+/home/virtualMachines/064/storage.qcow2:      QEMU QCOW2 Image (v2), 64424509440 bytes
+root@hannibal:~# 
+
