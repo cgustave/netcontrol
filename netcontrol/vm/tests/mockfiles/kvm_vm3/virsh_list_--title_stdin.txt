@@ -1,0 +1,15 @@
+root@radon-trn:~# virsh list --title
+ Id   Name   State     Title
+--------------------------------------------------------
+ 2    006    running   006 [vbharat] LinuxMint18_KVM
+ 3    004    running   004 [vbharat] Windows7_KVM
+ 4    009    running   009 [tgirard] FPOC-17_VM64_KVM
+ 5    002    running   002 [tgirard] FPOC-17_VM64_KVM
+ 6    010    running   010 [tgirard] FPOC-17_VM64_KVM
+ 11   012    running   012 [vbharat] Windows10_KVM
+ 12   015    running   015 [vbharat] Windows7_KVM
+ 15   007    running   007 [nvisentin] Windows7_KVM
+ 16   001    running   001 [shamelin] FPOC-17_VM64_KVM
+
+root@radon-trn:~# 
+

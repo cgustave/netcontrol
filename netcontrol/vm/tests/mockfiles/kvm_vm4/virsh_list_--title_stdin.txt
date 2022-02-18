@@ -1,0 +1,59 @@
+root@hannibal:~# virsh list --title
+ Id    Name   State     Title
+-------------------------------------------------------------
+ 1     001    running   001 [cgustave] FGT_VM64_KVM
+ 3     003    running   003 [asanz] FPOC-17_VM64_KVM
+ 7     007    running   007 [dinesh] FGT_VM64_KVM
+ 9     009    running   009 [dodsonj] FMG_VM64_KVM
+ 10    011    running   011 [xgalbois] FGT_VM64_KVM
+ 13    016    running   016 [iplepys] Windows2016_KVM
+ 16    021    running   021 [xgalbois] FMG_VM64_KVM
+ 17    022    running   022 [xgalbois] Ubuntu_2004S_KVM
+ 18    024    running   024 [xgalbois] Ubuntu_2004S_KVM
+ 19    025    running   025 [aelmishad] FPOC-17_VM64_KVM
+ 20    029    running   029 [sbaugh] FWB_VM64_KVM
+ 21    030    running   030 [knagrani] Windows10_KVM
+ 23    033    running   033 [dodsonj] FMG_VM64_KVM
+ 24    039    running   039 [dodsonj] Windows2016_KVM
+ 25    042    running   042 [fnech] FPOC-18_VM64_KVM
+ 26    048    running   048 [dmalara] FLG_VM64_KVM
+ 28    061    running   061 [ikokkuhannandige] FGT_VM64_KVM
+ 29    062    running   062 [ikokkuhannandige] FGT_VM64_KVM
+ 30    063    running   063 [ikokkuhannandige] FGT_VM64_KVM
+ 33    018    running   018 [xgalbois] FE_VM64_KVM
+ 40    015    running   015 [khanm] FGT_VM64_KVM
+ 42    035    running   035 [fjosca] FGT_VM64_KVM
+ 44    037    running   037 [bndlovu] FPOC-17_VM64_KVM
+ 45    038    running   038 [iplepys] FMG_VM64_KVM
+ 47    002    running   002 [cconstantinou] FE_VM64_KVM
+ 49    036    running   036 [fjosca] FLG_VM64_KVM
+ 50    040    running   040 [fjosca] FAC_VM64_KVM
+ 53    043    running   043 [vmanjunath] FPX_VM64_KVM
+ 64    034    running   034 [fjosca] FMG_VM64_KVM
+ 66    044    running   044 [bndlovu] FLG_VM64_KVM
+ 68    047    running   047 [asanz] FPOC-18_VM64_KVM
+ 69    012    running   012 [kgolawski] FMG_VM64_KVM
+ 73    056    running   056 [rmetzger] FPOC-18_VM64_KVM
+ 76    053    running   053 [jeichner] Windows2012r2_KVM
+ 82    052    running   052 [jeichner] FAC_VM64_KVM
+ 83    032    running   032 [qduault] FPOC-17_VM64_KVM
+ 88    055    running   055 [jeichner] Ubuntu_2004S_KVM
+ 91    051    running   051 [jeichner] FPC_P_VM64_KVM
+ 92    059    running   059 [khanm] FMG_VM64_KVM
+ 94    054    running   054 [jeichner] Ubuntu_2004S_KVM
+ 97    017    running   017 [abilash] FMG_VM64_KVM
+ 100   046    running   046 [forced] FPC_P_VM64_KVM
+ 101   050    running   050 [jeichner] FGT_VM64_KVM
+ 103   060    running   060 [knagrani] FMG_VM64_KVM
+ 107   041    running   041 [abilash] FGT_VM64_KVM
+ 110   020    running   020 [rmetzger] FPOC-17_VM64_KVM
+ 111   045    running   045 [bndlovu] FGT_VM64_KVM
+ 120   008    running   008 [qduault] Debian9_KVM
+ 121   005    running   005 [sputhalath] FGT_VM64_KVM
+ 122   006    running   006 [sputhalath] FGT_VM64_KVM
+ 123   004    running   004 [dmalara] FMG_VM64_KVM
+ 125   064    running   064 [dmalara] FPOC-18_VM64_KVM
+ 126   031    running   031 [khanm] Windows2016_KVM
+
+root@hannibal:~# 
+

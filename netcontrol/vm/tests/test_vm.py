@@ -209,6 +209,24 @@ class VMctlTestCase(unittest.TestCase):
         self.vm.dump_vms_total()
         #self.vm.close()
 
+    #@unittest.skip
+    def test_get_processes_esx(self):
+        self.vm.ssh.mock(context='esx_vm1')
+        self.vm._get_processes_esx()
+        log.debug("vms_system={}".format(self.vm._vms_system))
+        self.assertEqual(self.vm._vms_system[0]['id'], '041')
+        self.assertEqual(self.vm._vms_system[0]['system'], 'FSA_VM64')
+        self.assertEqual(self.vm._vms_system[0]['type'], 'ESXI')
+
+    #@unittest.skip
+    def test_get_vms_system_kvm(self):
+        self.vm.ssh.mock(context='kvm_vm4')
+        self.vm._get_vms_system_kvm()
+        log.debug("vms_system={}".format(self.vm._vms_system))
+        self.assertEqual(self.vm._vms_system[0]['id'], '001')
+        self.assertEqual(self.vm._vms_system[0]['system'], 'FGT_VM64')
+        self.assertEqual(self.vm._vms_system[0]['type'], 'KVM')
+
 
 
 if __name__ == '__main__':

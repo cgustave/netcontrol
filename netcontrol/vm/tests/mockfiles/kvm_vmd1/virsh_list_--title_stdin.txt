@@ -1,0 +1,49 @@
+root@ion:~# virsh list --title
+ Id    Name   State     Title
+------------------------------------------------------------
+ 15    024    running   024 [vrajendran] FAC_VM64_KVM
+ 16    080    running   080 [mmaubert] FMG_VM64_KVM
+ 39    017    running   017 [mmohr] LinuxMint18_KVM
+ 161   098    running   098 [mbernatek] Debian9_KVM
+ 182   009    running   009 [athirat] Windows2016_KVM
+ 184   057    running   057 [athirat] Windows7_KVM
+ 193   038    running   038 [aquadri] FPOC-17_VM64_KVM
+ 202   022    running   022 [jjoseph] Windows10_KVM
+ 236   074    running   074 [vpoliakov] FAC_VM64_KVM
+ 239   081    running   081 [emmanouilg] FPOC-17_VM64_KVM
+ 261   032    running   032 [vpoliakov] FMG_VM64_KVM
+ 333   085    running   085 [pciurea] Windows2012r2_KVM
+ 369   058    running   058 [aquadri] FMG_VM64_KVM
+ 400   087    running   087 [mmaubert] FPOC-17_VM64_KVM
+ 412   097    running   097 [melkhodary] FMG_VM64_KVM
+ 428   084    running   084 [akamath] FGT_VM64_KVM
+ 429   007    running   007 [welnaggar] FMG_VM64_KVM
+ 441   020    running   020 [matanaskovic] FAC_VM64_KVM
+ 453   010    running   010 [aquadri] FGT_VM64_KVM
+ 454   061    running   061 [msanjaypadma] FGT_VM64_KVM
+ 455   050    running   050 [vrajendran] FGT_VM64_KVM
+ 456   071    running   071 [matanaskovic] FAC_VM64_KVM
+ 463   002    running   002 [patras] FGT_VM64_KVM
+ 465   053    running   053 [bpriya] FGT_VM64_KVM
+ 480   011    running   011 [azaman] Windows7_KVM
+ 499   015    running   015 [akumarr] Windows2016_KVM
+ 502   001    running   001 [talsayyad] Windows2016_KVM
+ 504   060    running   060 [amoreno] Debian9_KVM
+ 505   077    running   077 [ranjith] Windows10_KVM
+ 506   004    running   004 [sfetokakis] FGT_VM64_KVM
+ 514   008    running   008 [mbenvenuti] Debian9_KVM
+ 521   069    running   069 [amoreno] FLG_VM64_KVM
+ 525   013    running   013 [mriswan] Windows7_KVM
+ 527   016    running   016 [wdeloraine] FGT_VM64_KVM
+ 529   055    running   055 [guptas] FGT_VM64_KVM
+ 532   045    running   045 [atsakiridis] Windows10_KVM
+ 533   006    running   006 [lblossier] FPOC-17_VM64_KVM
+ 535   041    running   041 [vyildirim] FPOC-17_VM64_KVM
+ 536   049    running   049 [rlokeswar] FWB_VM64_KVM
+ 538   076    running   076 [aquadri] FMG_VM64_KVM
+ 539   083    running   083 [talsayyad] FE_VM64_KVM
+ 541   088    running   088 [jithinthomas] Windows2016_KVM
+ 544   018    running   018 [lpizziniaco] FGT_VM64_KVM
+
+root@ion:~# 
+

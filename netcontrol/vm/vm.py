@@ -72,6 +72,7 @@ class Vm(object):
         self._vms = []         # Internal representation of each VMs
         self._vms_total = {}   # Total VMs statistics
         self._vms_disks = []   # Internal representation of each VM disks info
+        self._vms_system = []  # Internal representation of each VM systen info
         self._vms_disks_dict = {} # temp object
         self._vms_esx_id_map = {} # wid to vm_name mapping
         self._vms_esx_cpu = {}    # dict of vm_id containing nb_cpu
@@ -119,6 +120,7 @@ class Vm(object):
         log.debug('Enter')
         if self.hypervisor_type == 'kvm':
             self._get_processes_kvm()
+            self._get_vms_system_kvm()
             self._get_vms_disk_kvm()
         elif self.hypervisor_type == 'esx':
             self._build_vms_esx_cpu()
@@ -129,6 +131,7 @@ class Vm(object):
         result['vms'] = self._vms
         result['vms_total'] = self._vms_total
         result['vms_disks'] = self._vms_disks
+        result['vms_system'] = self._vms_system
         return(json.dumps(result))
 
     def _get_nbcpu(self):
@@ -404,6 +407,7 @@ class Vm(object):
     def _get_processes_esx(self):
         """
         Retrieve esxi process from 'esxcli process list' to fill _vms and _vms_total attributs
+        _vms_system is also filled but in ESX template is the system
         Sample of 1 process:
             root@uranium:~] esxcli vm process list
             uranium-esx36 [knagaraju] FGT_VM64_ESXI
@@ -436,13 +440,13 @@ class Vm(object):
                 esx_line = esx_line + 1
             log.debug("esx_line={} line={}".format(esx_line, line))
             if esx_line == 1:
-                match_name = re.search("(?P<vm_name>\S+)\s\[(?P<create_user>\S+)\]\s(?P<template>\S+)", line)
+                match_name = re.search("(?P<vm_name>\S+)\s\[(?P<create_user>\S+)\]\s(?P<system>\S+)", line)
                 if match_name:
                     vm_name = match_name.group('vm_name')
                     create_user = match_name.group('create_user')
-                    template = match_name.group('template')
+                    system = match_name.group('system')
                     self._vms_total['number'] += 1
-                    log.debug("Found new vm_name={} create_user={} template={} total_number={}".format(vm_name, create_user, template, self._vms_total['number']))
+                    log.debug("Found new vm_name={} create_user={} system={} total_number={}".format(vm_name, create_user, system, self._vms_total['number']))
             if esx_start:
                 match_esxid = re.search("VMX\sCartel\sID:\s(?P<vm_esxid>\d+)", line)
                 if match_esxid:
@@ -470,7 +474,13 @@ class Vm(object):
                     vm['id'] = instance
                     vm['cpu'] = 0
                     vm['memory'] = vm_memory
-                    vm['template'] = template
+                    vm['template'] = system
+                    if system:
+                        system = system.replace('_ESXI','')
+                    else:
+                        log.warning("No _ESXI in system")
+                    vm['system'] = system
+                    self._vms_system.append({'id': instance, 'system': system, 'type': 'ESXI' })
                     if vm_name in self._vms_esx_cpu:
                         vm['cpu'] = self._vms_esx_cpu[vm_name]
                         self._vms_total['cpu'] += vm['cpu']
@@ -622,6 +632,34 @@ class Vm(object):
                 if 'memory' in result:
                     self._vms_total['memory'] += int(result['memory'])
                     log.debug("vms_total_memory={}".format(self._vms_total['memory']))
+
+    def _get_vms_system_kvm(self):
+        """
+        Retrieve the running system code from virsh list --title
+        _KVM is removed so system is the same with esx
+        Fills _vms_system
+        ex:
+        root@radon-trn:~# virsh list --title
+         Id   Name   State     Title
+        --------------------------------------------------------
+         2    006    running   006 [vbharat] LinuxMint18_KVM
+         3    004    running   004 [vbharat] Windows7_KVM
+         4    009    running   009 [tgirard] FPOC-17_VM64_KVM
+        """
+        log.debug("Enter")
+        self.ssh.shell_send(["virsh list --title\n"])
+        for line in self.ssh.output.splitlines():
+            log.debug("line={}".format(line))
+            system_match = re.search("\s+\S+\s+(?P<id>\S+)\s+\S+\s+\S+\s+\S+\s+(?P<system>\S+)", line)
+            if system_match:
+                id = system_match.group('id')
+                system = system_match.group('system')
+                if system:
+                    system = system.replace('_KVM','')
+                else:
+                    log.warning("No _KVM in system")
+                log.debug("Found id={} system={}".format(id, system))
+                self._vms_system.append({'id': id, 'system': system, 'type': 'KVM' })
 
     def _tokenize(self, line):
         """

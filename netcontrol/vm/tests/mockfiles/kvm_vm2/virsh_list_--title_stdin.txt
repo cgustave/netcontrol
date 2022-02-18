@@ -1,0 +1,52 @@
+root@chameleon:~# virsh list --title
+ Id    Name   State     Title
+------------------------------------------------------------
+ 2     035    running   035 [rk] FGT_VM64_KVM
+ 6     014    running   014 [matanaskovic] FGT_VM64_KVM
+ 7     071    running   071 [aotilibiliani] FMG_VM64_KVM
+ 12    099    running   099 [helham] FMG_VM64_KVM
+ 18    015    running   015 [sthampi] Debian9_KVM
+ 26    057    running   057 [ddsouza] FWB_VM64_KVM
+ 29    038    running   038 [ddsouza] Windows2016_KVM
+ 30    004    running   004 [pgautam] Windows10_KVM
+ 37    028    running   028 [helham] FMG_VM64_KVM
+ 42    027    running   027 [ntaj] FGT_VM64_KVM
+ 48    054    running   054 [nagarajs] Ubuntu_2004S_KVM
+ 55    056    running   056 [srowles] FLG_VM64_KVM
+ 56    049    running   049 [nshelke] Windows2012r2_KVM
+ 58    045    running   045 [nagarajs] FAC_VM64_KVM
+ 60    055    running   055 [ntaj] Windows2019_KVM
+ 62    079    running   079 [ashaikh] FPOC-17_VM64_KVM
+ 66    051    running   051 [ntaj] Windows10_KVM
+ 67    005    running   005 [pciurea] Ubuntu_2004S_KVM
+ 68    088    running   088 [mriha] FGT_VM64_KVM
+ 79    012    running   012 [omiguelromo] FMG_VM64_KVM
+ 95    001    running   001 [rameshk] FLG_VM64_KVM
+ 96    053    running   053 [shamelin] FMG_VM64_KVM
+ 118   077    running   077 [knaveenkumar] Windows10_KVM
+ 119   009    running   009 [ddsouza] FWB_VM64_KVM
+ 121   087    running   087 [stymofiiev] Windows2012r2_KVM
+ 123   096    running   096 [sprasanta] FGT_VM64_KVM
+ 124   039    running   039 [ddsouza] FWB_VM64_KVM
+ 125   003    running   003 [ncorreia] Ubuntu_2004S_KVM
+ 127   061    running   061 [nvisentin] Windows7_KVM
+ 130   044    running   044 [ntaj] FGT_VM64_KVM
+ 131   041    running   041 [abarad] Windows7_KVM
+ 132   085    running   085 [abarad] Windows7_KVM
+ 136   089    running   089 [abarad] FGT_VM64_KVM
+ 142   058    running   058 [hvardhang] FGT_VM64_KVM
+ 144   066    running   066 [sganesh] FGT_VM64_KVM
+ 145   013    running   013 [dpavlovic] FAC_VM64_KVM
+ 146   033    running   033 [mzieba] FMG_VM64_KVM
+ 147   052    running   052 [sganesh] FGT_VM64_KVM
+ 148   048    running   048 [sganesh] FGT_VM64_KVM
+ 150   060    running   060 [bboudjema] FMG_VM64_KVM
+ 154   018    running   018 [gouthams] FMG_VM64_KVM
+ 155   031    running   031 [gouthams] FLG_VM64_KVM
+ 158   068    running   068 [eelvira] FMG_VM64_KVM
+ 160   020    running   020 [panchals] FSA_VM64_KVM
+ 165   063    running   063 [knagaraju] Windows10_KVM
+ 167   019    running   019 [sganesh] FGT_VM64_KVM
+
+root@chameleon:~# 
+
