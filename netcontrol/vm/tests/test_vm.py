@@ -220,10 +220,10 @@ class VMctlTestCase(unittest.TestCase):
 
     #@unittest.skip
     def test_get_vms_system_kvm(self):
-        self.vm.ssh.mock(context='kvm_vm4')
+        self.vm.ssh.mock(context='kvm_vm2')
         self.vm._get_vms_system_kvm()
         log.debug("vms_system={}".format(self.vm._vms_system))
-        self.assertEqual(self.vm._vms_system[0]['id'], '001')
+        self.assertEqual(self.vm._vms_system[0]['id'], '035')
         self.assertEqual(self.vm._vms_system[0]['system'], 'FGT_VM64')
         self.assertEqual(self.vm._vms_system[0]['type'], 'KVM')
 

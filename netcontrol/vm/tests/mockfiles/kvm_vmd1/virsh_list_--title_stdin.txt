@@ -22,7 +22,6 @@ root@ion:~# virsh list --title
  453   010    running   010 [aquadri] FGT_VM64_KVM
  454   061    running   061 [msanjaypadma] FGT_VM64_KVM
  455   050    running   050 [vrajendran] FGT_VM64_KVM
- 456   071    running   071 [matanaskovic] FAC_VM64_KVM
  463   002    running   002 [patras] FGT_VM64_KVM
  465   053    running   053 [bpriya] FGT_VM64_KVM
  480   011    running   011 [azaman] Windows7_KVM
@@ -44,6 +43,7 @@ root@ion:~# virsh list --title
  539   083    running   083 [talsayyad] FE_VM64_KVM
  541   088    running   088 [jithinthomas] Windows2016_KVM
  544   018    running   018 [lpizziniaco] FGT_VM64_KVM
+ 546   071    running   071 [matanaskovic] FAC_VM64_KVM
 
 root@ion:~# 
 

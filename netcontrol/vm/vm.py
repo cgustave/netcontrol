@@ -645,12 +645,20 @@ class Vm(object):
          2    006    running   006 [vbharat] LinuxMint18_KVM
          3    004    running   004 [vbharat] Windows7_KVM
          4    009    running   009 [tgirard] FPOC-17_VM64_KVM
+        -     006    shut off   006 [sindreschulstad] Windows10_KVM
+        -     008    shut off   008 [sharmap] FGT_VM64_KVM
+        -     010    shut off   010 [spathak] Windows10_KVM
+
+        Notes:
+        - can't use 'virsh list --title --all' because the combination is not supported by all servers
+        ion does not output anything at all.
+        - match with ESX behavior for which we don't extract OS on shutdown systems (based on process)
         """
         log.debug("Enter")
-        self.ssh.shell_send(["virsh list --title --all\n"])
+        self.ssh.shell_send(["virsh list --title\n"])
         for line in self.ssh.output.splitlines():
             log.debug("line={}".format(line))
-            system_match = re.search("\s+\S+\s+(?P<id>\S+)\s+\S+\s+\S+\s+\S+\s+(?P<system>\S+)", line)
+            system_match = re.search("\s+\S+\s+(?P<id>\S+)\s+(?:running|idle|paused|in\sshutdown|shut\soff|crashed|pmsuspended)\s+\S+\s+\S+\s+(?P<system>\S+)", line)
             if system_match:
                 id = system_match.group('id')
                 system = system_match.group('system')
