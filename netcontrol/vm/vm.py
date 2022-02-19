@@ -639,7 +639,7 @@ class Vm(object):
         _KVM is removed so system is the same with esx
         Fills _vms_system
         ex:
-        root@radon-trn:~# virsh list --title
+        root@radon-trn:~# virsh list --title --all
          Id   Name   State     Title
         --------------------------------------------------------
          2    006    running   006 [vbharat] LinuxMint18_KVM
@@ -647,7 +647,7 @@ class Vm(object):
          4    009    running   009 [tgirard] FPOC-17_VM64_KVM
         """
         log.debug("Enter")
-        self.ssh.shell_send(["virsh list --title\n"])
+        self.ssh.shell_send(["virsh list --title --all\n"])
         for line in self.ssh.output.splitlines():
             log.debug("line={}".format(line))
             system_match = re.search("\s+\S+\s+(?P<id>\S+)\s+\S+\s+\S+\s+\S+\s+(?P<system>\S+)", line)
