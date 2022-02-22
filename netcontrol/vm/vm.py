@@ -773,18 +773,43 @@ class Vm(object):
         """
         Parse datastore, retrieve disk usage for each VM.
         build self._vms_esx_disks using vm name as a key
-        du -h /vmfs/volumes/datastore-Uranium/machines
+        du -h /vmfs/volumes/datastore-Uranium/ | grep esx
+        may be in different locations /vmfs/volumes/datastore-Uranium/machines/ or /vmfs/volumes/datastore-Uranium/
+        as seen on uranium
+        16.1G   /vmfs/volumes/datastore-Uranium/machines/uranium-esx31 [iyotov] FMG_VM64_ESXI
+        22.9G   /vmfs/volumes/datastore-Uranium/uranium-esx57 [bvata] Win2012R2_ESXI
+
         sample:
-        [root@uranium:~] du -h /vmfs/volumes/datastore-Uranium/machines
-        4.9G    /vmfs/volumes/datastore-Uranium/machines/uranium-esx81 [melkhatib] FGT_VM64_ESXI
-        90.1G   /vmfs/volumes/datastore-Uranium/machines/uranium-esx51 [lpizziniaco] FPOC-17_VM64_ESXI
-        20.5G   /vmfs/volumes/datastore-Uranium/machines/uranium-FSA-esx42 [panchals] FSA_VM64_ESXI
-        12.6G   /vmfs/volumes/datastore-Uranium/machines/uranium-esx37 [emete] Debian9_ESXI
+        [root@uranium:~] du -h /vmfs/volumes/datastore-Uranium/ | grep esx
+        20.7G   /vmfs/volumes/datastore-Uranium/uranium-esx14 [vpalomo] FAD_VM64_ESXI
+        23.6G   /vmfs/volumes/datastore-Uranium/uranium-esx10 [birendrakumar] Win10_ESXI
+        26.3G   /vmfs/volumes/datastore-Uranium/uranium-esx22 [birendrakumar] Win2012R2_ESXI
+        19.5G   /vmfs/volumes/datastore-Uranium/uranium-FSA-esx42 [vchauhan] FSA_VM64_ESXI
+        2.7G    /vmfs/volumes/datastore-Uranium/uranium-esx18 [azaman] FGT_VM64_ESXI
+        29.2G   /vmfs/volumes/datastore-Uranium/uranium-esx83 [grg] Win2019_ESXI
+        30.2G   /vmfs/volumes/datastore-Uranium/uranium-esx06 [vkoodakandi] Win2016_ESXI
+        24.6G   /vmfs/volumes/datastore-Uranium/uranium-esx11 [amarinos] Win10_ESXI
+        24.8G   /vmfs/volumes/datastore-Uranium/uranium-esx05 [vchauhan] Win2012R2_ESXI
+        4.5G    /vmfs/volumes/datastore-Uranium/uranium-esx08 [emouque] FGT_VM64_ESXI
+        42.5G   /vmfs/volumes/datastore-Uranium/uranium-esx23 [azhunissov] Win2016_ESXI
+        16.9G   /vmfs/volumes/datastore-Uranium/uranium-esx69 [tstribrny] DebianJessie_ESXI
+        23.8G   /vmfs/volumes/datastore-Uranium/uranium-esx85 [abarushka] Win10_ESXI
+        34.7G   /vmfs/volumes/datastore-Uranium/uranium-esx79 [spathak] Win2016_ESXI
+        2.9G    /vmfs/volumes/datastore-Uranium/uranium-esx74 [ssener] FGT_VM64_ESXI
+        29.0G   /vmfs/volumes/datastore-Uranium/uranium-esx53 [abarushka] Win2016_ESXI
+        15.5G   /vmfs/volumes/datastore-Uranium/uranium-esx37 [emete] Debian9_ESXI
+        10.7G   /vmfs/volumes/datastore-Uranium/uranium-esx86 [opetr] FWB_VM64_ESXI
+        3.3G    /vmfs/volumes/datastore-Uranium/uranium-esx76 [flopez] FGT_VM64_ESXI
+        7.6G    /vmfs/volumes/datastore-Uranium/uranium-esx78 [tstribrny] FAC_VM64_ESXI
+        77.4G   /vmfs/volumes/datastore-Uranium/uranium-esx64 [bpozdena] FLG_VM64_ESXI
+        3.8G    /vmfs/volumes/datastore-Uranium/machines/uranium-esx49 [vchauhan] FAC_VM64_ESXI
+        2.6G    /vmfs/volumes/datastore-Uranium/machines/uranium-esx04 [fbegit] FGT_VM64_ESXI
+        2.3G    /vmfs/volumes/datastore-Uranium/machines/uranium-esx60 [ncorreia] FGT_VM64_ESXI
         Result to be provided in MB
         Should be run before _get_processes_esx
         """
         log.debug("Enter")
-        cmd = "(p=`ls -1 /vmfs/volumes/* | grep datastore | sed s/:$//`; du -h $p/machines) | awk '// { print $1 \", \" $2}'"
+        cmd = "(p=`ls -1 /vmfs/volumes/* | grep datastore | sed s/:$//`; du -h $p/) | grep esx | awk '// { print $1 \", \" $2}'"
         self.ssh.shell_send([cmd+"\n"])
         for line in self.ssh.output.splitlines():
             log.debug("line={}".format(line))
@@ -794,8 +819,11 @@ class Vm(object):
                 unit = match_vm.group('unit')
                 machine = match_vm.group('machine')
                 log.debug("Found size={} unit={} machine={}".format(size, unit, machine))
-                # get machine id from full name ex: /vmfs/volumes/datastore-Neutron/machines/neutron-esx36
-                match_name = re.search("machines\/(?P<name>\S+)$", machine)
+                # get machine id from full name
+                # ex: /vmfs/volumes/datastore-Neutron/machines/neutron-esx36  or
+                # ex: /vmfs/volumes/datastore-Uranium/uranium-esx69   (no machines)
+
+                match_name = re.search("(machines)?/(?P<name>\S+)$", machine)
                 if match_name:
                     name = match_name.group('name')
                     log.debug("Found name={}".format(name))

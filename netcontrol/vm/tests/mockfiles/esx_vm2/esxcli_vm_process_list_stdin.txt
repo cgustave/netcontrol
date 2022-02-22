@@ -1,0 +1,579 @@
+[root@uranium:~] esxcli vm process list
+
+uranium-esx75 [tstribrny] Debian9_ESXI
+   World ID: 2102509
+   Process ID: 0
+   VMX Cartel ID: 2102503
+   UUID: 42 00 18 4a 50 b3 2e bd-0d 3f 6c d7 9e f7 cb 72
+   Display Name: uranium-esx75 [tstribrny] Debian9_ESXI
+   Config File: /vmfs/volumes/61af611a-6ae5e08d-1d4c-b07b25e96658/uranium-esx75 [tstribrny] Debian9_ESXI/uranium-esx75 [tstribrny] Debian9_ESXI.vmx
+
+uranium-esx37 [emete] Debian9_ESXI
+   World ID: 2102524
+   Process ID: 0
+   VMX Cartel ID: 2102505
+   UUID: 42 00 12 6b 44 a2 e7 aa-e8 91 19 e9 b0 94 57 88
+   Display Name: uranium-esx37 [emete] Debian9_ESXI
+   Config File: /vmfs/volumes/61af611a-6ae5e08d-1d4c-b07b25e96658/uranium-esx37 [emete] Debian9_ESXI/uranium-esx37 [emete] Debian9_ESXI.vmx
+
+uranium-esx81 [anoushiravan] Win10_ESXI
+   World ID: 2102529
+   Process ID: 0
+   VMX Cartel ID: 2102506
+   UUID: 42 05 98 a1 39 7c 94 37-24 d9 da 38 72 2b 02 73
+   Display Name: uranium-esx81 [anoushiravan] Win10_ESXI
+   Config File: /vmfs/volumes/61af611a-6ae5e08d-1d4c-b07b25e96658/uranium-esx81 [anoushiravan] Win10_ESXI/uranium-esx81 [anoushiravan] Win10_ESXI.vmx
+
+uranium-esx30 [pchittimella] Win10_ESXI
+   World ID: 2102532
+   Process ID: 0
+   VMX Cartel ID: 2102504
+   UUID: 42 00 a3 cf 17 55 93 8d-48 2c 8d 7d 9e 25 12 92
+   Display Name: uranium-esx30 [pchittimella] Win10_ESXI
+   Config File: /vmfs/volumes/61af611a-6ae5e08d-1d4c-b07b25e96658/uranium-esx30 [pchittimella] Win10_ESXI/uranium-esx30 [pchittimella] Win10_ESXI.vmx
+
+uranium-esx79 [spathak] Win2016_ESXI
+   World ID: 2102547
+   Process ID: 0
+   VMX Cartel ID: 2102508
+   UUID: 42 05 3e 8d 2b 2c 14 b2-ab 96 f1 a4 f0 bd 7b 25
+   Display Name: uranium-esx79 [spathak] Win2016_ESXI
+   Config File: /vmfs/volumes/61af611a-6ae5e08d-1d4c-b07b25e96658/uranium-esx79 [spathak] Win2016_ESXI/uranium-esx79 [spathak] Win2016_ESXI.vmx
+
+uranium-esx83 [grg] Win2019_ESXI
+   World ID: 2102563
+   Process ID: 0
+   VMX Cartel ID: 2102514
+   UUID: 42 05 50 6b 14 14 ee 91-11 ee f5 4e a3 e3 68 d7
+   Display Name: uranium-esx83 [grg] Win2019_ESXI
+   Config File: /vmfs/volumes/61af611a-6ae5e08d-1d4c-b07b25e96658/uranium-esx83 [grg] Win2019_ESXI/uranium-esx83 [grg] Win2019_ESXI.vmx
+
+uranium-esx22 [birendrakumar] Win2012R2_ESXI
+   World ID: 2102569
+   Process ID: 0
+   VMX Cartel ID: 2102515
+   UUID: 42 00 a5 5a 33 be eb 4f-2d 24 ca 64 e5 73 b9 d7
+   Display Name: uranium-esx22 [birendrakumar] Win2012R2_ESXI
+   Config File: /vmfs/volumes/61af611a-6ae5e08d-1d4c-b07b25e96658/uranium-esx22 [birendrakumar] Win2012R2_ESXI/uranium-esx22 [birendrakumar] Win2012R2_ESXI.vmx
+
+uranium-esx91 [bpozdena] FMG_VM64_ESXI
+   World ID: 2102584
+   Process ID: 0
+   VMX Cartel ID: 2102517
+   UUID: 5e 98 64 b1 d1 62 4d be-89 89 fd 86 82 3d b0 f3
+   Display Name: uranium-esx91 [bpozdena] FMG_VM64_ESXI
+   Config File: /vmfs/volumes/61af611a-6ae5e08d-1d4c-b07b25e96658/uranium-esx91 [bpozdena] FMG_VM64_ESXI/uranium-esx91 [bpozdena] FMG_VM64_ESXI.vmx
+
+uranium-esx35 [byildirim] FMG_VM64_ESXI
+   World ID: 2102589
+   Process ID: 0
+   VMX Cartel ID: 2102522
+   UUID: cd e9 3b 1e 5e 14 49 4b-9a 9d 16 06 20 e8 da c5
+   Display Name: uranium-esx35 [byildirim] FMG_VM64_ESXI
+   Config File: /vmfs/volumes/61af611a-6ae5e08d-1d4c-b07b25e96658/uranium-esx35 [byildirim] FMG_VM64_ESXI/uranium-esx35 [byildirim] FMG_VM64_ESXI.vmx
+
+uranium-esx64 [bpozdena] FLG_VM64_ESXI
+   World ID: 2102590
+   Process ID: 0
+   VMX Cartel ID: 2102523
+   UUID: d7 97 05 1b 38 17 4e 45-ba aa e3 ae a2 d8 d2 28
+   Display Name: uranium-esx64 [bpozdena] FLG_VM64_ESXI
+   Config File: /vmfs/volumes/61af611a-6ae5e08d-1d4c-b07b25e96658/uranium-esx64 [bpozdena] FLG_VM64_ESXI/uranium-esx64 [bpozdena] FLG_VM64_ESXI.vmx
+
+uranium-esx23 [azhunissov] Win2016_ESXI
+   World ID: 2102591
+   Process ID: 0
+   VMX Cartel ID: 2102521
+   UUID: 42 00 e4 9c 43 24 96 c2-cf e0 ac 88 09 94 e6 89
+   Display Name: uranium-esx23 [azhunissov] Win2016_ESXI
+   Config File: /vmfs/volumes/61af611a-6ae5e08d-1d4c-b07b25e96658/uranium-esx23 [azhunissov] Win2016_ESXI/uranium-esx23 [azhunissov] Win2016_ESXI.vmx
+
+uranium-esx18 [azaman] FGT_VM64_ESXI
+   World ID: 2102605
+   Process ID: 0
+   VMX Cartel ID: 2102537
+   UUID: e8 2e b5 8d 73 3f 49 0f-a6 8f 50 94 5c 2e 19 d9
+   Display Name: uranium-esx18 [azaman] FGT_VM64_ESXI
+   Config File: /vmfs/volumes/61af611a-6ae5e08d-1d4c-b07b25e96658/uranium-esx18 [azaman] FGT_VM64_ESXI/uranium-esx18 [azaman] FGT_VM64_ESXI.vmx
+
+uranium-esx36 [mmaubert] FMG_VM64_ESXI
+   World ID: 2102613
+   Process ID: 0
+   VMX Cartel ID: 2102539
+   UUID: 2e 2f ea f9 f0 64 4b 26-9c ba d9 74 4f 9a 43 6f
+   Display Name: uranium-esx36 [mmaubert] FMG_VM64_ESXI
+   Config File: /vmfs/volumes/61af611a-6ae5e08d-1d4c-b07b25e96658/uranium-esx36 [mmaubert] FMG_VM64_ESXI/uranium-esx36 [mmaubert] FMG_VM64_ESXI.vmx
+
+uranium-esx80 [oholecek] FAC_VM64_ESXI
+   World ID: 2102618
+   Process ID: 0
+   VMX Cartel ID: 2102541
+   UUID: bc 7e 0e 03 24 96 4e 65-b6 9b 18 bc 5b 27 ad 6a
+   Display Name: uranium-esx80 [oholecek] FAC_VM64_ESXI
+   Config File: /vmfs/volumes/61af611a-6ae5e08d-1d4c-b07b25e96658/uranium-esx80 [oholecek] FAC_VM64_ESXI/uranium-esx80 [oholecek] FAC_VM64_ESXI.vmx
+
+uranium-esx70 [tstribrny] FLG_VM64_ESXI
+   World ID: 2102629
+   Process ID: 0
+   VMX Cartel ID: 2102542
+   UUID: 14 d7 0f a3 0b ac 44 42-a8 9b 2a 4c 09 29 76 6d
+   Display Name: uranium-esx70 [tstribrny] FLG_VM64_ESXI
+   Config File: /vmfs/volumes/61af611a-6ae5e08d-1d4c-b07b25e96658/uranium-esx70 [tstribrny] FLG_VM64_ESXI/uranium-esx70 [tstribrny] FLG_VM64_ESXI.vmx
+
+uranium-esx48 [bvata] FPOC-17_VM64_ESXI
+   World ID: 2102639
+   Process ID: 0
+   VMX Cartel ID: 2102552
+   UUID: 42 00 5a 10 86 8b 41 13-e5 64 d2 ef 8a 4b 78 49
+   Display Name: uranium-esx48 [bvata] FPOC-17_VM64_ESXI
+   Config File: /vmfs/volumes/61af611a-6ae5e08d-1d4c-b07b25e96658/uranium-esx48 [bvata] FPOC-17_VM64_ESXI/uranium-esx48 [bvata] FPOC-17_VM64_ESXI.vmx
+
+uranium-esx84 [mvlasak] FGT_VM64_ESXI
+   World ID: 2102660
+   Process ID: 0
+   VMX Cartel ID: 2102572
+   UUID: a6 8d 77 61 04 8e 43 80-9d f9 18 c6 57 0a c3 fc
+   Display Name: uranium-esx84 [mvlasak] FGT_VM64_ESXI
+   Config File: /vmfs/volumes/61af611a-6ae5e08d-1d4c-b07b25e96658/uranium-esx84 [mvlasak] FGT_VM64_ESXI/uranium-esx84 [mvlasak] FGT_VM64_ESXI.vmx
+
+uranium-esx47 [jangelis] FPOC-17_VM64_ESXI
+   World ID: 2102673
+   Process ID: 0
+   VMX Cartel ID: 2102588
+   UUID: 42 05 ba b0 23 e6 78 a6-1b 25 49 b8 26 d8 dd 51
+   Display Name: uranium-esx47 [jangelis] FPOC-17_VM64_ESXI
+   Config File: /vmfs/volumes/61af611a-6ae5e08d-1d4c-b07b25e96658/uranium-esx47 [jangelis] FPOC-17_VM64_ESXI/uranium-esx47 [jangelis] FPOC-17_VM64_ESXI.vmx
+
+uranium-esx86 [opetr] FWB_VM64_ESXI
+   World ID: 2102679
+   Process ID: 0
+   VMX Cartel ID: 2102599
+   UUID: 44 bd f2 bd 19 fa 43 a8-82 83 9c 8d db cc 1b 3e
+   Display Name: uranium-esx86 [opetr] FWB_VM64_ESXI
+   Config File: /vmfs/volumes/61af611a-6ae5e08d-1d4c-b07b25e96658/uranium-esx86 [opetr] FWB_VM64_ESXI/uranium-esx86 [opetr] FWB_VM64_ESXI.vmx
+
+uranium-esx40 [melkhodary] FLG_VM64_ESXI
+   World ID: 2102686
+   Process ID: 0
+   VMX Cartel ID: 2102567
+   UUID: bb 6d 3c c7 f4 36 4f 76-86 7c 62 05 de d6 0a 50
+   Display Name: uranium-esx40 [melkhodary] FLG_VM64_ESXI
+   Config File: /vmfs/volumes/61af611a-6ae5e08d-1d4c-b07b25e96658/uranium-esx40 [melkhodary] FLG_VM64_ESXI/uranium-esx40 [melkhodary] FLG_VM64_ESXI.vmx
+
+uranium-esx11 [amarinos] Win10_ESXI
+   World ID: 2102697
+   Process ID: 0
+   VMX Cartel ID: 2102578
+   UUID: 42 05 f9 08 5d 95 11 01-2a f8 2e b9 f1 cd 33 9a
+   Display Name: uranium-esx11 [amarinos] Win10_ESXI
+   Config File: /vmfs/volumes/61af611a-6ae5e08d-1d4c-b07b25e96658/uranium-esx11 [amarinos] Win10_ESXI/uranium-esx11 [amarinos] Win10_ESXI.vmx
+
+uranium-esx10 [birendrakumar] Win10_ESXI
+   World ID: 2102700
+   Process ID: 0
+   VMX Cartel ID: 2102598
+   UUID: 42 00 ef 76 59 61 a3 9d-1c 07 45 6a 8b ca 04 86
+   Display Name: uranium-esx10 [birendrakumar] Win10_ESXI
+   Config File: /vmfs/volumes/61af611a-6ae5e08d-1d4c-b07b25e96658/uranium-esx10 [birendrakumar] Win10_ESXI/uranium-esx10 [birendrakumar] Win10_ESXI.vmx
+
+uranium-esx69 [tstribrny] DebianJessie_ESXI
+   World ID: 2102708
+   Process ID: 0
+   VMX Cartel ID: 2102608
+   UUID: 42 00 28 ec a2 c3 54 fa-4f 45 fc 36 8d a1 e9 63
+   Display Name: uranium-esx69 [tstribrny] DebianJessie_ESXI
+   Config File: /vmfs/volumes/61af611a-6ae5e08d-1d4c-b07b25e96658/uranium-esx69 [tstribrny] DebianJessie_ESXI/uranium-esx69 [tstribrny] DebianJessie_ESXI.vmx
+
+uranium-esx74 [ssener] FGT_VM64_ESXI
+   World ID: 2102717
+   Process ID: 0
+   VMX Cartel ID: 2102612
+   UUID: de e1 f2 ef 5c 46 4d fc-99 d0 a1 d1 22 9c 98 c3
+   Display Name: uranium-esx74 [ssener] FGT_VM64_ESXI
+   Config File: /vmfs/volumes/61af611a-6ae5e08d-1d4c-b07b25e96658/uranium-esx74 [ssener] FGT_VM64_ESXI/uranium-esx74 [ssener] FGT_VM64_ESXI.vmx
+
+uranium-esx08 [emouque] FGT_VM64_ESXI
+   World ID: 2102723
+   Process ID: 0
+   VMX Cartel ID: 2102617
+   UUID: 6c f5 11 b5 b5 94 43 6b-90 80 69 df 40 37 cf 1e
+   Display Name: uranium-esx08 [emouque] FGT_VM64_ESXI
+   Config File: /vmfs/volumes/61af611a-6ae5e08d-1d4c-b07b25e96658/uranium-esx08 [emouque] FGT_VM64_ESXI/uranium-esx08 [emouque] FGT_VM64_ESXI.vmx
+
+uranium-esx20 [sfetokakis] Win10_ESXI
+   World ID: 2102787
+   Process ID: 0
+   VMX Cartel ID: 2102628
+   UUID: 42 00 9b 91 9e b5 62 b7-9c 63 c2 a0 97 1e 08 26
+   Display Name: uranium-esx20 [sfetokakis] Win10_ESXI
+   Config File: /vmfs/volumes/61af611a-6ae5e08d-1d4c-b07b25e96658/uranium-esx20 [sfetokakis] Win10_ESXI/uranium-esx20 [sfetokakis] Win10_ESXI.vmx
+
+uranium-esx51 [lpizziniaco] FPOC-17_VM64_ESXI
+   World ID: 2102898
+   Process ID: 0
+   VMX Cartel ID: 2102667
+   UUID: 42 00 65 10 a9 b4 5c c3-13 32 89 07 30 62 5c de
+   Display Name: uranium-esx51 [lpizziniaco] FPOC-17_VM64_ESXI
+   Config File: /vmfs/volumes/61af611a-6ae5e08d-1d4c-b07b25e96658/uranium-esx51 [lpizziniaco] FPOC-17_VM64_ESXI/uranium-esx51 [lpizziniaco] FPOC-17_VM64_ESXI.vmx
+
+uranium-esx85 [abarushka] Win10_ESXI
+   World ID: 2102960
+   Process ID: 0
+   VMX Cartel ID: 2102655
+   UUID: 42 05 41 b7 3c 08 73 ee-b6 25 5b 5a 0b 81 76 b7
+   Display Name: uranium-esx85 [abarushka] Win10_ESXI
+   Config File: /vmfs/volumes/61af611a-6ae5e08d-1d4c-b07b25e96658/uranium-esx85 [abarushka] Win10_ESXI/uranium-esx85 [abarushka] Win10_ESXI.vmx
+
+uranium-esx73 [tcucinieri] Win2019_ESXI
+   World ID: 2102975
+   Process ID: 0
+   VMX Cartel ID: 2102645
+   UUID: 42 00 40 2d 05 79 6d 54-3a b4 b2 2a db e9 c3 a2
+   Display Name: uranium-esx73 [tcucinieri] Win2019_ESXI
+   Config File: /vmfs/volumes/61af611a-6ae5e08d-1d4c-b07b25e96658/uranium-esx73 [tcucinieri] Win2019_ESXI/uranium-esx73 [tcucinieri] Win2019_ESXI.vmx
+
+uranium-esx78 [tstribrny] FAC_VM64_ESXI
+   World ID: 2103028
+   Process ID: 0
+   VMX Cartel ID: 2102633
+   UUID: 86 cd 60 b5 85 6b 4b ce-9c d3 63 9e f0 1f 63 1f
+   Display Name: uranium-esx78 [tstribrny] FAC_VM64_ESXI
+   Config File: /vmfs/volumes/61af611a-6ae5e08d-1d4c-b07b25e96658/uranium-esx78 [tstribrny] FAC_VM64_ESXI/uranium-esx78 [tstribrny] FAC_VM64_ESXI.vmx
+
+uranium-esx76 [flopez] FGT_VM64_ESXI
+   World ID: 2103047
+   Process ID: 0
+   VMX Cartel ID: 2102654
+   UUID: 3f d5 47 f0 66 3e 4b 7e-b1 aa 77 4c 4c 8f b4 67
+   Display Name: uranium-esx76 [flopez] FGT_VM64_ESXI
+   Config File: /vmfs/volumes/61af611a-6ae5e08d-1d4c-b07b25e96658/uranium-esx76 [flopez] FGT_VM64_ESXI/uranium-esx76 [flopez] FGT_VM64_ESXI.vmx
+
+uranium-esx56 [psuba] FMG_VM64_ESXI
+   World ID: 2103063
+   Process ID: 0
+   VMX Cartel ID: 2102691
+   UUID: b2 67 82 f0 08 db 43 a8-88 fd a2 a4 a6 86 b3 a0
+   Display Name: uranium-esx56 [psuba] FMG_VM64_ESXI
+   Config File: /vmfs/volumes/61af611a-6ae5e08d-1d4c-b07b25e96658/uranium-esx56 [psuba] FMG_VM64_ESXI/uranium-esx56 [psuba] FMG_VM64_ESXI.vmx
+
+uranium-esx05 [vchauhan] Win2012R2_ESXI
+   World ID: 2103100
+   Process ID: 0
+   VMX Cartel ID: 2102693
+   UUID: 42 00 83 7a 89 a1 49 db-7e 02 fa da 50 ec e7 3a
+   Display Name: uranium-esx05 [vchauhan] Win2012R2_ESXI
+   Config File: /vmfs/volumes/61af611a-6ae5e08d-1d4c-b07b25e96658/uranium-esx05 [vchauhan] Win2012R2_ESXI/uranium-esx05 [vchauhan] Win2012R2_ESXI.vmx
+
+uranium-esx26 [emmanouilg] FGT_VM64_ESXI
+   World ID: 2103133
+   Process ID: 0
+   VMX Cartel ID: 2102669
+   UUID: 9d 7b 05 9f a6 bb 4c e4-ac 70 74 58 0f 95 33 a1
+   Display Name: uranium-esx26 [emmanouilg] FGT_VM64_ESXI
+   Config File: /vmfs/volumes/61af611a-6ae5e08d-1d4c-b07b25e96658/uranium-esx26 [emmanouilg] FGT_VM64_ESXI/uranium-esx26 [emmanouilg] FGT_VM64_ESXI.vmx
+
+uranium-esx50 [mdeparisse] FLG_VM64_ESXI
+   World ID: 2103376
+   Process ID: 0
+   VMX Cartel ID: 2102714
+   UUID: 5e 4d 1c 44 a4 7f 43 59-ad 0f 28 da 4a bd cc 5c
+   Display Name: uranium-esx50 [mdeparisse] FLG_VM64_ESXI
+   Config File: /vmfs/volumes/61af611a-6ae5e08d-1d4c-b07b25e96658/uranium-esx50 [mdeparisse] FLG_VM64_ESXI/uranium-esx50 [mdeparisse] FLG_VM64_ESXI.vmx
+
+uranium-esx63 [oholecek] Debian9_ESXI
+   World ID: 2103379
+   Process ID: 0
+   VMX Cartel ID: 2103239
+   UUID: 42 05 19 11 9a 48 44 d6-2c 2a e5 4a 56 f2 8c f9
+   Display Name: uranium-esx63 [oholecek] Debian9_ESXI
+   Config File: /vmfs/volumes/61af611a-6ae5e08d-1d4c-b07b25e96658/uranium-esx63 [oholecek] Debian9_ESXI/uranium-esx63 [oholecek] Debian9_ESXI.vmx
+
+uranium-esx89 [jhouvenaghel] Debian9_ESXI
+   World ID: 2103395
+   Process ID: 0
+   VMX Cartel ID: 2102703
+   UUID: 42 00 34 cb 44 bb 2a b2-6e fd bb 92 6c 05 b3 6d
+   Display Name: uranium-esx89 [jhouvenaghel] Debian9_ESXI
+   Config File: /vmfs/volumes/61af611a-6ae5e08d-1d4c-b07b25e96658/uranium-esx89 [jhouvenaghel] Debian9_ESXI/uranium-esx89 [jhouvenaghel] Debian9_ESXI.vmx
+
+uranium-esx82 [abarushka] Win2016_ESXI
+   World ID: 2103430
+   Process ID: 0
+   VMX Cartel ID: 2103366
+   UUID: 42 05 82 7d 72 fe 78 66-e2 ce 53 96 c0 4b b5 b5
+   Display Name: uranium-esx82 [abarushka] Win2016_ESXI
+   Config File: /vmfs/volumes/61af611a-6ae5e08d-1d4c-b07b25e96658/uranium-esx82 [abarushka] Win2016_ESXI/uranium-esx82 [abarushka] Win2016_ESXI.vmx
+
+uranium-esx67 [jhussain] FLG_VM64_ESXI
+   World ID: 2103448
+   Process ID: 0
+   VMX Cartel ID: 2103141
+   UUID: 1b 40 a2 28 99 32 48 a7-a2 c8 b9 b2 2a 4f af 64
+   Display Name: uranium-esx67 [jhussain] FLG_VM64_ESXI
+   Config File: /vmfs/volumes/61af611a-6ae5e08d-1d4c-b07b25e96658/uranium-esx67 [jhussain] FLG_VM64_ESXI/uranium-esx67 [jhussain] FLG_VM64_ESXI.vmx
+
+uranium-esx14 [vpalomo] FAD_VM64_ESXI
+   World ID: 2103475
+   Process ID: 0
+   VMX Cartel ID: 2103281
+   UUID: 5a 09 98 f2 a5 75 4d 14-b7 fd 43 a7 9b 51 aa 34
+   Display Name: uranium-esx14 [vpalomo] FAD_VM64_ESXI
+   Config File: /vmfs/volumes/61af611a-6ae5e08d-1d4c-b07b25e96658/uranium-esx14 [vpalomo] FAD_VM64_ESXI/uranium-esx14 [vpalomo] FAD_VM64_ESXI.vmx
+
+uranium-esx53 [abarushka] Win2016_ESXI
+   World ID: 2103487
+   Process ID: 0
+   VMX Cartel ID: 2103355
+   UUID: 42 05 39 c9 6f 1a 21 8a-ed 58 61 99 1c da a3 f7
+   Display Name: uranium-esx53 [abarushka] Win2016_ESXI
+   Config File: /vmfs/volumes/61af611a-6ae5e08d-1d4c-b07b25e96658/uranium-esx53 [abarushka] Win2016_ESXI/uranium-esx53 [abarushka] Win2016_ESXI.vmx
+
+uranium-esx57 [bvata] Win2012R2_ESXI
+   World ID: 2103506
+   Process ID: 0
+   VMX Cartel ID: 2103393
+   UUID: 42 00 ed 71 00 ff 45 2c-db ab c8 88 4b 86 e2 1f
+   Display Name: uranium-esx57 [bvata] Win2012R2_ESXI
+   Config File: /vmfs/volumes/61af611a-6ae5e08d-1d4c-b07b25e96658/uranium-esx57 [bvata] Win2012R2_ESXI/uranium-esx57 [bvata] Win2012R2_ESXI.vmx
+
+uranium-esx13 [maxton] Debian9_ESXI
+   World ID: 2103518
+   Process ID: 0
+   VMX Cartel ID: 2103335
+   UUID: 42 05 52 51 59 fd 7c 2a-8f b5 e7 d2 6a c9 fd 39
+   Display Name: uranium-esx13 [maxton] Debian9_ESXI
+   Config File: /vmfs/volumes/61af611a-6ae5e08d-1d4c-b07b25e96658/uranium-esx13 [maxton] Debian9_ESXI/uranium-esx13 [maxton] Debian9_ESXI.vmx
+
+uranium-esx01 [iyotov] FMG_VM64_ESXI
+   World ID: 4220692
+   Process ID: 0
+   VMX Cartel ID: 4220691
+   UUID: 6b 45 2f 58 ba f4 49 ad-b2 7e 8e 14 37 29 9e 19
+   Display Name: uranium-esx01 [iyotov] FMG_VM64_ESXI
+   Config File: /vmfs/volumes/61af611a-6ae5e08d-1d4c-b07b25e96658/machines/uranium-esx01 [iyotov] FMG_VM64_ESXI/uranium-esx01 [iyotov] FMG_VM64_ESXI.vmx
+
+uranium-esx04 [fbegit] FGT_VM64_ESXI
+   World ID: 4254637
+   Process ID: 0
+   VMX Cartel ID: 4254636
+   UUID: 93 23 cf 96 45 be 49 2b-bd 27 d1 62 ce c7 10 e5
+   Display Name: uranium-esx04 [fbegit] FGT_VM64_ESXI
+   Config File: /vmfs/volumes/61af611a-6ae5e08d-1d4c-b07b25e96658/machines/uranium-esx04 [fbegit] FGT_VM64_ESXI/uranium-esx04 [fbegit] FGT_VM64_ESXI.vmx
+
+uranium-esx27 [oguce] FGT_VM64_ESXI
+   World ID: 4260952
+   Process ID: 0
+   VMX Cartel ID: 4260951
+   UUID: eb a7 c1 71 af 54 48 40-8e e9 d0 56 7a ca cc 9d
+   Display Name: uranium-esx27 [oguce] FGT_VM64_ESXI
+   Config File: /vmfs/volumes/61af611a-6ae5e08d-1d4c-b07b25e96658/machines/uranium-esx27 [oguce] FGT_VM64_ESXI/uranium-esx27 [oguce] FGT_VM64_ESXI.vmx
+
+uranium-esx33 [msolanki] Win10_ESXI
+   World ID: 3212630
+   Process ID: 0
+   VMX Cartel ID: 3212629
+   UUID: 42 05 b8 cd 59 bf 8b 7d-96 e9 b9 1c a6 dc 8e 5f
+   Display Name: uranium-esx33 [msolanki] Win10_ESXI
+   Config File: /vmfs/volumes/61af611a-6ae5e08d-1d4c-b07b25e96658/machines/uranium-esx33 [msolanki] Win10_ESXI/uranium-esx33 [msolanki] Win10_ESXI.vmx
+
+uranium-esx97 [vchauhan] FE_VM64_ESXI
+   World ID: 4290166
+   Process ID: 0
+   VMX Cartel ID: 4290165
+   UUID: 43 73 ca 5e 43 f8 40 44-af 9c 20 3b d1 17 ec df
+   Display Name: uranium-esx97 [vchauhan] FE_VM64_ESXI
+   Config File: /vmfs/volumes/61af611a-6ae5e08d-1d4c-b07b25e96658/machines/uranium-esx97 [vchauhan] FE_VM64_ESXI/uranium-esx97 [vchauhan] FE_VM64_ESXI.vmx
+
+uranium-esx90 [anikolov] FGT_VM64_ESXI
+   World ID: 3262928
+   Process ID: 0
+   VMX Cartel ID: 3262927
+   UUID: 47 b8 c5 28 4c 03 47 d1-81 47 0a cf ea 2c 59 ea
+   Display Name: uranium-esx90 [anikolov] FGT_VM64_ESXI
+   Config File: /vmfs/volumes/61af611a-6ae5e08d-1d4c-b07b25e96658/machines/uranium-esx90 [anikolov] FGT_VM64_ESXI/uranium-esx90 [anikolov] FGT_VM64_ESXI.vmx
+
+uranium-esx02 [nmerchant] FMG_VM64_ESXI
+   World ID: 2251293
+   Process ID: 0
+   VMX Cartel ID: 2251292
+   UUID: c7 51 ee 01 58 a5 4a 24-90 7e dc 39 d0 ee 9e 30
+   Display Name: uranium-esx02 [nmerchant] FMG_VM64_ESXI
+   Config File: /vmfs/volumes/61af611a-6ae5e08d-1d4c-b07b25e96658/uranium-esx02 [nmerchant] FMG_VM64_ESXI/uranium-esx02 [nmerchant] FMG_VM64_ESXI.vmx
+
+uranium-esx19 [mmishra] FGT_VM64_ESXI
+   World ID: 2273472
+   Process ID: 0
+   VMX Cartel ID: 2273471
+   UUID: 40 69 3b e2 ad 0c 4f 8c-a2 62 3f ce f7 9f 16 8f
+   Display Name: uranium-esx19 [mmishra] FGT_VM64_ESXI
+   Config File: /vmfs/volumes/61af611a-6ae5e08d-1d4c-b07b25e96658/machines/uranium-esx19 [mmishra] FGT_VM64_ESXI/uranium-esx19 [mmishra] FGT_VM64_ESXI.vmx
+
+uranium-esx24 [dsandoval] FMG_VM64_ESXI
+   World ID: 2275310
+   Process ID: 0
+   VMX Cartel ID: 2275267
+   UUID: ae 34 21 e7 c4 6d 41 e4-84 9b 07 f5 3f 6b 6c d4
+   Display Name: uranium-esx24 [dsandoval] FMG_VM64_ESXI
+   Config File: /vmfs/volumes/61af611a-6ae5e08d-1d4c-b07b25e96658/machines/uranium-esx24 [dsandoval] FMG_VM64_ESXI/uranium-esx24 [dsandoval] FMG_VM64_ESXI.vmx
+
+uranium-esx93 [jhussain] Win10_ESXI
+   World ID: 3344162
+   Process ID: 0
+   VMX Cartel ID: 3344161
+   UUID: 42 05 40 56 da 5f 47 c0-af ec ba c9 88 49 45 34
+   Display Name: uranium-esx93 [jhussain] Win10_ESXI
+   Config File: /vmfs/volumes/61af611a-6ae5e08d-1d4c-b07b25e96658/machines/uranium-esx93 [jhussain] Win10_ESXI/uranium-esx93 [jhussain] Win10_ESXI.vmx
+
+uranium-esx16 [jkhokhar] FSA_VM64_ESXI
+   World ID: 2334553
+   Process ID: 0
+   VMX Cartel ID: 2334552
+   UUID: ca 34 20 1a 4d 5e 46 c9-ba 19 1f 9a c3 d6 b8 e4
+   Display Name: uranium-esx16 [jkhokhar] FSA_VM64_ESXI
+   Config File: /vmfs/volumes/61af611a-6ae5e08d-1d4c-b07b25e96658/machines/uranium-esx16 [jkhokhar] FSA_VM64_ESXI/uranium-esx16 [jkhokhar] FSA_VM64_ESXI.vmx
+
+uranium-esx07 [ranand] FGT_VM64_ESXI
+   World ID: 4457706
+   Process ID: 0
+   VMX Cartel ID: 4457705
+   UUID: e0 12 15 08 a4 bb 4e 2e-91 fe b6 91 49 48 8a 05
+   Display Name: uranium-esx07 [ranand] FGT_VM64_ESXI
+   Config File: /vmfs/volumes/61af611a-6ae5e08d-1d4c-b07b25e96658/machines/uranium-esx07 [ranand] FGT_VM64_ESXI/uranium-esx07 [ranand] FGT_VM64_ESXI.vmx
+
+uranium-esx31 [iyotov] FMG_VM64_ESXI
+   World ID: 4464606
+   Process ID: 0
+   VMX Cartel ID: 4464605
+   UUID: 62 45 21 2c 15 b2 48 e0-b8 48 32 ef 9b c3 11 b1
+   Display Name: uranium-esx31 [iyotov] FMG_VM64_ESXI
+   Config File: /vmfs/volumes/61af611a-6ae5e08d-1d4c-b07b25e96658/machines/uranium-esx31 [iyotov] FMG_VM64_ESXI/uranium-esx31 [iyotov] FMG_VM64_ESXI.vmx
+
+uranium-esx59 [mnistal] Debian9_ESXI
+   World ID: 4473706
+   Process ID: 0
+   VMX Cartel ID: 4473705
+   UUID: 42 05 cb ab 00 94 6b 41-12 e3 10 9d 1d 44 33 f0
+   Display Name: uranium-esx59 [mnistal] Debian9_ESXI
+   Config File: /vmfs/volumes/61af611a-6ae5e08d-1d4c-b07b25e96658/machines/uranium-esx59 [mnistal] Debian9_ESXI/uranium-esx59 [mnistal] Debian9_ESXI.vmx
+
+uranium-esx12 [panchals] Win2019_ESXI
+   World ID: 4474058
+   Process ID: 0
+   VMX Cartel ID: 4474053
+   UUID: 42 05 1c 13 2e b6 be dd-c1 2c fc c1 25 8f 5c ea
+   Display Name: uranium-esx12 [panchals] Win2019_ESXI
+   Config File: /vmfs/volumes/61af611a-6ae5e08d-1d4c-b07b25e96658/machines/uranium-esx12 [panchals] Win2019_ESXI/uranium-esx12 [panchals] Win2019_ESXI.vmx
+
+uranium-esx87 [bvagadia] FGT_VM64_ESXI
+   World ID: 4475915
+   Process ID: 0
+   VMX Cartel ID: 4475914
+   UUID: e5 a4 b3 f2 20 c7 49 db-bf e9 fa 11 56 84 50 89
+   Display Name: uranium-esx87 [bvagadia] FGT_VM64_ESXI
+   Config File: /vmfs/volumes/61af611a-6ae5e08d-1d4c-b07b25e96658/machines/uranium-esx87 [bvagadia] FGT_VM64_ESXI/uranium-esx87 [bvagadia] FGT_VM64_ESXI.vmx
+
+uranium-esx09 [phaldikar] FGT_VM64_ESXI
+   World ID: 4571387
+   Process ID: 0
+   VMX Cartel ID: 4571386
+   UUID: 1d 69 30 d6 2d 90 4b 04-a1 9f b0 f3 32 02 2b eb
+   Display Name: uranium-esx09 [phaldikar] FGT_VM64_ESXI
+   Config File: /vmfs/volumes/61af611a-6ae5e08d-1d4c-b07b25e96658/machines/uranium-esx09 [phaldikar] FGT_VM64_ESXI/uranium-esx09 [phaldikar] FGT_VM64_ESXI.vmx
+
+uranium-esx41 [jhelder] Kali_ESXI
+   World ID: 4586710
+   Process ID: 0
+   VMX Cartel ID: 4586709
+   UUID: 42 05 a9 f1 86 cd 8b a2-6e ec a0 0d d2 bf aa 85
+   Display Name: uranium-esx41 [jhelder] Kali_ESXI
+   Config File: /vmfs/volumes/61af611a-6ae5e08d-1d4c-b07b25e96658/machines/uranium-esx41 [jhelder] Kali_ESXI/uranium-esx41 [jhelder] Kali_ESXI.vmx
+
+uranium-esx03 [vchauhan] FGT_VM64_ESXI
+   World ID: 4610528
+   Process ID: 0
+   VMX Cartel ID: 4610527
+   UUID: 4f e0 6a 39 48 22 42 39-8c eb 2c 1c c1 fc 4f 01
+   Display Name: uranium-esx03 [vchauhan] FGT_VM64_ESXI
+   Config File: /vmfs/volumes/61af611a-6ae5e08d-1d4c-b07b25e96658/machines/uranium-esx03 [vchauhan] FGT_VM64_ESXI/uranium-esx03 [vchauhan] FGT_VM64_ESXI.vmx
+
+uranium-esx58 [pminarik] FMG_VM64_ESXI
+   World ID: 4611900
+   Process ID: 0
+   VMX Cartel ID: 4611899
+   UUID: 6d d2 f1 d1 b7 b7 47 9f-9c f0 8f 5b 05 a5 ef d1
+   Display Name: uranium-esx58 [pminarik] FMG_VM64_ESXI
+   Config File: /vmfs/volumes/61af611a-6ae5e08d-1d4c-b07b25e96658/machines/uranium-esx58 [pminarik] FMG_VM64_ESXI/uranium-esx58 [pminarik] FMG_VM64_ESXI.vmx
+
+uranium-esx60 [ncorreia] FGT_VM64_ESXI
+   World ID: 4617257
+   Process ID: 0
+   VMX Cartel ID: 4617256
+   UUID: 46 60 98 c4 e6 07 4b 32-90 86 96 1d 07 64 70 ab
+   Display Name: uranium-esx60 [ncorreia] FGT_VM64_ESXI
+   Config File: /vmfs/volumes/61af611a-6ae5e08d-1d4c-b07b25e96658/machines/uranium-esx60 [ncorreia] FGT_VM64_ESXI/uranium-esx60 [ncorreia] FGT_VM64_ESXI.vmx
+
+uranium-FSA-esx42 [vchauhan] FSA_VM64_ESXI
+   World ID: 2575729
+   Process ID: 0
+   VMX Cartel ID: 2575728
+   UUID: f4 ea 15 bc 27 d0 48 bd-af 3f dd 06 ee fd 47 f4
+   Display Name: uranium-FSA-esx42 [vchauhan] FSA_VM64_ESXI
+   Config File: /vmfs/volumes/61af611a-6ae5e08d-1d4c-b07b25e96658/uranium-FSA-esx42 [vchauhan] FSA_VM64_ESXI/uranium-FSA-esx42 [vchauhan] FSA_VM64_ESXI.vmx
+
+uranium-esx29 [awasfi] FMG_VM64_ESXI
+   World ID: 2622046
+   Process ID: 0
+   VMX Cartel ID: 2622045
+   UUID: 41 e8 61 b4 f7 a3 4c c6-92 d4 f7 bd a3 44 21 99
+   Display Name: uranium-esx29 [awasfi] FMG_VM64_ESXI
+   Config File: /vmfs/volumes/61af611a-6ae5e08d-1d4c-b07b25e96658/machines/uranium-esx29 [awasfi] FMG_VM64_ESXI/uranium-esx29 [awasfi] FMG_VM64_ESXI.vmx
+
+uranium-esx66 [scardno] Win2012R2_ESXI
+   World ID: 3696932
+   Process ID: 0
+   VMX Cartel ID: 3696895
+   UUID: 42 05 7d 59 d5 b6 65 89-24 29 ba 61 72 af 95 19
+   Display Name: uranium-esx66 [scardno] Win2012R2_ESXI
+   Config File: /vmfs/volumes/61af611a-6ae5e08d-1d4c-b07b25e96658/machines/uranium-esx66 [scardno] Win2012R2_ESXI/uranium-esx66 [scardno] Win2012R2_ESXI.vmx
+
+uranium-esx49 [vchauhan] FAC_VM64_ESXI
+   World ID: 3818504
+   Process ID: 0
+   VMX Cartel ID: 3818503
+   UUID: 45 c2 fe 70 97 d4 46 5a-b2 79 8c b9 fa 97 31 98
+   Display Name: uranium-esx49 [vchauhan] FAC_VM64_ESXI
+   Config File: /vmfs/volumes/61af611a-6ae5e08d-1d4c-b07b25e96658/machines/uranium-esx49 [vchauhan] FAC_VM64_ESXI/uranium-esx49 [vchauhan] FAC_VM64_ESXI.vmx
+
+uranium-esx28 [melsamoly] Win2016_ESXI
+   World ID: 4003045
+   Process ID: 0
+   VMX Cartel ID: 4003044
+   UUID: 42 05 e6 35 e6 c5 f3 a5-f6 8a 98 9c 03 78 28 96
+   Display Name: uranium-esx28 [melsamoly] Win2016_ESXI
+   Config File: /vmfs/volumes/61af611a-6ae5e08d-1d4c-b07b25e96658/machines/uranium-esx28 [melsamoly] Win2016_ESXI/uranium-esx28 [melsamoly] Win2016_ESXI.vmx
+
+uranium-esx54 [pkarna] Kali_ESXI
+   World ID: 2975684
+   Process ID: 0
+   VMX Cartel ID: 2975683
+   UUID: 42 05 ec bd 00 c1 33 a0-e3 34 8c 60 14 f9 d9 ef
+   Display Name: uranium-esx54 [pkarna] Kali_ESXI
+   Config File: /vmfs/volumes/61af611a-6ae5e08d-1d4c-b07b25e96658/machines/uranium-esx54 [pkarna] Kali_ESXI/uranium-esx54 [pkarna] Kali_ESXI.vmx
+
+uranium-esx06 [vkoodakandi] Win2016_ESXI
+   World ID: 4086700
+   Process ID: 0
+   VMX Cartel ID: 4086699
+   UUID: 42 00 88 0b 45 66 15 6c-95 be 56 66 9d 29 f0 2f
+   Display Name: uranium-esx06 [vkoodakandi] Win2016_ESXI
+   Config File: /vmfs/volumes/61af611a-6ae5e08d-1d4c-b07b25e96658/uranium-esx06 [vkoodakandi] Win2016_ESXI/uranium-esx06 [vkoodakandi] Win2016_ESXI.vmx
+
+uranium-esx43 [sdabhade] FTS_VM64_ESXI
+   World ID: 3121243
+   Process ID: 0
+   VMX Cartel ID: 3121242
+   UUID: 0d 36 70 ae 6d 8f 45 62-ac 6d 3f d4 a2 08 30 96
+   Display Name: uranium-esx43 [sdabhade] FTS_VM64_ESXI
+   Config File: /vmfs/volumes/61af611a-6ae5e08d-1d4c-b07b25e96658/machines/uranium-esx43 [sdabhade] FTS_VM64_ESXI/uranium-esx43 [sdabhade] FTS_VM64_ESXI.vmx
+[root@uranium:~] 
+

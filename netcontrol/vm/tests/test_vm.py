@@ -105,13 +105,21 @@ class VMctlTestCase(unittest.TestCase):
     def test_build_vms_esx_disk(self):
         self.vm.host_type = 'ESX'
         self.vm.hypervisor_type = 'esx'
+        self.vm.ssh.mock(context='esx_vm2')
+        self.vm._build_vms_esx_disk()
+        result = json.loads(self.vm.get_vms_statistics())
+        log.debug("ESXI disk Result : {} len={}".format(result, len(str(result))))
+        self.assertEqual(result['vms_disks'][0]['size'], 22225616896)
+
+    #@unittest.skip
+    def test_build_vms_esx_disk2(self):
+        # case with different path on uranium
+        self.vm.host_type = 'ESX'
+        self.vm.hypervisor_type = 'esx'
         self.vm.ssh.mock(context='esx_vm1')
         self.vm._build_vms_esx_disk()
         result = json.loads(self.vm.get_vms_statistics())
-        log.debug("Result : {} len={}".format(result, len(str(result))))
-        self.assertEqual(result['vms_disks'][0]['id'], '025')
-        self.assertEqual(result['vms_disks'][0]['size'], 3006267392)
-        self.assertEqual(result['vms_disks'][0]['type'], 'ESXI')
+        self.assertEqual(result['vms_disks'][0]['size'], 4831838208)
 
     #@unittest.skip
     def test_get_vm_resources_esx_v60(self):
