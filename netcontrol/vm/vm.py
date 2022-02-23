@@ -823,7 +823,7 @@ class Vm(object):
                 # ex: /vmfs/volumes/datastore-Neutron/machines/neutron-esx36  or
                 # ex: /vmfs/volumes/datastore-Uranium/uranium-esx69   (no machines)
 
-                match_name = re.search("(machines)?/(?P<name>\S+)$", machine)
+                match_name = re.search("(machines)?/(?P<name>[A-Za-z0-9_-]+)$", machine)
                 if match_name:
                     name = match_name.group('name')
                     log.debug("Found name={}".format(name))
@@ -845,7 +845,9 @@ class Vm(object):
                         id = match.group('id')
                         fid = self.format_instance(id=id)
                         size = value * 1024 * 1024
-                        self._vms_disks.append({'id': fid, 'size': size, 'type': 'ESXI'})
+                        json = {'id': fid , 'size': size, 'type': 'ESXI'}
+                        log.debug("json={}".format(json))
+                        self._vms_disks.append(json)
                     else:
                         log.warning("No disk for name={} fid={}".format(name, fid))
                 else:
