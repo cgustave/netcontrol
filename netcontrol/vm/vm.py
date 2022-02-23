@@ -807,6 +807,8 @@ class Vm(object):
         2.3G    /vmfs/volumes/datastore-Uranium/machines/uranium-esx60 [ncorreia] FGT_VM64_ESXI
         Result to be provided in MB
         Should be run before _get_processes_esx
+        Note: 220223 on slower server, ouput ot the command be be seen on next one...
+        Sending an empty line in th end seems to do the trick
         """
         log.debug("Enter")
         cmd = "(p=`ls -1 /vmfs/volumes/* | grep datastore | sed s/:$//`; du -h $p/) | grep esx | awk '// { print $1 \", \" $2}'"
@@ -852,7 +854,10 @@ class Vm(object):
                         log.warning("No disk for name={} fid={}".format(name, fid))
                 else:
                     log.debug("Could not extract machine name from machine={}".format(machine))
-
+        # Sending an empty line in the end to temporize before next command
+        # was needed on electron
+        log.debug("end of processing, sending empty line")
+        self.ssh.shell_send(["\n"])
 
     def _extract_vms_disk(self, vmpath, line):
         """
