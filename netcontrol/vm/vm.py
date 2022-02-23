@@ -462,7 +462,7 @@ class Vm(object):
             if (not esx_start and (line.find('esxcli vm process list') != -1) or (line == "")):
                 log.debug("Found esx process line start")
                 esx_start = True
-                exx_end = False
+                esx_end = False
                 esx_line = 0
             if (esx_start and (line.find('Config File') != -1)):
                 log.debug("Found esx process line end")
