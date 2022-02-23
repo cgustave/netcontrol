@@ -811,7 +811,7 @@ class Vm(object):
         Sending an empty line in th end seems to do the trick
         """
         log.debug("Enter")
-        cmd = "(p=`ls -1 /vmfs/volumes/* | grep datastore | sed s/:$//`; du -h $p/) | grep esx | awk '// { print $1 \", \" $2}'"
+        cmd = "du -h /vmfs/volumes/*datastore*/ | grep esx | awk '// { print $1 \", \" $2}'"
         self.ssh.shell_send([cmd+"\n"])
         for line in self.ssh.output.splitlines():
             log.debug("line={}".format(line))

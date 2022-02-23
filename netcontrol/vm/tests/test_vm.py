@@ -119,7 +119,7 @@ class VMctlTestCase(unittest.TestCase):
         self.vm.ssh.mock(context='esx_vm1')
         self.vm._build_vms_esx_disk()
         result = json.loads(self.vm.get_vms_statistics())
-        self.assertEqual(result['vms_disks'][0]['size'], 4831838208)
+        self.assertEqual(result['vms_disks'][0]['size'], 3328180224)
 
     #@unittest.skip
     def test_get_vm_resources_esx_v60(self):
