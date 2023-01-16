@@ -577,7 +577,7 @@ class Vm(object):
         concatenated in one before it is tokenized
         """
         log.debug("Enter")
-        self.ssh.shell_send(["ps -xww | grep qemu-system\n"])
+        self.ssh.shell_send(["sudo ps -xww | grep qemu-system\n"])
         self._vms_total = {}
         self._vms_total['cpu'] = 0
         self._vms_total['memory'] = 0
@@ -639,7 +639,7 @@ class Vm(object):
         _KVM is removed so system is the same with esx
         Fills _vms_system
         ex:
-        root@radon-trn:~# virsh list --title --all
+        vmstats@radon-trn:~$ sudo virsh list --title --all
          Id   Name   State     Title
         --------------------------------------------------------
          2    006    running   006 [vbharat] LinuxMint18_KVM
@@ -655,7 +655,7 @@ class Vm(object):
         - match with ESX behavior for which we don't extract OS on shutdown systems (based on process)
         """
         log.debug("Enter")
-        self.ssh.shell_send(["virsh list --title\n"])
+        self.ssh.shell_send(["sudo virsh list --title\n"])
         for line in self.ssh.output.splitlines():
             log.debug("line={}".format(line))
             system_match = re.search("\s+\S+\s+(?P<id>\S+)\s+(?:running|idle|paused|in\sshutdown|shut\soff|crashed|pmsuspended)\s+\S+\s+\S+\s+(?P<system>\S+)", line)
@@ -760,7 +760,7 @@ class Vm(object):
         Need to addition for each VM the size of each disks in bytes
         """
         log.debug('Enter with vmpath={}'.format(vmpath))
-        cmd = "for i in `virsh list --all | awk '{print $2}'`; do file "+vmpath+"/$i/* ; done"
+        cmd = "for i in `sudo virsh list --all | awk '{print $2}'`; do file "+vmpath+"/$i/* ; done"
         self.ssh.shell_send([cmd+"\n"])
         for line in self.ssh.output.splitlines():
             log.debug("line={}".format(line))
