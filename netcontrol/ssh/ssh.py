@@ -48,8 +48,7 @@ warnings.filterwarnings(action='ignore', module='.*paramiko.*')
 class Ssh(object):
     """ main class """
 
-    def __init__(self, ip='', port=22, user='admin', password='',
-                 private_key_file='', debug=False):
+    def __init__(self, ip='', port=22, user='admin', password='', private_key_file='', debug=False):
         """
         Constructor with default values.
         Use admin / no password by default
@@ -117,15 +116,16 @@ class Ssh(object):
         self._client.load_system_host_keys()
         self._client.set_missing_host_key_policy(paramiko.AutoAddPolicy)
 
-        log.debug("Connecting with ip={} port={} user={} password={}"
-                  .format(self.ip, self.port, self.user, self.password))
+        log.debug("Connecting with ip={} port={} user={} password={} private_key_file={}"
+                  .format(self.ip, self.port, self.user, self.password, self.private_key_file))
 
         # Connecting
         try:
             private_key = None
             if (self.private_key_file != ''):
+                log.debug("Got private_key")
                 private_key = paramiko.RSAKey.from_private_key_file(self.private_key_file)
-                log.debug("Got private_key={}".format(private_key))
+                log.debug("private_key={}".format(private_key))
 
             self._client.connect(hostname=self.ip, port=self.port,
                                  username=self.user, pkey=private_key,
