@@ -138,6 +138,10 @@ class Ssh(object):
             log.debug("exception : Authentication failed")
             result_flag = False
 
+        except paramiko.PasswordRequiredException:
+            log.debug("exception : Key should not be password protected")
+            result_flag = False
+
         except paramiko.SSHException as sshException:
             log.debug("exception: Couldn't establish connection: {}".
                       format(sshException))
