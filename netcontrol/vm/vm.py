@@ -575,9 +575,10 @@ class Vm(object):
         that each KVM line start contains the starting token and the ending
         one (timestamp=). If the ending one is not there, lines need to be
         concatenated in one before it is tokenized
+        remove ansi color needed on grep
         """
         log.debug("Enter")
-        self.ssh.shell_send(["sudo ps -xww | grep -E 'qemu-system\s|kvm\s'\n"])
+        self.ssh.shell_send(["sudo ps -xww | grep --color=never -E 'qemu-system\s|kvm\s'\n"])
         self._vms_total = {}
         self._vms_total['cpu'] = 0
         self._vms_total['memory'] = 0

@@ -53,10 +53,8 @@ class Ssh(object):
         Constructor with default values.
         Use admin / no password by default
         """
-
         if debug:
             log.basicConfig(level='DEBUG')
-
         log.basicConfig(
             format='%(asctime)s,%(msecs)3.3d\
             %(levelname)-8s[%(module)-7.7s.%(funcName)\
@@ -64,10 +62,8 @@ class Ssh(object):
             datefmt='%Y%m%d:%H:%M:%S',
             filename='debug.log',
             level=log.NOTSET)
-
         log.debug("Constructor with ip={}, port={}, user={}, password={}, private_key_file={}, debug={}"
                   .format(ip, port, user, password, private_key_file, debug))
-
         # public class attributs
         self.ip = ip
         self.port = port
@@ -80,12 +76,10 @@ class Ssh(object):
         self.connected = False
         self.mock_exception = ''
         self.mock_context = ''
-
         # Number of maximum round used to search for prompt
         # Can be increased in case command takes time to
         # give back prompt (ex : a failing ping, takes several seconds)
         self.maxround = 10
-
         # Private attributs
         self._client = paramiko.SSHClient()
         self._channel = None  # Paramiko channel
@@ -108,17 +102,13 @@ class Ssh(object):
         Returns ssh object itself to allow methods chaining
         """
         log.debug("Enter")
-
         # Moking : position request for exception if asked
         if self.mock_exception:
             self._client.exception = self.mock_exception
-
         self._client.load_system_host_keys()
         self._client.set_missing_host_key_policy(paramiko.AutoAddPolicy)
-
         log.debug("Connecting with ip={} port={} user={} password={} private_key_file={}"
                   .format(self.ip, self.port, self.user, self.password, self.private_key_file))
-
         # Connecting
         try:
             private_key = None
@@ -126,40 +116,32 @@ class Ssh(object):
                 log.debug("Got private_key")
                 private_key = paramiko.RSAKey.from_private_key_file(self.private_key_file)
                 log.debug("private_key={}".format(private_key))
-
             self._client.connect(hostname=self.ip, port=self.port,
                                  username=self.user, pkey=private_key,
                                  password=self.password,
                                  timeout=self.timeout,
                                  allow_agent=False,
                                  look_for_keys=False)
-
         except paramiko.AuthenticationException:
             log.debug("exception : Authentication failed")
             result_flag = False
-
         except paramiko.PasswordRequiredException:
             log.debug("exception : Key should not be password protected")
             result_flag = False
-
         except paramiko.SSHException as sshException:
             log.debug("exception: Couldn't establish connection: {}".
                       format(sshException))
             result_flag = False
-
         except socket.timeout as e:
             log.debug("exception: Connection timed out: {}".format(e))
             result_flag = False
-
         except Exception as e:
             log.debug("exception : Exception in connecting to the server : {}".
                       format(e))
             result_flag = False
             self._client.close()
-
         else:
             result_flag = True
-
         self.connected = result_flag
         return result_flag
 
@@ -170,10 +152,8 @@ class Ssh(object):
         if self.connected:
             self._client.close()
             self.connected = False
-
             if self._channel:
                 self._channel.close()
-
         if self._tracefile_FH:
             self._tracefile_FH.close()
 
@@ -194,7 +174,6 @@ class Ssh(object):
         This should be supported by any ssh devices
         """
         log.debug("Enter with type={}".format(type))
-
         if type == 'command':
             self.commands(commands)
         elif type == 'shell':
@@ -215,57 +194,44 @@ class Ssh(object):
         returns True if commands are sent succesfully
         """
         log.debug("Enter with commands={}".format(commands))
-
         self.output = ''
         result_flag = False
-
         if not self.connected:
             self.connect()
-
         try:
             if self.connected:
-
                 if not self._channel:
                     log.debug("Invoke shell")
-                    self._channel = self._client.invoke_shell(term='vt100',
+                    self._channel = self._client.invoke_shell(term='dumb',
                                                               width=0,
                                                               height=0,
                                                               width_pixels=0,
                                                               height_pixels=0,
                                                               environment=None)
                     self.read_prompt()
-
                 # Clear all output so far, expecting that all usefull output
                 # has been processed on output buffer so far
                 self.output = ""
-
                 # send all we need to send
                 for command in commands:
                     log.debug("Processing command={}, context={}".format(command, self.mock_context))
-
                     self.trace_write("\n* "+time.strftime("%y%m%d-%H:%M:%S")+" command="+str(command)+"\n")
-
                     if self._channel.send_ready():
                         log.debug("sending command={}".format(command))
-
                         self._channel.send(command)
                         if self.read_prompt():
                             log.debug("command is confirmed, output recorded")
                             self.trace_write(self.output)
-
         except socket.timeout as e:
             log.debug("Command timed out : {}".format(e))
             self._client.close()
             result_flag = False
-
         except paramiko.SSHException:
             log.debug("Failed to execute the command {}".format(command))
             self._client.close()
             result_flag = False
-
         else:
             result_flag = True
-
         return result_flag
 
     def shell_read(self):
@@ -283,56 +249,47 @@ class Ssh(object):
         returns True if the prompt was found
         """
         log.debug("Enter with [prompt={} maxround={}]".format(self._prompt, self._maxround))
-
         result_flag = False
         read_block = ""
-
         if not self.connected:
             self.connect()
-
         try:
             if self.connected:
-
                 if not self._channel:
                     log.debug("Invoke shell")
-                    self._channel = self._client.invoke_shell(term='vt100',
+                    self._channel = self._client.invoke_shell(term='dumb',
                                                               width=0,
                                                               height=0,
                                                               width_pixels=0,
                                                               height_pixels=0,
                                                               environment=None)
-
                 looping = True
                 found = False
                 round = 1
                 read_block = ""
-
                 # Need some time after write or channel
                 # will never be ready for read
                 # don't understand why this is required here...
-
                 time.sleep(0.1)
-
                 while (looping and round < self.maxround):
-
                     if self._channel.recv_ready():
                         read_stdout = self._channel.recv(9999)
-                        log.debug("Reading channel round={} read_stdout={}".format(round, read_stdout))
-
                         if type(read_stdout) is str:
                             # Mocked paramiko or paramiko on python2
                             log.debug("read_stdout is a {} (mocked paramiko or python2)".format(type(read_stdout)))
-                            read_block += read_stdout
+                            read = re.compile(r'\x1b[^m]*m').sub('', read_stdout)
+                            log.debug("Reading channel round={} read={}".format(round, read))
+                            read_block += read
                         else:
                             # paramiko on python3
                             log.debug("read_stdout is a {} (paramiko on python3)".format(type(read_stdout)))
-                            read_block += read_stdout.decode('utf-8')
-
+                            read = re.compile(r'\x1b[^m]*m').sub('', read_stdout.decode('utf-8'))
+                            log.debug("Reading channel round={} read={}".format(round, read))
+                            read_block += read
                     # See if prompt has been seen
                     # For mockup, make sure file 'default_stdin.txt' has same
                     # prompt as 'show configuration commands | grep network-emulator_stdin.txt'
                     # or the prompt won't be found !
-
                     if self._prompt:
                         log.debug("round={} inspect for prompt={} in read_block={}".
                                   format(round, self._prompt, read_block))
@@ -341,25 +298,19 @@ class Ssh(object):
                                       format(read_block.find(self._prompt)))
                             looping = False
                             result_flag = True
-
                     if not found:
                         time.sleep(0.1)
-
                     round = round + 1
-
         except socket.timeout as e:
             log.debug("Command timed out : {}".format(e))
             self._client.close()
             result_flag = False
-
         except paramiko.SSHException as e:
             log.debug("Failed : {}".format(e))
             self._client.close()
             result_flag = False
-
         self.output = read_block
         self.trace_write(self.output)
-
         return result_flag
 
     def read_prompt(self):
@@ -392,6 +343,8 @@ class Ssh(object):
                         decoded_line = line.decode('utf-8')
                     else:
                         decoded_line = line
+                    # remove ANSI escape sequences
+                    decoded_line = re.compile(r'\x1b[^m]*m').sub('', decoded_line)
                     log.debug("decoded_line={}".format(decoded_line))
                     # Store decoded lines in ssh.output
                     self.output += decoded_line+"\n"
@@ -402,10 +355,8 @@ class Ssh(object):
                         log.debug("found prompt={}".format(prompt))
                         self._prompt = prompt
                         found = True
-
             time.sleep(0.2)
             round = round + 1
-
         return found
 
     def commands(self, commands):
@@ -416,62 +367,52 @@ class Ssh(object):
         Returns True upon success
         """
         log.debug("Enter with commands={}".format(commands))
-
         self.output = ''
         ssh_error = False
         result_flag = True
-
         if not self.connected:
             self.connect()
-
         try:
             if self.connected:
                 for command in commands:
                     log.debug("Executing command {} [context={}]".format(command, self.mock_context))
                     self.trace_write("\n* "+time.strftime("%y%m%d-%H:%M:%S")+" command="+str(command)+"\n")
-
                     stdin, stdout, stderr = self._client.exec_command(command, timeout=10)
-
                     # stdout could either be a channel object (real paramiko)
                     # or a filehandle when using mocked paramiko.
                     # The real paramiko requires a decode('utf-8') which is
                     # not supported by the filehandle.
                     read_stdout = stdout.read()
-
                     if type(read_stdout) is str:
                         # Mocked paramiko or paramiko on python2
                         log.debug("read_stdout is a {} (mocked paramiko or python2)".format(type(read_stdout)))
-                        self.output += read_stdout
-
+                        read = re.compile(r'\x1b[^m]*m').sub('', read_stdout)
+                        log.debug("read={}".format(read))
+                        self.output += read
                     else:
                         # paramiko on python3
                         log.debug("read_stdout is a {} (paramiko on python3)".format(type(read_stdout)))
-                        self.output += read_stdout.decode('utf-8')
-
+                        read = re.compile(r'\x1b[^m]*m').sub('', read_stdout.decode('utf-8'))
+                        log.debug("read={}".format(read))
+                        self.output += read
                     ssh_error = stderr.read()
-
                     if ssh_error:
                         log.debug("Problem occurred while running : {} : {}".
                                   format(str(command), str(ssh_error)))
-
                         result_flag = False
-
                     else:
                         log.debug("Successfully sent {}".format(command))
             else:
                 log.debug("Could not establish SSH connection")
                 result_flag = False
-
         except socket.timeout as e:
             log.debug("Command timed out : {}".format(e))
             self._client.close()
             result_flag = False
-
         except paramiko.SSHException:
             log.debug("Failed to execute the command {}".format(command))
             self._client.close()
             result_flag = False
-
         self.trace_write(self.output)
         return result_flag
 
@@ -481,11 +422,9 @@ class Ssh(object):
         Opens also the ssh session if needed
         """
         log.debug("Enter")
-
         if not self.connected:
             self.connect()
-
-        self._channel = self._client.invoke_shell(term='vt100',
+        self._channel = self._client.invoke_shell(term='dumb',
                                                   width=0,
                                                   height=0,
                                                   width_pixels=0,
@@ -499,16 +438,12 @@ class Ssh(object):
         Use shell_read to get the data output (including the ones sent here)
         """
         log.debug("Enter with data={}".format(data))
-
         if not self._channel:
             log.debug("Channel is not opened, opening")
             self.invoke_channel()
-
         if self._channel.send_ready():
             log.debug("sending data={}".format(data))
-
             # no tracing : done on read (otherwise commands are doubled)
-
             self._channel.send(data)
 
     def channel_read(self):
@@ -522,25 +457,22 @@ class Ssh(object):
         Returns the received data or empty string if no data
         """
         log.debug("Enter")
-
         read_block = ""
-
         if not self._channel:
             log.debug("Channel is not opened, leaving")
             return ""
-
         time.sleep(0.1)
-
         if self._channel.recv_ready():
             time.sleep(0.1)
             read_stdout = self._channel.recv(99999)
-            log.debug("Reading channel read_stdout={}".format(read_stdout))
-
             if type(read_stdout) is str:
-                read_block += read_stdout
+                read = re.compile(r'\x1b[^m]*m').sub('', read_stdout)
+                log.debug("Reading channel read={}".format(read))
+                read_block += read
             else:
-                read_block += read_stdout.decode('utf-8')
-
+                read = re.compile(r'\x1b[^m]*m').sub('', read_stdout.decode('utf-8'))
+                log.debug("Reading channel read={}".format(read))
+                read_block += read
         self.trace_write(read_block)
         return read_block
 
@@ -553,7 +485,6 @@ class Ssh(object):
         """
         log.debug("Enter with context={} exception={}"
                   .format(context, exception))
-
         # switch context in paramiko
         # including the channel class
         if context:
@@ -561,7 +492,6 @@ class Ssh(object):
             self.mock_context = context
             self._client.mock(context=context)
             self._client.channel.mock(context=context)
-
         # set an exception in paramiko
         if exception:
             self.mock_exception = exception
@@ -586,13 +516,10 @@ class Ssh(object):
         Opens tracefile, write and close
         """
         log.debug("Enter with line={}".format(line))
-
         if not self._traceflag:
             return
-
         if self._tracefilename:
             self._tracefile_FH = open(self._tracefilename, "a")
-
             if self._tracefile_FH:
                 try:
                     self._tracefile_FH.write(line)
@@ -600,7 +527,6 @@ class Ssh(object):
                     self._tracefile_FH.close()
                 except:
                     log.error("Could not write to tracefile")
-
         else:
             log.error("Tracefilename is not defined")
             raise SystemExit
@@ -612,7 +538,6 @@ class Ssh(object):
         ### <date_time> : <Mark> ###
         """
         log.debug("Enter with mark={}".format(mark))
-
         self.trace_write("\n### "+time.strftime("%y%m%d-%H:%M:%S")+" "+str(mark)+" ###\n")
 
 
