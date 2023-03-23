@@ -765,7 +765,7 @@ class Vm(object):
         Need to addition for each VM the size of each disks in bytes
         """
         log.debug('Enter with vmpath={}'.format(vmpath))
-        cmd = "for i in `sudo virsh list --all | awk '{print $2}'`; do file "+vmpath+"/$i/* ; done"
+        cmd = "for i in `sudo virsh list --all | awk '{print $2}'`; do sudo file "+vmpath+"/$i/* ; done"
         self.ssh.shell_send([cmd+"\n"])
         for line in self.ssh.output.splitlines():
             log.debug("line={}".format(line))
