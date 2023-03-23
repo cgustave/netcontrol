@@ -207,6 +207,7 @@ class VMctlTestCase(unittest.TestCase):
         self.vm.ssh.mock(context='kvm_vm4')
         result = json.loads(self.vm.get_statistics())
         log.debug("Result : {} len={}".format(result, len(str(result))))
+        self.assertEqual(result["nb_cpu"], 128)
 
     #@unittest.skip
     def test_get_vm_resources_kvm(self):
@@ -215,7 +216,37 @@ class VMctlTestCase(unittest.TestCase):
         log.debug("KVM result : {} len={}".format(result, len(str(result))))
         self.vm.dump_vms()
         self.vm.dump_vms_total()
+        self.assertEqual(result['vms_disks'][0]['id'], '001')
+        self.assertEqual(result['vms_disks'][0]['size'], 19327352832)
+        self.assertEqual(result['vms_disks'][0]['type'], 'KVM')
         #self.vm.close()
+
+    #@unittest.skip
+    def test_get_processes_kvm_1(self):
+       """ process named qemu-system (ex: Ubuntu 20.04.5)"""
+       self.vm.ssh.mock(context='kvm_vm5')
+       self.vm._get_processes_kvm()
+       total_cpu = self.vm._vms_total['cpu']
+       total_mem = self.vm._vms_total['memory']
+       total_number = self.vm._vms_total['number']
+       log.debug("total_cpu={} total_mem={} total_number={}".format(total_cpu, total_mem, total_number))
+       self.assertEqual(total_cpu, 4)
+       self.assertEqual(total_mem, 8192)
+       self.assertEqual(total_number, 3)
+
+    #@unittest.skip
+    def test_get_processes_kvm_2(self):
+       """ process named qemu-system (ex: Ubuntu 22.04.2)"""
+       self.vm.ssh.mock(context='kvm_vm6')
+       self.vm._get_processes_kvm()
+       total_cpu = self.vm._vms_total['cpu']
+       total_mem = self.vm._vms_total['memory']
+       total_number = self.vm._vms_total['number']
+       log.debug("total_cpu={} total_mem={} total_number={}".format(total_cpu, total_mem, total_number))
+       self.assertEqual(total_cpu, 12)
+       self.assertEqual(total_mem, 26624)
+       self.assertEqual(total_number, 3)
+
 
     #@unittest.skip
     def test_get_processes_esx(self):

@@ -577,7 +577,7 @@ class Vm(object):
         concatenated in one before it is tokenized
         """
         log.debug("Enter")
-        self.ssh.shell_send(["sudo ps -xww | grep qemu-system\n"])
+        self.ssh.shell_send(["sudo ps -xww | grep -E 'qemu-system\s|kvm\s'\n"])
         self._vms_total = {}
         self._vms_total['cpu'] = 0
         self._vms_total['memory'] = 0

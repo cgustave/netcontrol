@@ -76,5 +76,4 @@ root@ion:~# for i in `virsh list | awk '{print $2}'`; do file /home/virtualMachi
 /home/virtualMachines/013/logdisk.qcow2: QEMU QCOW Image (v2), 17179869184 bytes
 /home/virtualMachines/050/fortios.qcow2: QEMU QCOW Image (v3), 2147483648 bytes
 /home/virtualMachines/050/logdisk.qcow2: QEMU QCOW Image (v2), 17179869184 bytes
-root@ion:~# 
-
+root@ion:~#

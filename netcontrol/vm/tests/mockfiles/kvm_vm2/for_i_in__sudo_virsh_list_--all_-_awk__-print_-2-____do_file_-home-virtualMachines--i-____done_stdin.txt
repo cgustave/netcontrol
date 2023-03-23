@@ -106,5 +106,4 @@ root@chameleon:~# for i in `virsh list --all | awk '{print $2}'` ; do file /home
 /home/virtualMachines/072/storage.qcow2:         QEMU QCOW Image (v2), 64424509440 bytes
 /home/virtualMachines/086/boot.qcow2:      QEMU QCOW Image (v3), 1073741824 bytes
 /home/virtualMachines/086/datadrive.qcow2: QEMU QCOW Image (v3), 214748364800 bytes
-root@chameleon:~# 
-
+root@chameleon:~#
