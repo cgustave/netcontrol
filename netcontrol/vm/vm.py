@@ -447,6 +447,8 @@ class Vm(object):
                     system = match_name.group('system')
                     self._vms_total['number'] += 1
                     log.debug("Found new vm_name={} create_user={} system={} total_number={}".format(vm_name, create_user, system, self._vms_total['number']))
+                else:
+                    log.warning("VM does not look like an LMS vms")
             if esx_start:
                 match_esxid = re.search("VMX\sCartel\sID:\s(?P<vm_esxid>\d+)", line)
                 if match_esxid:
@@ -502,12 +504,13 @@ class Vm(object):
                     ret = False
         return ret
 
-    def _get_vm_instance_from_name(self,name=""):
+    def _get_vm_instance_from_name(self, name=""):
         """
         VM instance is like 001, 011, 122 and so on.
         It should be extracted from server name (ex: uranium-tam-esx42)
         """
         log.debug("Enter with name={}".format(name))
+        result = "" 
         match_inst = re.search("(?P<inst>\d+)$", name)
         if match_inst:
             inst = match_inst.group('inst')

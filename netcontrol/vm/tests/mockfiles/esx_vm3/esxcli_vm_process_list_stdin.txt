@@ -1,0 +1,586 @@
+[root@localhost:~] esxcli vm process list
+vCenter-6.7 (1)
+   World ID: 2102646
+   Process ID: 0
+   VMX Cartel ID: 2102645
+   UUID: 56 4d 1e be 1f 1d 4b 37-5b 88 64 2b 09 d3 5c dd
+   Display Name: vCenter-6.7 (1)
+   Config File: /vmfs/volumes/44bf2eb5-073cebc2-0000-000000000000/vCenter-6.7/vCenter-6.7.vmx
+
+iridium-esx56 [ijeremic] FGT_VM64_ESXI
+   World ID: 2105669
+   Process ID: 0
+   VMX Cartel ID: 2105668
+   UUID: 2c 90 40 4e 2e 45 49 85-be 33 fe 81 5e 06 a7 9b
+   Display Name: iridium-esx56 [ijeremic] FGT_VM64_ESXI
+   Config File: /vmfs/volumes/638a47c5-0372e4bd-3bd1-908d6efe1574/machines/iridium-esx56 [ijeremic] FGT_VM64_ESXI/iridium-esx56 [ijeremic] FGT_VM64_ESXI.vmx
+
+iridium-esx53 [ijeremic] FGT_VM64_ESXI
+   World ID: 2105976
+   Process ID: 0
+   VMX Cartel ID: 2105975
+   UUID: 2f fd 30 1e 5f 21 46 63-80 f3 fe 30 2b e1 3d 5c
+   Display Name: iridium-esx53 [ijeremic] FGT_VM64_ESXI
+   Config File: /vmfs/volumes/638a47c5-0372e4bd-3bd1-908d6efe1574/machines/iridium-esx53 [ijeremic] FGT_VM64_ESXI/iridium-esx53 [ijeremic] FGT_VM64_ESXI.vmx
+
+iridium-esx09 [ighita] Win10_ESXI
+   World ID: 2108133
+   Process ID: 0
+   VMX Cartel ID: 2108132
+   UUID: 42 05 c0 d0 3c 3f c2 3e-10 41 9e 94 16 b2 d2 00
+   Display Name: iridium-esx09 [ighita] Win10_ESXI
+   Config File: /vmfs/volumes/638a47c5-0372e4bd-3bd1-908d6efe1574/machines/iridium-esx09 [ighita] Win10_ESXI/iridium-esx09 [ighita] Win10_ESXI.vmx
+
+iridium-esx89 [kagritelis] FreeNAS_ESXI
+   World ID: 2119639
+   Process ID: 0
+   VMX Cartel ID: 2119638
+   UUID: 42 05 d5 8c 39 47 72 65-82 cb 99 87 18 be a0 c6
+   Display Name: iridium-esx89 [kagritelis] FreeNAS_ESXI
+   Config File: /vmfs/volumes/638a47c5-0372e4bd-3bd1-908d6efe1574/machines/iridium-esx89 [kagritelis] FreeNAS_ESXI/iridium-esx89 [kagritelis] FreeNAS_ESXI.vmx
+
+iridium-esx61 [rrai] Win2019_ESXI
+   World ID: 2128899
+   Process ID: 0
+   VMX Cartel ID: 2128898
+   UUID: 42 05 68 92 a6 df 2e 61-51 a4 7d 22 15 46 e8 3d
+   Display Name: iridium-esx61 [rrai] Win2019_ESXI
+   Config File: /vmfs/volumes/638a47c5-0372e4bd-3bd1-908d6efe1574/machines/iridium-esx61 [rrai] Win2019_ESXI/iridium-esx61 [rrai] Win2019_ESXI.vmx
+
+iridium-esx32 [ametkola] Win10_ESXI
+   World ID: 2131464
+   Process ID: 0
+   VMX Cartel ID: 2131463
+   UUID: 42 05 63 f6 49 45 bc 24-c7 bd ca c4 44 c7 e5 64
+   Display Name: iridium-esx32 [ametkola] Win10_ESXI
+   Config File: /vmfs/volumes/638a47c5-0372e4bd-3bd1-908d6efe1574/machines/iridium-esx32 [ametkola] Win10_ESXI/iridium-esx32 [ametkola] Win10_ESXI.vmx
+
+iridium-esx78 [knagaraju] FGT_VM64_ESXI
+   World ID: 2134538
+   Process ID: 0
+   VMX Cartel ID: 2134537
+   UUID: b5 d6 30 77 3d a5 43 37-95 24 f4 a1 91 79 6d 44
+   Display Name: iridium-esx78 [knagaraju] FGT_VM64_ESXI
+   Config File: /vmfs/volumes/638a47c5-0372e4bd-3bd1-908d6efe1574/machines/iridium-esx78 [knagaraju] FGT_VM64_ESXI/iridium-esx78 [knagaraju] FGT_VM64_ESXI.vmx
+
+iridium-esx83 [akaratas] FLG_VM64_ESXI
+   World ID: 2150471
+   Process ID: 0
+   VMX Cartel ID: 2150470
+   UUID: 3a 99 19 1b f3 ba 43 9e-8b be b3 3d 64 3c 0e 9e
+   Display Name: iridium-esx83 [akaratas] FLG_VM64_ESXI
+   Config File: /vmfs/volumes/638a47c5-0372e4bd-3bd1-908d6efe1574/machines/iridium-esx83 [akaratas] FLG_VM64_ESXI/iridium-esx83 [akaratas] FLG_VM64_ESXI.vmx
+
+iridium-esx42 [akaratas] FLG_VM64_ESXI
+   World ID: 2151560
+   Process ID: 0
+   VMX Cartel ID: 2151559
+   UUID: 4c 54 b6 94 f3 f9 43 1f-a7 62 4e b6 99 29 3e 80
+   Display Name: iridium-esx42 [akaratas] FLG_VM64_ESXI
+   Config File: /vmfs/volumes/638a47c5-0372e4bd-3bd1-908d6efe1574/machines/iridium-esx42 [akaratas] FLG_VM64_ESXI/iridium-esx42 [akaratas] FLG_VM64_ESXI.vmx
+
+iridium-esx84 [lzuliani] FMG_VM64_ESXI
+   World ID: 2153879
+   Process ID: 0
+   VMX Cartel ID: 2153878
+   UUID: d6 57 47 c9 ac f1 42 4e-9b 29 fe 10 dc a5 3c 03
+   Display Name: iridium-esx84 [lzuliani] FMG_VM64_ESXI
+   Config File: /vmfs/volumes/638a47c5-0372e4bd-3bd1-908d6efe1574/machines/iridium-esx84 [lzuliani] FMG_VM64_ESXI/iridium-esx84 [lzuliani] FMG_VM64_ESXI.vmx
+
+iridium-esx65 [ybenaicha] Win10_ESXI
+   World ID: 2155108
+   Process ID: 0
+   VMX Cartel ID: 2155107
+   UUID: 42 05 04 1e 70 61 85 82-45 99 33 31 a9 c6 41 e6
+   Display Name: iridium-esx65 [ybenaicha] Win10_ESXI
+   Config File: /vmfs/volumes/638a47c5-0372e4bd-3bd1-908d6efe1574/machines/iridium-esx65 [ybenaicha] Win10_ESXI/iridium-esx65 [ybenaicha] Win10_ESXI.vmx
+
+iridium-esx82 [nunal] Win10_ESXI
+   World ID: 2155986
+   Process ID: 0
+   VMX Cartel ID: 2155985
+   UUID: 42 05 79 cf 64 1b f3 66-f2 86 64 cc f0 2e 8a 6f
+   Display Name: iridium-esx82 [nunal] Win10_ESXI
+   Config File: /vmfs/volumes/638a47c5-0372e4bd-3bd1-908d6efe1574/machines/iridium-esx82 [nunal] Win10_ESXI/iridium-esx82 [nunal] Win10_ESXI.vmx
+
+iridium-esx72 [rlokeswar] FAD_VM64_ESXI
+   World ID: 2206049
+   Process ID: 0
+   VMX Cartel ID: 2206048
+   UUID: ce e0 5a d6 f5 be 48 dd-b5 2e 09 2f fd f4 d2 9f
+   Display Name: iridium-esx72 [rlokeswar] FAD_VM64_ESXI
+   Config File: /vmfs/volumes/638a47c5-0372e4bd-3bd1-908d6efe1574/machines/iridium-esx72 [rlokeswar] FAD_VM64_ESXI/iridium-esx72 [rlokeswar] FAD_VM64_ESXI.vmx
+
+iridium-esx39 [sharmap] Win10_ESXI
+   World ID: 2208347
+   Process ID: 0
+   VMX Cartel ID: 2208346
+   UUID: 42 05 81 e2 d0 38 0f 22-11 25 2a 85 bb 63 9f 02
+   Display Name: iridium-esx39 [sharmap] Win10_ESXI
+   Config File: /vmfs/volumes/638a47c5-0372e4bd-3bd1-908d6efe1574/machines/iridium-esx39 [sharmap] Win10_ESXI/iridium-esx39 [sharmap] Win10_ESXI.vmx
+
+iridium-esx04 [fjashari] FPOC-18_VM64_ESXI
+   World ID: 2222130
+   Process ID: 0
+   VMX Cartel ID: 2222129
+   UUID: 42 05 a1 b2 e6 70 86 91-07 49 d4 19 e9 ab 07 d7
+   Display Name: iridium-esx04 [fjashari] FPOC-18_VM64_ESXI
+   Config File: /vmfs/volumes/638a47c5-0372e4bd-3bd1-908d6efe1574/machines/iridium-esx04 [fjashari] FPOC-18_VM64_ESXI/iridium-esx04 [fjashari] FPOC-18_VM64_ESXI.vmx
+
+iridium-esx02 [knagaraju] FGT_VM64_ESXI
+   World ID: 2226971
+   Process ID: 0
+   VMX Cartel ID: 2226970
+   UUID: 9a fa 2a 06 e1 0a 43 83-b3 5d a1 09 f4 f3 2a 84
+   Display Name: iridium-esx02 [knagaraju] FGT_VM64_ESXI
+   Config File: /vmfs/volumes/638a47c5-0372e4bd-3bd1-908d6efe1574/machines/iridium-esx02 [knagaraju] FGT_VM64_ESXI/iridium-esx02 [knagaraju] FGT_VM64_ESXI.vmx
+
+iridium-esx30 [rlokeswar] FWB_VM64_ESXI
+   World ID: 2227405
+   Process ID: 0
+   VMX Cartel ID: 2227404
+   UUID: 80 47 30 f6 e5 c6 49 96-81 ec 93 bd 4f f5 68 2a
+   Display Name: iridium-esx30 [rlokeswar] FWB_VM64_ESXI
+   Config File: /vmfs/volumes/638a47c5-0372e4bd-3bd1-908d6efe1574/machines/iridium-esx30 [rlokeswar] FWB_VM64_ESXI/iridium-esx30 [rlokeswar] FWB_VM64_ESXI.vmx
+
+iridium-esx43 [blamine] FPOC-18_VM64_ESXI
+   World ID: 2227906
+   Process ID: 0
+   VMX Cartel ID: 2227905
+   UUID: 42 05 6c 46 5a 83 1c 77-2d 4e e9 7f f4 3b e3 e8
+   Display Name: iridium-esx43 [blamine] FPOC-18_VM64_ESXI
+   Config File: /vmfs/volumes/638a47c5-0372e4bd-3bd1-908d6efe1574/machines/iridium-esx43 [blamine] FPOC-18_VM64_ESXI/iridium-esx43 [blamine] FPOC-18_VM64_ESXI.vmx
+
+iridium-esx96 [ecamuegi] Win10_ESXI
+   World ID: 2230818
+   Process ID: 0
+   VMX Cartel ID: 2230817
+   UUID: 42 05 70 0d ec fb 48 50-89 da 43 89 0c 57 8e b3
+   Display Name: iridium-esx96 [ecamuegi] Win10_ESXI
+   Config File: /vmfs/volumes/638a47c5-0372e4bd-3bd1-908d6efe1574/machines/iridium-esx96 [ecamuegi] Win10_ESXI/iridium-esx96 [ecamuegi] Win10_ESXI.vmx
+
+iridium-esx62 [lmelo] FGT_VM64_ESXI
+   World ID: 2231430
+   Process ID: 0
+   VMX Cartel ID: 2231429
+   UUID: 46 8d fb 7c 89 d7 4d 3a-ae ff fa b0 41 be 3f 80
+   Display Name: iridium-esx62 [lmelo] FGT_VM64_ESXI
+   Config File: /vmfs/volumes/638a47c5-0372e4bd-3bd1-908d6efe1574/machines/iridium-esx62 [lmelo] FGT_VM64_ESXI/iridium-esx62 [lmelo] FGT_VM64_ESXI.vmx
+
+iridium-esx67 [lmelo] FLG_VM64_ESXI
+   World ID: 2232689
+   Process ID: 0
+   VMX Cartel ID: 2232688
+   UUID: c5 3f fa 1d 76 b1 4d a6-99 de 7c b0 7d 12 67 2a
+   Display Name: iridium-esx67 [lmelo] FLG_VM64_ESXI
+   Config File: /vmfs/volumes/638a47c5-0372e4bd-3bd1-908d6efe1574/machines/iridium-esx67 [lmelo] FLG_VM64_ESXI/iridium-esx67 [lmelo] FLG_VM64_ESXI.vmx
+
+iridium-esx81 [srajeswaran] FGT_VM64_ESXI
+   World ID: 2249245
+   Process ID: 0
+   VMX Cartel ID: 2249206
+   UUID: ac 1c 4d 70 a4 0e 45 87-a6 ad 5e c5 c9 a3 25 21
+   Display Name: iridium-esx81 [srajeswaran] FGT_VM64_ESXI
+   Config File: /vmfs/volumes/638a47c5-0372e4bd-3bd1-908d6efe1574/machines/iridium-esx81 [srajeswaran] FGT_VM64_ESXI/iridium-esx81 [srajeswaran] FGT_VM64_ESXI.vmx
+
+iridium-esx19 [anikolov] Win10_ESXI
+   World ID: 2253797
+   Process ID: 0
+   VMX Cartel ID: 2253796
+   UUID: 42 05 d4 a4 c3 2e 41 d2-9b a8 78 7a 04 21 56 7e
+   Display Name: iridium-esx19 [anikolov] Win10_ESXI
+   Config File: /vmfs/volumes/638a47c5-0372e4bd-3bd1-908d6efe1574/machines/iridium-esx19 [anikolov] Win10_ESXI/iridium-esx19 [anikolov] Win10_ESXI.vmx
+
+iridium-esx15 [driverolopez] FAC_VM64_ESXI
+   World ID: 2267518
+   Process ID: 0
+   VMX Cartel ID: 2267517
+   UUID: 45 c2 fe 70 97 d4 46 5a-b2 79 8c b9 fa 97 31 98
+   Display Name: iridium-esx15 [driverolopez] FAC_VM64_ESXI
+   Config File: /vmfs/volumes/638a47c5-0372e4bd-3bd1-908d6efe1574/machines/iridium-esx15 [driverolopez] FAC_VM64_ESXI/iridium-esx15 [driverolopez] FAC_VM64_ESXI.vmx
+
+iridium-esx41 [kgalanopoulos] FLG_VM64_ESXI
+   World ID: 2268324
+   Process ID: 0
+   VMX Cartel ID: 2268323
+   UUID: fd 86 55 77 20 03 43 5e-b0 35 2a eb 84 7a f5 28
+   Display Name: iridium-esx41 [kgalanopoulos] FLG_VM64_ESXI
+   Config File: /vmfs/volumes/638a47c5-0372e4bd-3bd1-908d6efe1574/machines/iridium-esx41 [kgalanopoulos] FLG_VM64_ESXI/iridium-esx41 [kgalanopoulos] FLG_VM64_ESXI.vmx
+
+iridium-esx20 [mionescu] FGT_VM64_ESXI
+   World ID: 2317436
+   Process ID: 0
+   VMX Cartel ID: 2317435
+   UUID: fc b1 7d 21 18 5a 4e e8-82 8e 3b f5 1f 07 5c 71
+   Display Name: iridium-esx20 [mionescu] FGT_VM64_ESXI
+   Config File: /vmfs/volumes/638a47c5-0372e4bd-3bd1-908d6efe1574/machines/iridium-esx20 [mionescu] FGT_VM64_ESXI/iridium-esx20 [mionescu] FGT_VM64_ESXI.vmx
+
+iridium-esx37 [jandrysek] FE_VM64_ESXI
+   World ID: 2333682
+   Process ID: 0
+   VMX Cartel ID: 2333681
+   UUID: c5 4f ea 73 8e 50 43 bb-8a e9 37 b8 57 0c 7c a5
+   Display Name: iridium-esx37 [jandrysek] FE_VM64_ESXI
+   Config File: /vmfs/volumes/638a47c5-0372e4bd-3bd1-908d6efe1574/machines/iridium-esx37 [jandrysek] FE_VM64_ESXI/iridium-esx37 [jandrysek] FE_VM64_ESXI.vmx
+
+iridium-esx66 [fdoisneau] FGT_VM64_ESXI
+   World ID: 2335167
+   Process ID: 0
+   VMX Cartel ID: 2335166
+   UUID: 2e 63 13 00 2f 62 44 3c-b5 68 e6 22 f3 e2 48 3d
+   Display Name: iridium-esx66 [fdoisneau] FGT_VM64_ESXI
+   Config File: /vmfs/volumes/638a47c5-0372e4bd-3bd1-908d6efe1574/machines/iridium-esx66 [fdoisneau] FGT_VM64_ESXI/iridium-esx66 [fdoisneau] FGT_VM64_ESXI.vmx
+
+iridium-esx23 [htelli] Win10_ESXI
+   World ID: 2335457
+   Process ID: 0
+   VMX Cartel ID: 2335456
+   UUID: 42 05 d9 f7 fc 48 eb 26-0e 5a e8 f0 b5 92 4b 7b
+   Display Name: iridium-esx23 [htelli] Win10_ESXI
+   Config File: /vmfs/volumes/638a47c5-0372e4bd-3bd1-908d6efe1574/machines/iridium-esx23 [htelli] Win10_ESXI/iridium-esx23 [htelli] Win10_ESXI.vmx
+
+iridium-esx69 [knagaraju] FGT_VM64_ESXI
+   World ID: 2346232
+   Process ID: 0
+   VMX Cartel ID: 2346231
+   UUID: e7 5a 45 81 5f 86 44 f2-95 ce 9a 3c 4e f8 5d d3
+   Display Name: iridium-esx69 [knagaraju] FGT_VM64_ESXI
+   Config File: /vmfs/volumes/638a47c5-0372e4bd-3bd1-908d6efe1574/machines/iridium-esx69 [knagaraju] FGT_VM64_ESXI/iridium-esx69 [knagaraju] FGT_VM64_ESXI.vmx
+
+iridium-esx55 [oarslan] FGT_VM64_ESXI
+   World ID: 2354194
+   Process ID: 0
+   VMX Cartel ID: 2354193
+   UUID: 91 d3 57 8c b1 87 47 b6-be 41 1c ec b2 3d 9b e1
+   Display Name: iridium-esx55 [oarslan] FGT_VM64_ESXI
+   Config File: /vmfs/volumes/638a47c5-0372e4bd-3bd1-908d6efe1574/machines/iridium-esx55 [oarslan] FGT_VM64_ESXI/iridium-esx55 [oarslan] FGT_VM64_ESXI.vmx
+
+iridium-esx71 [bndlovu] FPOC-18_VM64_ESXI
+   World ID: 2354739
+   Process ID: 0
+   VMX Cartel ID: 2354738
+   UUID: 42 05 07 8f a8 fb 0e ae-1f 1c 20 58 59 1c 87 0a
+   Display Name: iridium-esx71 [bndlovu] FPOC-18_VM64_ESXI
+   Config File: /vmfs/volumes/638a47c5-0372e4bd-3bd1-908d6efe1574/machines/iridium-esx71 [bndlovu] FPOC-18_VM64_ESXI/iridium-esx71 [bndlovu] FPOC-18_VM64_ESXI.vmx
+
+iridium-esx18 [anikolov] FLG_VM64_ESXI
+   World ID: 2367998
+   Process ID: 0
+   VMX Cartel ID: 2367997
+   UUID: 29 96 8f e1 5c d4 43 18-b6 42 a9 b6 90 93 29 e9
+   Display Name: iridium-esx18 [anikolov] FLG_VM64_ESXI
+   Config File: /vmfs/volumes/638a47c5-0372e4bd-3bd1-908d6efe1574/machines/iridium-esx18 [anikolov] FLG_VM64_ESXI/iridium-esx18 [anikolov] FLG_VM64_ESXI.vmx
+
+iridium-esx14 [ssavin] FGT_VM64_ESXI
+   World ID: 2369939
+   Process ID: 0
+   VMX Cartel ID: 2369938
+   UUID: 21 6d 08 37 d1 87 40 26-a5 1e b9 0d 08 f1 3b f8
+   Display Name: iridium-esx14 [ssavin] FGT_VM64_ESXI
+   Config File: /vmfs/volumes/638a47c5-0372e4bd-3bd1-908d6efe1574/machines/iridium-esx14 [ssavin] FGT_VM64_ESXI/iridium-esx14 [ssavin] FGT_VM64_ESXI.vmx
+
+iridium-esx13 [lpizziniaco] FGT_VM64_ESXI
+   World ID: 2376861
+   Process ID: 0
+   VMX Cartel ID: 2376860
+   UUID: 8f 01 23 95 9b 0c 4c f0-8b 3c 07 aa ea 0a 5e d5
+   Display Name: iridium-esx13 [lpizziniaco] FGT_VM64_ESXI
+   Config File: /vmfs/volumes/638a47c5-0372e4bd-3bd1-908d6efe1574/machines/iridium-esx13 [lpizziniaco] FGT_VM64_ESXI/iridium-esx13 [lpizziniaco] FGT_VM64_ESXI.vmx
+
+iridium-esx63 [rortizandres] FPC_P_VM64_ESXI
+   World ID: 2392861
+   Process ID: 0
+   VMX Cartel ID: 2392860
+   UUID: 5b 1e 02 87 83 fc 41 cb-84 65 59 00 30 c6 4b 1b
+   Display Name: iridium-esx63 [rortizandres] FPC_P_VM64_ESXI
+   Config File: /vmfs/volumes/638a47c5-0372e4bd-3bd1-908d6efe1574/machines/iridium-esx63 [rortizandres] FPC_P_VM64_ESXI/iridium-esx63 [rortizandres] FPC_P_VM64_ESXI.vmx
+
+iridium-esx74 [ametkola] Win10_ESXI
+   World ID: 2394467
+   Process ID: 0
+   VMX Cartel ID: 2394429
+   UUID: 42 05 da ed 67 d4 2b de-f8 26 c2 e0 fe da e2 d8
+   Display Name: iridium-esx74 [ametkola] Win10_ESXI
+   Config File: /vmfs/volumes/638a47c5-0372e4bd-3bd1-908d6efe1574/machines/iridium-esx74 [ametkola] Win10_ESXI/iridium-esx74 [ametkola] Win10_ESXI.vmx
+
+iridium-esx98 [asoava] FMG_VM64_ESXI
+   World ID: 2449214
+   Process ID: 0
+   VMX Cartel ID: 2449213
+   UUID: 8c e2 b2 1f d9 5c 4f 44-a0 6c d5 ba 1c e1 bb 9c
+   Display Name: iridium-esx98 [asoava] FMG_VM64_ESXI
+   Config File: /vmfs/volumes/638a47c5-0372e4bd-3bd1-908d6efe1574/machines/iridium-esx98 [asoava] FMG_VM64_ESXI/iridium-esx98 [asoava] FMG_VM64_ESXI.vmx
+
+iridium-esx11 [ovoda] FE_VM64_ESXI
+   World ID: 2451417
+   Process ID: 0
+   VMX Cartel ID: 2451416
+   UUID: 69 4b 97 59 17 b8 42 8e-aa e9 e1 41 eb e0 a5 1b
+   Display Name: iridium-esx11 [ovoda] FE_VM64_ESXI
+   Config File: /vmfs/volumes/638a47c5-0372e4bd-3bd1-908d6efe1574/machines/iridium-esx11 [ovoda] FE_VM64_ESXI/iridium-esx11 [ovoda] FE_VM64_ESXI.vmx
+
+iridium-esx95 [jangelis] FMG_VM64_ESXI
+   World ID: 2456030
+   Process ID: 0
+   VMX Cartel ID: 2456029
+   UUID: 3a 41 c7 c6 40 27 4b bc-8b 7b e4 70 db 5a 23 15
+   Display Name: iridium-esx95 [jangelis] FMG_VM64_ESXI
+   Config File: /vmfs/volumes/638a47c5-0372e4bd-3bd1-908d6efe1574/machines/iridium-esx95 [jangelis] FMG_VM64_ESXI/iridium-esx95 [jangelis] FMG_VM64_ESXI.vmx
+
+iridium-esx36 [akadoura] Win10_ESXI
+   World ID: 2470975
+   Process ID: 0
+   VMX Cartel ID: 2470974
+   UUID: 42 05 f9 fe de 7c 2c 1a-b7 78 09 79 7f 17 7b 51
+   Display Name: iridium-esx36 [akadoura] Win10_ESXI
+   Config File: /vmfs/volumes/638a47c5-0372e4bd-3bd1-908d6efe1574/machines/iridium-esx36 [akadoura] Win10_ESXI/iridium-esx36 [akadoura] Win10_ESXI.vmx
+
+iridium-esx03 [akadoura] Win10_ESXI
+   World ID: 2471179
+   Process ID: 0
+   VMX Cartel ID: 2471178
+   UUID: 42 05 b3 b6 9e c4 8a 39-dd 32 a5 cf 19 79 ab 9d
+   Display Name: iridium-esx03 [akadoura] Win10_ESXI
+   Config File: /vmfs/volumes/638a47c5-0372e4bd-3bd1-908d6efe1574/machines/iridium-esx03 [akadoura] Win10_ESXI/iridium-esx03 [akadoura] Win10_ESXI.vmx
+
+iridium-esx68 [mmankollari] Win10_ESXI
+   World ID: 2476561
+   Process ID: 0
+   VMX Cartel ID: 2476560
+   UUID: 42 05 da bc b3 22 f3 74-4f 91 73 a9 a2 13 9c 39
+   Display Name: iridium-esx68 [mmankollari] Win10_ESXI
+   Config File: /vmfs/volumes/638a47c5-0372e4bd-3bd1-908d6efe1574/machines/iridium-esx68 [mmankollari] Win10_ESXI/iridium-esx68 [mmankollari] Win10_ESXI.vmx
+
+iridium-esx08 [aelamrani] FPOC-18_VM64_ESXI
+   World ID: 2477747
+   Process ID: 0
+   VMX Cartel ID: 2477746
+   UUID: 42 05 d6 7c 28 bb 65 25-98 12 e5 58 1b 5f 5d 21
+   Display Name: iridium-esx08 [aelamrani] FPOC-18_VM64_ESXI
+   Config File: /vmfs/volumes/638a47c5-0372e4bd-3bd1-908d6efe1574/machines/iridium-esx08 [aelamrani] FPOC-18_VM64_ESXI/iridium-esx08 [aelamrani] FPOC-18_VM64_ESXI.vmx
+
+iridium-esx77 [amarinos] FMG_VM64_ESXI
+   World ID: 2489124
+   Process ID: 0
+   VMX Cartel ID: 2489123
+   UUID: bf 7f db e0 9c db 4e c6-9f 91 ff 92 4e 9a c3 04
+   Display Name: iridium-esx77 [amarinos] FMG_VM64_ESXI
+   Config File: /vmfs/volumes/638a47c5-0372e4bd-3bd1-908d6efe1574/machines/iridium-esx77 [amarinos] FMG_VM64_ESXI/iridium-esx77 [amarinos] FMG_VM64_ESXI.vmx
+
+iridium-esx29 [anikolov] FGT_VM64_ESXI
+   World ID: 2491940
+   Process ID: 0
+   VMX Cartel ID: 2491939
+   UUID: 92 fa 0a da 28 1d 4d e2-b3 e3 24 6c cc 97 8d 87
+   Display Name: iridium-esx29 [anikolov] FGT_VM64_ESXI
+   Config File: /vmfs/volumes/638a47c5-0372e4bd-3bd1-908d6efe1574/machines/iridium-esx29 [anikolov] FGT_VM64_ESXI/iridium-esx29 [anikolov] FGT_VM64_ESXI.vmx
+
+iridium-esx60 [anikolov] FGT_VM64_ESXI
+   World ID: 2492452
+   Process ID: 0
+   VMX Cartel ID: 2492447
+   UUID: 88 79 83 b3 68 91 44 92-95 47 8b f2 95 fe ad 63
+   Display Name: iridium-esx60 [anikolov] FGT_VM64_ESXI
+   Config File: /vmfs/volumes/638a47c5-0372e4bd-3bd1-908d6efe1574/machines/iridium-esx60 [anikolov] FGT_VM64_ESXI/iridium-esx60 [anikolov] FGT_VM64_ESXI.vmx
+
+iridium-esx54 [pcavalcante] FGT_VM64_ESXI
+   World ID: 2493637
+   Process ID: 0
+   VMX Cartel ID: 2493636
+   UUID: 69 87 d5 4b c8 5e 45 b2-a2 b4 14 e8 06 9c cd c8
+   Display Name: iridium-esx54 [pcavalcante] FGT_VM64_ESXI
+   Config File: /vmfs/volumes/638a47c5-0372e4bd-3bd1-908d6efe1574/machines/iridium-esx54 [pcavalcante] FGT_VM64_ESXI/iridium-esx54 [pcavalcante] FGT_VM64_ESXI.vmx
+
+iridium-esx80 [amarinos] FGT_VM64_ESXI
+   World ID: 2495464
+   Process ID: 0
+   VMX Cartel ID: 2495463
+   UUID: 1d 4d 1b fd 41 b6 45 a8-85 60 60 e3 2e 8e 0e 33
+   Display Name: iridium-esx80 [amarinos] FGT_VM64_ESXI
+   Config File: /vmfs/volumes/638a47c5-0372e4bd-3bd1-908d6efe1574/machines/iridium-esx80 [amarinos] FGT_VM64_ESXI/iridium-esx80 [amarinos] FGT_VM64_ESXI.vmx
+
+iridium-esx79 [ssavin] FLG_VM64_ESXI
+   World ID: 2496387
+   Process ID: 0
+   VMX Cartel ID: 2496386
+   UUID: be 45 ea 9c 7a 56 44 fa-a9 57 1a 0f c5 c9 01 30
+   Display Name: iridium-esx79 [ssavin] FLG_VM64_ESXI
+   Config File: /vmfs/volumes/638a47c5-0372e4bd-3bd1-908d6efe1574/machines/iridium-esx79 [ssavin] FLG_VM64_ESXI/iridium-esx79 [ssavin] FLG_VM64_ESXI.vmx
+
+iridium-esx75 [alkhatiba] FTS_VM64_ESXI
+   World ID: 2497968
+   Process ID: 0
+   VMX Cartel ID: 2497967
+   UUID: 8b 85 79 4e d6 7f 44 9c-a3 75 1f f7 38 5b 6d 24
+   Display Name: iridium-esx75 [alkhatiba] FTS_VM64_ESXI
+   Config File: /vmfs/volumes/638a47c5-0372e4bd-3bd1-908d6efe1574/machines/iridium-esx75 [alkhatiba] FTS_VM64_ESXI/iridium-esx75 [alkhatiba] FTS_VM64_ESXI.vmx
+
+iridium-esx87 [kagritelis] FE_VM64_ESXI
+   World ID: 2512553
+   Process ID: 0
+   VMX Cartel ID: 2512552
+   UUID: d6 0b 2f f2 09 b5 40 d0-9f 60 dc e6 17 51 1a 9a
+   Display Name: iridium-esx87 [kagritelis] FE_VM64_ESXI
+   Config File: /vmfs/volumes/638a47c5-0372e4bd-3bd1-908d6efe1574/machines/iridium-esx87 [kagritelis] FE_VM64_ESXI/iridium-esx87 [kagritelis] FE_VM64_ESXI.vmx
+
+iridium-esx57 [subramanis] FGT_VM64_ESXI
+   World ID: 2513454
+   Process ID: 0
+   VMX Cartel ID: 2513453
+   UUID: c6 92 5d 05 2e 5f 4c ef-9e 80 32 3d 8c 18 91 9d
+   Display Name: iridium-esx57 [subramanis] FGT_VM64_ESXI
+   Config File: /vmfs/volumes/638a47c5-0372e4bd-3bd1-908d6efe1574/machines/iridium-esx57 [subramanis] FGT_VM64_ESXI/iridium-esx57 [subramanis] FGT_VM64_ESXI.vmx
+
+iridium-esx01 [akristof] Win10_ESXI
+   World ID: 2514786
+   Process ID: 0
+   VMX Cartel ID: 2514785
+   UUID: 42 05 80 9f 2c 1f bd 1d-aa ba 5d 16 75 df 27 1b
+   Display Name: iridium-esx01 [akristof] Win10_ESXI
+   Config File: /vmfs/volumes/638a47c5-0372e4bd-3bd1-908d6efe1574/machines/iridium-esx01 [akristof] Win10_ESXI/iridium-esx01 [akristof] Win10_ESXI.vmx
+
+iridium-esx86 [kagritelis] FE_VM64_ESXI
+   World ID: 2516504
+   Process ID: 0
+   VMX Cartel ID: 2516503
+   UUID: dd c9 b7 14 48 16 4c 10-a0 10 e8 f8 9b c8 56 af
+   Display Name: iridium-esx86 [kagritelis] FE_VM64_ESXI
+   Config File: /vmfs/volumes/638a47c5-0372e4bd-3bd1-908d6efe1574/machines/iridium-esx86 [kagritelis] FE_VM64_ESXI/iridium-esx86 [kagritelis] FE_VM64_ESXI.vmx
+
+iridium-esx22 [ybkruthi] FGT_VM64_ESXI
+   World ID: 2517590
+   Process ID: 0
+   VMX Cartel ID: 2517589
+   UUID: 1c 47 fa e4 35 a3 42 c7-b6 6a 84 b4 08 6f 26 28
+   Display Name: iridium-esx22 [ybkruthi] FGT_VM64_ESXI
+   Config File: /vmfs/volumes/638a47c5-0372e4bd-3bd1-908d6efe1574/machines/iridium-esx22 [ybkruthi] FGT_VM64_ESXI/iridium-esx22 [ybkruthi] FGT_VM64_ESXI.vmx
+
+iridium-esx10 [ssavin] FAC_VM64_ESXI
+   World ID: 2520138
+   Process ID: 0
+   VMX Cartel ID: 2520133
+   UUID: 3e 95 40 52 32 6c 48 b2-8a be e3 65 b1 86 98 f7
+   Display Name: iridium-esx10 [ssavin] FAC_VM64_ESXI
+   Config File: /vmfs/volumes/638a47c5-0372e4bd-3bd1-908d6efe1574/machines/iridium-esx10 [ssavin] FAC_VM64_ESXI/iridium-esx10 [ssavin] FAC_VM64_ESXI.vmx
+
+iridium-esx70 [subramanis] Debian9_ESXI
+   World ID: 2536058
+   Process ID: 0
+   VMX Cartel ID: 2536057
+   UUID: 42 05 e0 84 a7 5a b9 1d-ab 67 2d 33 1e f8 a5 be
+   Display Name: iridium-esx70 [subramanis] Debian9_ESXI
+   Config File: /vmfs/volumes/638a47c5-0372e4bd-3bd1-908d6efe1574/machines/iridium-esx70 [subramanis] Debian9_ESXI/iridium-esx70 [subramanis] Debian9_ESXI.vmx
+
+iridium-esx93 [aaborehab] FE_VM64_ESXI
+   World ID: 2536818
+   Process ID: 0
+   VMX Cartel ID: 2536817
+   UUID: 0f 5a 51 2e 76 9a 43 65-b0 88 54 78 f2 d1 02 7d
+   Display Name: iridium-esx93 [aaborehab] FE_VM64_ESXI
+   Config File: /vmfs/volumes/638a47c5-0372e4bd-3bd1-908d6efe1574/machines/iridium-esx93 [aaborehab] FE_VM64_ESXI/iridium-esx93 [aaborehab] FE_VM64_ESXI.vmx
+
+iridium-esx24 [fndiaye] FLG_VM64_ESXI
+   World ID: 2537352
+   Process ID: 0
+   VMX Cartel ID: 2537351
+   UUID: 0c 13 32 86 fd d2 42 5c-b0 e4 90 39 83 a4 85 7f
+   Display Name: iridium-esx24 [fndiaye] FLG_VM64_ESXI
+   Config File: /vmfs/volumes/638a47c5-0372e4bd-3bd1-908d6efe1574/machines/iridium-esx24 [fndiaye] FLG_VM64_ESXI/iridium-esx24 [fndiaye] FLG_VM64_ESXI.vmx
+
+iridium-esx51 [jhelder] Win7_ESXI
+   World ID: 2538058
+   Process ID: 0
+   VMX Cartel ID: 2538057
+   UUID: 42 05 f5 c9 2c 3d 83 7a-b8 01 4b f1 26 1d ec b2
+   Display Name: iridium-esx51 [jhelder] Win7_ESXI
+   Config File: /vmfs/volumes/638a47c5-0372e4bd-3bd1-908d6efe1574/machines/iridium-esx51 [jhelder] Win7_ESXI/iridium-esx51 [jhelder] Win7_ESXI.vmx
+
+iridium-esx33 [vargap] FVE_VM64_ESXI
+   World ID: 2539499
+   Process ID: 0
+   VMX Cartel ID: 2539498
+   UUID: 2d 4f 08 4b 9a 12 48 3c-af 86 a6 99 5a 1b 19 67
+   Display Name: iridium-esx33 [vargap] FVE_VM64_ESXI
+   Config File: /vmfs/volumes/638a47c5-0372e4bd-3bd1-908d6efe1574/machines/iridium-esx33 [vargap] FVE_VM64_ESXI/iridium-esx33 [vargap] FVE_VM64_ESXI.vmx
+
+iridium-esx90 [akaratas] FMG_VM64_ESXI
+   World ID: 2543748
+   Process ID: 0
+   VMX Cartel ID: 2543747
+   UUID: c7 8b d9 75 d9 01 40 66-b7 f1 98 18 52 e0 ed ea
+   Display Name: iridium-esx90 [akaratas] FMG_VM64_ESXI
+   Config File: /vmfs/volumes/638a47c5-0372e4bd-3bd1-908d6efe1574/machines/iridium-esx90 [akaratas] FMG_VM64_ESXI/iridium-esx90 [akaratas] FMG_VM64_ESXI.vmx
+
+iridium-esx59 [akaratas] FMG_VM64_ESXI
+   World ID: 2544251
+   Process ID: 0
+   VMX Cartel ID: 2544250
+   UUID: c3 03 89 1e 79 b7 44 a6-85 7f 8f 50 c8 ee aa f5
+   Display Name: iridium-esx59 [akaratas] FMG_VM64_ESXI
+   Config File: /vmfs/volumes/638a47c5-0372e4bd-3bd1-908d6efe1574/machines/iridium-esx59 [akaratas] FMG_VM64_ESXI/iridium-esx59 [akaratas] FMG_VM64_ESXI.vmx
+
+iridium-esx26 [ovoda] FLG_VM64_ESXI
+   World ID: 2544534
+   Process ID: 0
+   VMX Cartel ID: 2544533
+   UUID: 5a 2d 44 70 da 30 41 91-87 75 1c d7 95 2d 8b 3e
+   Display Name: iridium-esx26 [ovoda] FLG_VM64_ESXI
+   Config File: /vmfs/volumes/638a47c5-0372e4bd-3bd1-908d6efe1574/machines/iridium-esx26 [ovoda] FLG_VM64_ESXI/iridium-esx26 [ovoda] FLG_VM64_ESXI.vmx
+
+iridium-esx52 [fchabbal] FGT_VM64_ESXI
+   World ID: 2569916
+   Process ID: 0
+   VMX Cartel ID: 2569915
+   UUID: 8b a4 57 d8 15 2c 4a 2a-bb 8a 40 83 b9 dc f2 32
+   Display Name: iridium-esx52 [fchabbal] FGT_VM64_ESXI
+   Config File: /vmfs/volumes/638a47c5-0372e4bd-3bd1-908d6efe1574/machines/iridium-esx52 [fchabbal] FGT_VM64_ESXI/iridium-esx52 [fchabbal] FGT_VM64_ESXI.vmx
+
+iridium-esx28 [ebilcari] FPOC-18_VM64_ESXI
+   World ID: 2576139
+   Process ID: 0
+   VMX Cartel ID: 2576114
+   UUID: 42 05 cc f2 c4 ee 48 39-03 f8 7e 94 6d bb 11 a5
+   Display Name: iridium-esx28 [ebilcari] FPOC-18_VM64_ESXI
+   Config File: /vmfs/volumes/638a47c5-0372e4bd-3bd1-908d6efe1574/machines/iridium-esx28 [ebilcari] FPOC-18_VM64_ESXI/iridium-esx28 [ebilcari] FPOC-18_VM64_ESXI.vmx
+
+iridium-esx49 [jhelder] FGT_VM64_ESXI
+   World ID: 2584611
+   Process ID: 0
+   VMX Cartel ID: 2584610
+   UUID: c2 82 c1 b1 44 bb 4e 4e-be d6 00 97 6e 8f a8 e0
+   Display Name: iridium-esx49 [jhelder] FGT_VM64_ESXI
+   Config File: /vmfs/volumes/638a47c5-0372e4bd-3bd1-908d6efe1574/machines/iridium-esx49 [jhelder] FGT_VM64_ESXI/iridium-esx49 [jhelder] FGT_VM64_ESXI.vmx
+
+iridium-esx07 [mvianello] FMG_VM64_ESXI
+   World ID: 2584963
+   Process ID: 0
+   VMX Cartel ID: 2584959
+   UUID: 78 be 7c 1e a0 b5 46 cd-b0 37 ad 03 c9 95 e2 53
+   Display Name: iridium-esx07 [mvianello] FMG_VM64_ESXI
+   Config File: /vmfs/volumes/638a47c5-0372e4bd-3bd1-908d6efe1574/machines/iridium-esx07 [mvianello] FMG_VM64_ESXI/iridium-esx07 [mvianello] FMG_VM64_ESXI.vmx
+
+iridium-esx31 [mvianello] FLG_VM64_ESXI
+   World ID: 2585354
+   Process ID: 0
+   VMX Cartel ID: 2585353
+   UUID: ee 20 f9 57 36 1a 47 03-a1 f0 2b e1 3b 4b b3 62
+   Display Name: iridium-esx31 [mvianello] FLG_VM64_ESXI
+   Config File: /vmfs/volumes/638a47c5-0372e4bd-3bd1-908d6efe1574/machines/iridium-esx31 [mvianello] FLG_VM64_ESXI/iridium-esx31 [mvianello] FLG_VM64_ESXI.vmx
+
+iridium-esx27 [aaborehab] FE_VM64_ESXI
+   World ID: 2586137
+   Process ID: 0
+   VMX Cartel ID: 2586136
+   UUID: 14 27 7d 31 9c cb 4c a3-a1 14 e4 88 e6 4b 78 9d
+   Display Name: iridium-esx27 [aaborehab] FE_VM64_ESXI
+   Config File: /vmfs/volumes/638a47c5-0372e4bd-3bd1-908d6efe1574/machines/iridium-esx27 [aaborehab] FE_VM64_ESXI/iridium-esx27 [aaborehab] FE_VM64_ESXI.vmx
+
+iridium-esx38 [mvianello] FLG_VM64_ESXI
+   World ID: 2586393
+   Process ID: 0
+   VMX Cartel ID: 2586392
+   UUID: bb 6d 3c c7 f4 36 4f 76-86 7c 62 05 de d6 0a 50
+   Display Name: iridium-esx38 [mvianello] FLG_VM64_ESXI
+   Config File: /vmfs/volumes/638a47c5-0372e4bd-3bd1-908d6efe1574/machines/iridium-esx38 [mvianello] FLG_VM64_ESXI/iridium-esx38 [mvianello] FLG_VM64_ESXI.vmx
+[root@localhost:~] 
+
