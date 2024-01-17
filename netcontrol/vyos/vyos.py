@@ -325,14 +325,16 @@ class Vyos(object):
        log.debug(f"Enter with link={link} status={status}")
        command_list = []
        if status == 'up':
-            cmd = f"delete interfaces ethernet {link} disable"
+            cmd = f"delete interfaces ethernet {link} disable\n"
             command_list.append(cmd)
        elif status == 'down':
-            cmd = f"set interfaces ethernet {link} disable"
+            cmd = f"set interfaces ethernet {link} disable\n"
             command_list.append(cmd)
        else:
             log.error(f"unexpected status={status}")
             return
+       # send an empty command before commit (or it may fail)
+       command_list.append("\n")
        if not self.ssh.connected:
             self.ssh.connect()
        self.ssh.shell_send(["configure\n"])
