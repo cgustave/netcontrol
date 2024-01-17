@@ -324,10 +324,10 @@ class Vyos(object):
        """
        log.debug(f"Enter with link={link} status={status}")
        command_list = []
-       if status == 'UP':
+       if status == 'up':
             cmd = f"delete interfaces ethernet {link} disable"
             command_list.append(cmd)
-       elif status == 'DOWN':
+       elif status == 'down':
             cmd = f"set interfaces ethernet {link} disable"
             command_list.append(cmd)
        else:

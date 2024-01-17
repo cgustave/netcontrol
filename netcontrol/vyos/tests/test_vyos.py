@@ -81,7 +81,7 @@ class VyosTestCase(unittest.TestCase):
 
     def test_set_link_status(self):
         self.vyos.ssh.mock(context='vyosctl4')
-        result = self.vyos.set_link_status(link="eth1", status="DOWN")
+        result = self.vyos.set_link_status(link="eth1", status="down")
         expected = ""
         self.vyos.close()
 
