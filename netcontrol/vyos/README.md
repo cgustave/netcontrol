@@ -87,6 +87,10 @@ CLASSES
      |  dump_config(self)
      |      For troubleshooting, dump internal representation for the configuration
      |  
+     |  get_link_status(self, device='')
+     |      Returns a json object representing vyos links status for given device.
+     |      Keys are device port name, values are  'UP' or 'DOWN'
+     |  
      |  get_traffic_policy(self)
      |      Get network-emulator settings for the given interface
      |      Fills self._json with settings for the interfaces with keys like :
@@ -96,6 +100,10 @@ CLASSES
      |  
      |  run_op_mode_command(self, cmd)
      |      Use netcontrol shell to send commands to vyos
+     |  
+     |  set_link_status(self, link='', status='')
+     |      Set vyos port link UP or DOWN for the given peer_port
+     |      In Vyos mode, the port is vyos port itself (unlike fortipoc)
      |  
      |  set_traffic_policy(self, network_delay='', packet_loss='', packet_reordering='', packet_corruption='', bandwidth='', exit=True, save=True, commit=True, configure=True)
      |      Sets network-emulator settings

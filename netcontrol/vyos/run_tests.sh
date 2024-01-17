@@ -19,7 +19,8 @@ echo
 echo "======================================================================"
 echo "= UNIT TESTS                                                         ="
 echo "======================================================================"
-python3 -m coverage run --rcfile tests/coveragerc  tests/test_"$NAME".py
+#python3 -m coverage run --rcfile tests/coveragerc  tests/test_"$NAME".py
+python3 tests/test_"$NAME".py
 
 echo
 echo "======================================================================"

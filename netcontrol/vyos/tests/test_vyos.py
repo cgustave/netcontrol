@@ -53,7 +53,6 @@ class VyosTestCase(unittest.TestCase):
         self.vyos.close()
         self.assertEqual(str(result),expected)
 
-
     def test_set_bandwidth(self):
         self.vyos.ssh.mock(context='vyosctl3')
         self.vyos.set_traffic_policy(bandwidth=12)
@@ -72,6 +71,19 @@ class VyosTestCase(unittest.TestCase):
         self.vyos.set_traffic_policy(network_delay=11, packet_loss=3,packet_reordering=4, packet_corruption=2, bandwidth=10)
         self.vyos.close()
 
+    def test_get_link_status(self):
+        self.vyos.ssh.mock(context='vyosctl4')
+        result = json.loads(self.vyos.get_link_status(device="R1"))
+        log.debug(f"result={result}")
+        expected = "{'eth0': 'UP', 'eth1': 'DOWN'}"
+        self.vyos.close()
+        self.assertEqual(str(result),expected)
+
+    def test_set_link_status(self):
+        self.vyos.ssh.mock(context='vyosctl4')
+        result = self.vyos.set_link_status(link="eth1", status="DOWN")
+        expected = ""
+        self.vyos.close()
 
     #def test_unset_bandwidth(self):
     #     self.vyos.set_traffic_policy(bandwidth=0)

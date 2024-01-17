@@ -112,8 +112,8 @@ CLASSES
      |      This is only possible if using our test paramiko mocked module
      |  
      |  read_prompt(self)
-     |      Read up to 10 blocks until we can identify the shell prompt
-     |      prompt is stored in self.prompt
+     |      Reads up to 10 blocks until we can identify the shell prompt
+     |      Once found, prompt is stored in self._prompt
      |      It can be called after a shell_send to make sure we have received an
      |      acknowledgment prompt from the device
      |      While waiting for prompt, all output received is stored in the
@@ -121,8 +121,9 @@ CLASSES
      |      
      |      Prompt may or may not have vdom so it may have 2 forms like
      |      FGT-1B2-9 #  or  FGT-1B2-9 (vdom)  or even FGT-1B2-9 (global) #
-     |      
      |      for form with global or vdom, we would match once the first ( is found
+     |      
+     |      #210825 ESX system prompt is different: [root@neutron:~]
      |      
      |      Returns True if prompt si found
      |  

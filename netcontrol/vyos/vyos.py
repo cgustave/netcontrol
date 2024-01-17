@@ -232,8 +232,6 @@ class Vyos(object):
            - save : Forces a saving of config
            - commit : Apply the configuration
            - configure : Enter configuration mode
-           
-
         """
         flag_configured = False
         command_list = []
@@ -318,6 +316,57 @@ class Vyos(object):
                 self.ssh.shell_send(["exit\n"])
             else:
                 log.debug("exit is bypassed")
+
+    def set_link_status(self, link='', status=''):
+       """
+       Set vyos port link UP or DOWN for the given peer_port
+       In Vyos mode, the port is vyos port itself (unlike fortipoc)
+       """
+       log.debug(f"Enter with link={link} status={status}")
+       command_list = []
+       if status == 'UP':
+            cmd = f"delete interfaces ethernet {link} disable"
+            command_list.append(cmd)
+       elif status == 'DOWN':
+            cmd = f"set interfaces ethernet {link} disable"
+            command_list.append(cmd)
+       else:
+            log.error(f"unexpected status={status}")
+            return
+       if not self.ssh.connected:
+            self.ssh.connect()
+       self.ssh.shell_send(["configure\n"])
+       self.ssh.shell_send(command_list)
+       self.ssh.shell_send(["commit\n"])
+       self.ssh.shell_send(["save\n"])
+       self.ssh.shell_send(["exit\n"])
+       return(self.ssh.output)
+
+    def get_link_status(self, device=''):
+       """
+       Returns a json object representing vyos links status for given device.
+       Keys are device port name, values are  'UP' or 'DOWN'
+       """
+       log.debug(f"Enter with device={device}")
+       links = {}
+       if not self.ssh.connected:
+            self.ssh.connect()
+       self.run_op_mode_command("show interfaces ethernet detail | grep qdisc\n")
+       # Ex:
+       #eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc pfifo_fast state UP group default qlen 1000                                                             
+       #eth1: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc pfifo_fast state UP group default qlen 1000                                                             
+       for line in self.ssh.output.splitlines():
+          log.debug(f"line={line}")
+          match_port = re.search("^(?P<port>\S+):\s<", line)
+          if match_port:
+             port = match_port.group('port')
+             log.debug(f"found port={port}")
+             match_status = re.search("state\s(?P<status>(UP|DOWN))\s", line)
+             if match_status:
+                 status = match_status.group('status')
+                 log.debug(f"port={port} => status={status}")
+                 links[port] = status
+       return (json.dumps(links))
 
     def dump_config(self):
         """
