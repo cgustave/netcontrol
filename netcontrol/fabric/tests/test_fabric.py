@@ -24,19 +24,23 @@ class fabricTestCase(unittest.TestCase):
         self.fabric = Fabric(ip='10.5.51.118', user='admin', password='', debug=True)
 
     #@unittest.skip
+    def test_get_link_status(self):
+        self.fabric.get_link_status(peer_name='Client', peer_link='eth0')
+
+    @unittest.skip
     def test_session_check(self):
         self.fabric.session_check()
 
-    #@unittest.skip
+    @unittest.skip
     def test_open_session(self):
         self.fabric.close()
         self.fabric.open_session()
 
-    #@unittest.skip
+    @unittest.skip
     def test_version(self):
         self.fabric.version()
 
-    #@unittest.skip
+    @unittest.skip
     def test_close_session(self):
         self.fabric.open_session()
         self.fabric.close()

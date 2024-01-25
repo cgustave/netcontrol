@@ -28,7 +28,6 @@ log.basicConfig(
     level=log.NOTSET
     )
 
-
 class Fabric(object):
     """
     main class
@@ -59,9 +58,7 @@ class Fabric(object):
         try:
             return_value = False
             url = self.base_url+"/api/v1/session/check"
-            headers = {}
-            headers['Referer'] = f"https://{self.ip}/"
-            log.debug(f"headers={headers} url={url}")
+            headers = self.get_headers()
             response = requests.get(url, headers=headers, verify=False, timeout=5)
             if response.status_code != 200:
                 log.error(f"HTTP ERROR {response.status_code}")
@@ -108,10 +105,7 @@ class Fabric(object):
         self.session_check()
         try:
             url = self.base_url+"/api/v1/session/open"
-            headers = {}
-            headers['Referer'] = f"https://{self.ip}/"
-            headers['Content-Type'] = 'application/json'
-            headers['X-FortiPoC-CSRFToken'] = self.csrftoken
+            headers = self.get_headers()
             data = {}
             data['username'] = f"{self.user}"
             data['password'] = f"{self.password}"
@@ -149,25 +143,18 @@ class Fabric(object):
         if not self.session_check():
             log.debug("Not authenticated, opening session")
             self.open_session()
-        
-    def version(self):
+
+    def get_headers(self):
         """ 
-        Get FabricStudio version
-        Test function for the API
+        Prepare request headers (Referer, Content-Type, X-FortiPoC-CSRFToken)
         """
         log.debug("Enter")
-        try:
-            self.connect()
-            url = self.base_url+"/api/v1/system/version"
-            headers = {}
-            headers['Referer'] = f"https://{self.ip}/"
-            headers['X-FortiPoC-CSRFToken'] = self.csrftoken
-            log.debug(f"headers={headers} url={url} csrftoken={self.csrftoken}")
-            response = requests.get(url, headers=headers, cookies=self.cookies, verify=False, timeout=5) 
-            log.debug(f"status_code={response.status_code}")
-            log.debug(f"response={response.text}")
-        except Exception as e:
-            log.error(f"error={repr(e)}")
+        headers = {}
+        headers['Referer'] = f"https://{self.ip}/"
+        headers['Content-Type'] = 'application/json'
+        headers['X-FortiPoC-CSRFToken'] = self.csrftoken        
+        log.debug(f"headers={headers}")
+        return headers
         
     def close(self):
         """ 
@@ -176,10 +163,7 @@ class Fabric(object):
         log.debug("Enter")
         try:
             url = self.base_url+"/api/v1/session/close"
-            headers = {}
-            headers['Referer'] = f"https://{self.ip}/"
-            headers['X-FortiPoC-CSRFToken'] = self.csrftoken
-            log.debug(f"headers={headers} url={url} csrftoken={self.csrftoken}")
+            headers = self.get_headers()
             response = requests.post(url, headers=headers, cookies=self.cookies, verify=False, timeout=5) 
             log.debug(f"status_code={response.status_code}")
             if response.status_code == 200:
@@ -192,40 +176,90 @@ class Fabric(object):
                 log.debug(f"text={response.text}")
         except Exception as e:
             log.error(f"error={repr(e)}")
+
+    def version(self):
+        """ 
+        Get FabricStudio version
+        Test function for the API
+        """
+        log.debug("Enter")
+        try:
+            self.connect()
+            url = self.base_url+"/api/v1/system/version"
+            headers = self.get_headers()
+            response = requests.get(url, headers=headers, cookies=self.cookies, verify=False, timeout=5) 
+            log.debug(f"status_code={response.status_code}")
+            log.debug(f"response={response.text}")
+        except Exception as e:
+            log.error(f"error={repr(e)}")
+    
+    def get_device_runtime_id(self, name):
+        """ 
+        Returns the FabricStudio device runtime id from the device name 
+        """
+        log.debug(f"Enter with name={name}")
+        try:
+            self.connect()
+            url = self.base_url+f"/api/v1/runtime/device?select=name%3D{name}"
+            headers = self.get_headers()
+            response = requests.get(url, headers=headers, cookies=self.cookies, verify=False, timeout=5) 
+            dict_response = response.json()
+            log.debug(f"type dict_response={type(dict_response)}")
+            log.debug(f"status_code={response.status_code}")
+            if response.status_code == 200:
+                if 'object' in dict_response:
+                    item = dict_response['object'][0]
+                    log.debug(f"item={item}")
+                    runtime = item['runtime']
+                    log.debug(f"response text={response.text}")
+                    log.debug(f"found runtime={runtime} for device name={name}")
+                    return runtime
+            else:
+                log.warning(f"status code {response.status_code}")
+        except Exception as e:
+            log.error(f"error={repr(e)}")           
             
-    def set_link_status(self, device='', link='', status=''):
-        """
-        Set fortifabric link UP or DOWN for the given device and link
-        Device is the device name in FabricStudio (like 'FGT-1') and link
-        is the port name for the device in FabricStudio
-        """
-        log.debug("Enter with device={} link={} status={}".
-                 format(device, link, status))
-
-        # sanity checks
-        if (status != 'up') and (status != 'down'):
-            print("status values can only be 'up' or 'down'")
-            return ("ERROR: status values can only be 'up' or 'down'")
-
-        if (device == ''):
-            print("device is missing")
-            return("ERROR: device missing")
-
-        if (link == ''):
-            print("link is required")
-            return("ERROR: link missing")
-        return
-
-    def get_link_status(self, device='', link=''):
+    def get_link_status(self, peer_name='', peer_link=''):
         """
         Returns a json object representing fabric link status for givena
         device and link. Keys are device port name, values are  'UP' or 'DOWN'
+        Note: FS API uses the device runtime id for peer instead of name
         example of return :
         {
            "port1": "UP",
         }
         """
-        log.debug("Enter with device={}".format(device))
+        log.debug(f"Enter with peer_name={peer_name} peer_link={peer_link}")
+        dev_id = self.get_device_runtime_id(name=peer_name)
+        log.debug(f"Found dev_id={dev_id} for peer_name={peer_name}")
+        try:
+            #self.connect()
+            url = self.base_url+f"/api/v1/runtime/device/{dev_id}/port"
+            headers = self.get_headers()
+            response = requests.get(url, headers=headers, cookies=self.cookies, verify=False, timeout=5) 
+            log.debug(f"status_code={response.status_code}")
+            log.debug(f"response={response.text}")
+        except Exception as e:
+            log.error(f"error={repr(e)}")
+        return
+
+    def set_link_status(self, action='', peer_name='', peer_link='', status=''):
+        """
+        Set fortifabric link UP or DOWN for the given device and link
+        Device is the device name in FabricStudio (like 'FGT-1') and link
+        is the port name for the device in FabricStudio
+        """
+        log.debug(f"Enter with action={action} peer_name={peer_name} peer_link={peer_link} status={status}")
+        # sanity checks
+        if (status != 'up') and (status != 'down'):
+            print("status values can only be 'up' or 'down'")
+            return ("ERROR: status values can only be 'up' or 'down'")
+        if (peer_name == ''):
+            print("peer_name is missing")
+            return("ERROR: peer_name missing")
+        if (peer_link == ''):
+            print("peer_link is required")
+            return("ERROR: peer_link missing")
         return
 
 
