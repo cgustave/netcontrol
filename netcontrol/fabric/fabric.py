@@ -17,7 +17,10 @@ API requires authenticated by opening a session using admin/password credentials
 import re
 import json
 import requests
+requests.packages.urllib3.disable_warnings(requests.packages.urllib3.exceptions.InsecureRequestWarning)
 import logging as log
+
+# remove warning message on certificates
 
 log.basicConfig(
     format='%(asctime)s,%(msecs)3.3d\
@@ -48,18 +51,21 @@ class Fabric(object):
         self.csrftoken = None
         self.cookies = None
         self.session = None
+        self.dev_id = None  # Cache for devie id, filled from get_link_status
+        self.port_id = None # Cache for port id, filled from get_link_status
 
     def session_check(self):
         """ 
-        Check if session is authenticated and get csrf token
-        Return True or False
+        Used as first contact with the API. 
+        Check if session is authenticated
+        Extract received cookies (especially csrf-token and session-id)
         """
         log.debug("Enter")
         try:
             return_value = False
             url = self.base_url+"/api/v1/session/check"
-            headers = self.get_headers()
-            response = requests.get(url, headers=headers, verify=False, timeout=5)
+            headers = self.build_headers()
+            response = requests.get(url, headers=headers, cookies=self.cookies, verify=False, timeout=5)
             if response.status_code != 200:
                 log.error(f"HTTP ERROR {response.status_code}")
                 return False
@@ -79,14 +85,12 @@ class Fabric(object):
                     log.warning("No authenticated key in object")
             else:
                 log.error("No object in response")
-            # Extract CSRF token
-            if response.cookies:
-                log.debug(f"cookies type={type(response.cookies)}")
-                self.cookies = response.cookies
-                if 'fortipoc-csrftoken' in response.cookies:
-                    self.csrftoken = response.cookies['fortipoc-csrftoken']
-                    log.debug(f"got fortipoc-csrftoken={self.csrftoken}")
-            return return_value
+            self.process_cookies(cookies=response.cookies)
+            # Return true if we have a csrftoken and a session-id
+            if self.csrftoken and self.session:
+                log.debug(f"Session is opened with session-id{self.session}")
+            else:
+                log.debug("Session is not opened (missing either csrf-tocken or session-id)")
         except Exception as e:
             log.error(f"error={repr(e)}")
 
@@ -105,7 +109,7 @@ class Fabric(object):
         self.session_check()
         try:
             url = self.base_url+"/api/v1/session/open"
-            headers = self.get_headers()
+            headers = self.build_headers()
             data = {}
             data['username'] = f"{self.user}"
             data['password'] = f"{self.password}"
@@ -117,21 +121,11 @@ class Fabric(object):
                 log.debug(f"Feedback page text={response.text}")
             elif response.status_code == 200:
                 log.debug("status_code 200")
-                # Extract sessionid cookie
-                for key in response.cookies.iterkeys():
-                    log.debug(f"key={key}")
-                    match_session = re.search('(?P<session_id>fortipoc-sessionid-\S+)', key)
-                    if match_session:
-                        session_id = match_session['session_id']
-                        session_value = response.cookies[session_id]
-                        log.debug(f"received session_id={session_id} session_value={session_value}")
-                        self.session = session_id
-                        self.cookies = response.cookies
-                        return_value = True
-            log.debug(f"cookies={response.cookies}")
+                self.process_cookies(cookies=response.cookies)
             log.debug(f"response dict={response.json()}")
         except Exception as e:
             log.error(f"error={repr(e)}")
+        log.debug(f"session summary: csrftoken={self.csrftoken} session={self.session}")
         return return_value
 
     def connect(self):
@@ -140,11 +134,37 @@ class Fabric(object):
         Get a session cookie
         """
         log.debug("Enter")
-        if not self.session_check():
+        if not self.session:
             log.debug("Not authenticated, opening session")
             self.open_session()
+        else:
+            log.debug(f"Already authenticated with session-id={self.session}")
 
-    def get_headers(self):
+    def process_cookies(self, cookies=None):
+        """ 
+        Take a response.cookies and extract csrf-token and session-id
+        and update the cookies attribut
+        """
+        log.debug("Enter")
+        if cookies:
+            log.debug(f"cookies oject type={type(cookies)}")
+            log.debug(f"cookies={cookies}")
+            self.cookies = cookies
+            for key in cookies.iterkeys():
+                log.debug(f"cookie key={key}")
+                # extract CSRF token
+                if key == 'fortipoc-csrftoken':
+                    self.csrftoken = cookies['fortipoc-csrftoken']
+                    log.debug(f"got fortipoc-csrftoken={self.csrftoken}")
+                # extract session-id
+                match_session = re.search('(?P<session_id>fortipoc-sessionid-\S+)', key)
+                if match_session:
+                    session_id = match_session['session_id']
+                    session_value = cookies[session_id]
+                    log.debug(f"got session {session_id} with value={session_value}")
+                    self.session = session_id
+
+    def build_headers(self):
         """ 
         Prepare request headers (Referer, Content-Type, X-FortiPoC-CSRFToken)
         """
@@ -163,7 +183,7 @@ class Fabric(object):
         log.debug("Enter")
         try:
             url = self.base_url+"/api/v1/session/close"
-            headers = self.get_headers()
+            headers = self.build_headers()
             response = requests.post(url, headers=headers, cookies=self.cookies, verify=False, timeout=5) 
             log.debug(f"status_code={response.status_code}")
             if response.status_code == 200:
@@ -186,10 +206,14 @@ class Fabric(object):
         try:
             self.connect()
             url = self.base_url+"/api/v1/system/version"
-            headers = self.get_headers()
+            headers = self.build_headers()
             response = requests.get(url, headers=headers, cookies=self.cookies, verify=False, timeout=5) 
             log.debug(f"status_code={response.status_code}")
             log.debug(f"response={response.text}")
+            if response.status_code == 200:
+                self.process_cookies(cookies=response.cookies)
+            else:
+                log.warning(f"unexpected status_code={response.status_code}")
         except Exception as e:
             log.error(f"error={repr(e)}")
     
@@ -201,12 +225,13 @@ class Fabric(object):
         try:
             self.connect()
             url = self.base_url+f"/api/v1/runtime/device?select=name%3D{name}"
-            headers = self.get_headers()
+            headers = self.build_headers()
             response = requests.get(url, headers=headers, cookies=self.cookies, verify=False, timeout=5) 
             dict_response = response.json()
             log.debug(f"type dict_response={type(dict_response)}")
             log.debug(f"status_code={response.status_code}")
             if response.status_code == 200:
+                self.process_cookies(cookies=response.cookies)
                 if 'object' in dict_response:
                     item = dict_response['object'][0]
                     log.debug(f"item={item}")
@@ -221,9 +246,21 @@ class Fabric(object):
             
     def get_link_status(self, peer_name='', peer_link=''):
         """
-        Returns a json object representing fabric link status for givena
-        device and link. Keys are device port name, values are  'UP' or 'DOWN'
-        Note: FS API uses the device runtime id for peer instead of name
+        Returns a json object representing fabric link status for given the given device and link.
+        Keys are device port name but FS API uses the device runtime id for peer instead of name.
+        Port status information is provided in the iproute2 section. If device is down, iproute is empty
+        If device is up, there are flags and operstate:
+        
+        Device up, port up example => "operstate": "UP"
+        [{"name": "eth1", "index": 2, "hwaddr": "02:09:0F:00:02:02", "override_pair_hwaddr": "", "device": 24, "ipv4addr": null, "ipv4netmask": null, "mgmt": false, "addrmode": "STA", "auto_config": true, "dhcp_server": null, "copy_hwaddr_from_port": null, "mtu": 0, "iproute2": {"ifindex": 55, "link_index": 3, "ifname": "LXC.eth1", "flags": ["BROADCAST", "MULTICAST", "UP", "LOWER_UP"], "mtu": 1500, "qdisc": "noqueue", "operstate": "UP", "group": "default", "txqlen": 1000, "link_type": "ether", "address": "f2:09:0f:00:02:02", "broadcast": "ff:ff:ff:ff:ff:ff", "link_netnsid": 2, "addr_info": [{"family": "inet6", "local": "fe80::f009:fff:fe00:202", "prefixlen": 64, "scope": "link", "valid_life_time": 4294967295, "preferred_life_time": 4294967295}]}, "peer": null, "cable": null, "pair_hwaddr": "F2:09:0F:00:02:02", "runtime": 140, "__model": "model.vmport", "__db": "runtime", "id": 140}], "status": "done", "rcode": 0}
+        
+        Device up but interface down => "operstate": "LOWERLAYERDOWN"
+        [{"name": "eth1", "index": 2, "hwaddr": "02:09:0F:00:02:02", "override_pair_hwaddr": "", "device": 24, "ipv4addr": null, "ipv4netmask": null, "mgmt": false, "addrmode": "STA", "auto_config": true, "dhcp_server": null, "copy_hwaddr_from_port": null, "mtu": 0, "iproute2": {"ifindex": 55, "link_index": 3, "ifname": "LXC.eth1", "flags": ["NO-CARRIER", "BROADCAST", "MULTICAST", "UP"], "mtu": 1500, "qdisc": "noqueue", "operstate": "LOWERLAYERDOWN", "group": "default", "txqlen": 1000, "link_type": "ether", "address": "f2:09:0f:00:02:02", "broadcast": "ff:ff:ff:ff:ff:ff", "link_netnsid": 2, "addr_info": [{"family": "inet6", "local": "fe80::f009:fff:fe00:202", "prefixlen": 64, "scope": "link", "valid_life_time": 4294967295, "preferred_life_time": 4294967295}]}, "peer": null, "cable": null, "pair_hwaddr": "F2:09:0F:00:02:02", "runtime": 140, "__model": "model.vmport", "__db": "runtime", "id": 140}], "status": "done", "rcode": 0}
+
+        Device shutdown example (no iproute2) => iproute2": {}
+        {"name": "eth1", "index": 2, "hwaddr": "02:09:0F:00:02:02", "override_pair_hwaddr": "", "device": 24, "ipv4addr": null, "ipv4netmask": null, "mgmt": false, "addrmode": "STA", "auto_config": true, "dhcp_server": null, "copy_hwaddr_from_port": null, "mtu": 0, "iproute2": {}, "peer": null, "cable": null, "pair_hwaddr": "F2:09:0F:00:02:02", "runtime": 140, "__model": "model.vmport", "__db": "runtime", "id": 140}], "status": "done", "rcode": 0}
+
+        Extract portid so it can be used by set_link_status
         example of return :
         {
            "port1": "UP",
@@ -232,24 +269,64 @@ class Fabric(object):
         log.debug(f"Enter with peer_name={peer_name} peer_link={peer_link}")
         dev_id = self.get_device_runtime_id(name=peer_name)
         log.debug(f"Found dev_id={dev_id} for peer_name={peer_name}")
+        self.dev_id = dev_id
+        return_value = None
         try:
-            #self.connect()
-            url = self.base_url+f"/api/v1/runtime/device/{dev_id}/port"
-            headers = self.get_headers()
+            self.connect()
+            # Note: operstate requires to add related-fields iproute2 in the query
+            url = self.base_url+f"/api/v1/runtime/device/{dev_id}/port?related-fields=iproute2&select=name%3D{peer_link}"
+            headers = self.build_headers()
             response = requests.get(url, headers=headers, cookies=self.cookies, verify=False, timeout=5) 
+            dict_response = response.json()
             log.debug(f"status_code={response.status_code}")
             log.debug(f"response={response.text}")
+            if response.status_code == 200:
+                if 'object' in dict_response:
+                    item = dict_response['object'][0]
+                    # Extract port_id
+                    if 'id' in item:
+                        log.debug(f"port_id={item['id']}")
+                        self.port_id = item['id']
+                    # Extract port status
+                    if 'iproute2' in item:
+                        iproute2 = item['iproute2']
+                        if 'operstate' in iproute2:
+                            if iproute2['operstate'] == 'UP':
+                                log.debug(f"operstate=UP => link {peer_link} is up")
+                                return_value = 'UP'
+                            elif iproute2['operstate'] == 'LOWERLAYERDOWN':
+                                log.debug(f"operstate=LOWERLAYERDOWN => link {peer_link} is DOWN")
+                            else:
+                                log.warning(f"unknown state={iproute2['operstate']} consider {peer_link} is DOWN")
+                                return_value = 'DOWN'
+                        else:
+                            log.debug(f"no operstate => link {peer_link} is DOWN")
+                            return_value = 'DOWN'
+                    else:
+                        log.debug("No iproute2")
+                        return_value = 'DOWN'
+                else:
+                    log.error("no object")
+                log.debug(f"status={return_value}")
+            else:
+                log.warning(f"unexpected status_code={response.status_code}")
+            # Prepare json for output
+            output = {}
+            output[peer_link] = return_value
+            json_return = json.dumps(output)
+            log.debug(f"json_return={json_return}")
+            return json_return
         except Exception as e:
             log.error(f"error={repr(e)}")
         return
 
-    def set_link_status(self, action='', peer_name='', peer_link='', status=''):
+    def set_link_status(self, peer_name='', peer_link='', status=''):
         """
         Set fortifabric link UP or DOWN for the given device and link
         Device is the device name in FabricStudio (like 'FGT-1') and link
         is the port name for the device in FabricStudio
         """
-        log.debug(f"Enter with action={action} peer_name={peer_name} peer_link={peer_link} status={status}")
+        log.debug(f"Enter with peer_name={peer_name} peer_link={peer_link} status={status}")
         # sanity checks
         if (status != 'up') and (status != 'down'):
             print("status values can only be 'up' or 'down'")
@@ -260,8 +337,31 @@ class Fabric(object):
         if (peer_link == ''):
             print("peer_link is required")
             return("ERROR: peer_link missing")
+        # define url action
+        action = 'repair'
+        if status == 'down':
+            action = 'break'
+        # Need first to get current status and get the portid
+        self.get_link_status(peer_name=peer_name, peer_link=peer_link)
+        if self.port_id == None or self.dev_id == None:
+            log.error(f"missing port_id={self.port_id} and/or dev_id={self.dev_id}")
+            return
+        try:
+            self.connect()
+            url = self.base_url+f"/api/v1/runtime/cable/{self.dev_id}/{self.port_id}:{action}"
+            headers = self.build_headers()
+            response = requests.post(url, headers=headers, cookies=self.cookies, verify=False, timeout=5) 
+            log.debug(f"status_code={response.status_code}")
+            log.debug(f"response={response.text}")
+            if response.status_code == 200:
+                log.debug("ok")
+            else:
+                log.warning(f"unexpected status_code={response.status_code}")
+        except Exception as e:
+            log.error(f"error={repr(e)}")
         return
-
+        
+        return
 
 if __name__ == '__main__': #pragma: no cover
 
