@@ -10,18 +10,11 @@ Used for unittest
 import logging as log
 # create logger
 log.basicConfig(
-    format='%(asctime)s,%(msecs)3.3d %(levelname)-8s[%(module)-7.7s.\
-    %(funcName)-30.30s:%(lineno)5d]%(message)s',
-    datefmt='%Y%m%d:%H:%M:%S',
-    filename='debug.log',
-    level=log.DEBUG)
-
-log.basicConfig(
     format='%(asctime)s,%(msecs)3.3d %(levelname)-8s[%(module)-7.7s.%(funcName)-30.30s:%(lineno)5d] %(message)s',
     datefmt='%Y%m%d:%H:%M:%S',
     filename='debug.log',
     level='DEBUG')
-
+log.debug("Loading mocked lib paramiko")
 
 class SSHException(Exception):
     """
@@ -162,7 +155,7 @@ class SSHClient():
 
         # some commands need to be translated so they can be used as filename
         # We replace / with - and 'space' with _ and | with -
-        tr_command = command.translate(str.maketrans({"/": "-", "\\": "_","'" : "_","^" : "_"," ": "_","|": "-"}))
+        tr_command = command.translate(str.maketrans({"/":"-", "\\":"_", "'":"_", "^":"_", " ":"_", "|":"-", "<":"_", ">":"_"}))
         log.debug("tr_command={}".format(tr_command))
 
         filename = "tests/mockfiles/"+self.context+"/"+tr_command+"_stdin.txt"

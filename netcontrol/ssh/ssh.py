@@ -53,8 +53,6 @@ class Ssh(object):
         Constructor with default values.
         Use admin / no password by default
         """
-        if debug:
-            log.basicConfig(level='DEBUG')
         log.basicConfig(
             format='%(asctime)s,%(msecs)3.3d\
             %(levelname)-8s[%(module)-7.7s.%(funcName)\
@@ -62,6 +60,9 @@ class Ssh(object):
             datefmt='%Y%m%d:%H:%M:%S',
             filename='debug.log',
             level=log.NOTSET)
+ 
+        if debug:
+            log.basicConfig(level='DEBUG')
         log.debug("Constructor with ip={}, port={}, user={}, password={}, private_key_file={}, debug={}"
                   .format(ip, port, user, password, private_key_file, debug))
         # public class attributs

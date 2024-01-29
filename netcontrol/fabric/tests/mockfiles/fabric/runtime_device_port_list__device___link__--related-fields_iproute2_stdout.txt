@@ -1,0 +1,12 @@
+{
+    "errors": {
+    },
+    "object": [
+        {
+            "iproute2": {
+                 "operstate": "DOWN",
+             }, 
+            "name": "eth0",
+        }, 
+    ],
+}
