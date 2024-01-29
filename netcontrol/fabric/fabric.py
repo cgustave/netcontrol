@@ -17,7 +17,7 @@ API requires authenticated by opening a session using admin/password credentials
 import re
 import json
 import requests
-requests.packages.urllib3.disable_warnings(requests.packages.urllib3.exceptions.InsecureRequestWarning)
+#requests.packages.urllib3.disable_warnings(requests.packages.urllib3.exceptions.InsecureRequestWarning)
 import logging as log
 
 # remove warning message on certificates
@@ -45,9 +45,9 @@ class Fabric(object):
 
         # public class attributs
         self.ip = ip
+        self.port = port
         self.user = user
         self.password = password
-        self.base_url = f"https://{ip}:{port}"
         self.csrftoken = None
         self.cookies = None
         self.session = None
@@ -63,7 +63,7 @@ class Fabric(object):
         log.debug("Enter")
         try:
             return_value = False
-            url = self.base_url+"/api/v1/session/check"
+            url = f"https://{self.ip}:{self.port}/api/v1/session/check"
             headers = self.build_headers()
             response = requests.get(url, headers=headers, cookies=self.cookies, verify=False, timeout=5)
             if response.status_code != 200:
@@ -108,7 +108,7 @@ class Fabric(object):
             return True
         self.session_check()
         try:
-            url = self.base_url+"/api/v1/session/open"
+            url = f"https://{self.ip}:{self.port}/api/v1/session/open"
             headers = self.build_headers()
             data = {}
             data['username'] = f"{self.user}"
@@ -117,7 +117,7 @@ class Fabric(object):
             log.debug(f"headers={headers} url={url} data={json.dumps(data)} csrftoken={self.csrftoken}")
             response = requests.post(url, headers=headers, cookies=self.cookies, data=json.dumps(data), verify=False, timeout=5) 
             if response.status_code == 403:
-                log.warning(f"403 Authentication issue with username={user} password={password}")
+                log.warning(f"403 Authentication issue with username={self.user} password={self.password}")
                 log.debug(f"Feedback page text={response.text}")
             elif response.status_code == 200:
                 log.debug("status_code 200")
@@ -182,7 +182,7 @@ class Fabric(object):
         """
         log.debug("Enter")
         try:
-            url = self.base_url+"/api/v1/session/close"
+            url = f"https://{self.ip}:{self.port}/api/v1/session/close"
             headers = self.build_headers()
             response = requests.post(url, headers=headers, cookies=self.cookies, verify=False, timeout=5) 
             log.debug(f"status_code={response.status_code}")
@@ -205,7 +205,7 @@ class Fabric(object):
         log.debug("Enter")
         try:
             self.connect()
-            url = self.base_url+"/api/v1/system/version"
+            url = f"https://{self.ip}:{self.port}/api/v1/system/version"
             headers = self.build_headers()
             response = requests.get(url, headers=headers, cookies=self.cookies, verify=False, timeout=5) 
             log.debug(f"status_code={response.status_code}")
@@ -224,7 +224,7 @@ class Fabric(object):
         log.debug(f"Enter with name={name}")
         try:
             self.connect()
-            url = self.base_url+f"/api/v1/runtime/device?select=name%3D{name}"
+            url = f"https://{self.ip}:{self.port}/api/v1/runtime/device?select=name%3D{name}"
             headers = self.build_headers()
             response = requests.get(url, headers=headers, cookies=self.cookies, verify=False, timeout=5) 
             dict_response = response.json()
@@ -274,7 +274,7 @@ class Fabric(object):
         try:
             self.connect()
             # Note: operstate requires to add related-fields iproute2 in the query
-            url = self.base_url+f"/api/v1/runtime/device/{dev_id}/port?related-fields=iproute2&select=name%3D{peer_link}"
+            url = f"https://{self.ip}:{self.port}/api/v1/runtime/device/{dev_id}/port?related-fields=iproute2&select=name%3D{peer_link}"
             headers = self.build_headers()
             response = requests.get(url, headers=headers, cookies=self.cookies, verify=False, timeout=5) 
             dict_response = response.json()
@@ -296,6 +296,10 @@ class Fabric(object):
                                 return_value = 'UP'
                             elif iproute2['operstate'] == 'LOWERLAYERDOWN':
                                 log.debug(f"operstate=LOWERLAYERDOWN => link {peer_link} is DOWN")
+                                return_value = 'DOWN'
+                            elif iproute2['operstate'] == 'DOWN':
+                                log.debug(f"operstate=DOWN => link {peer_link} is DOWN")
+                                return_value = 'DOWN'
                             else:
                                 log.warning(f"unknown state={iproute2['operstate']} consider {peer_link} is DOWN")
                                 return_value = 'DOWN'
@@ -348,7 +352,7 @@ class Fabric(object):
             return
         try:
             self.connect()
-            url = self.base_url+f"/api/v1/runtime/cable/{self.dev_id}/{self.port_id}:{action}"
+            url = f"https://{self.ip}:{self.port}/api/v1/runtime/cable/{self.dev_id}/{self.port_id}:{action}"
             headers = self.build_headers()
             response = requests.post(url, headers=headers, cookies=self.cookies, verify=False, timeout=5) 
             log.debug(f"status_code={response.status_code}")

@@ -28,18 +28,27 @@ class cookies(object):
 
 class response(object):
 
-    def __init__(self):
+    def __init__(self, object=None):
        self.status_code = 200
        self.cookies = cookies()
+       self.object = {}
+       if self.object != None:
+           self.object = object
     
     def json(self):
         """
         dict_response={'errors': {}, 'warnings': {}, 'object': {'authenticated': False, 'username': '', 'disclaimer': '<p>\n
         {'errors': {}, 'warnings': {}, 'object': {'authenticated': False, 'username': '', 'disclaimer': '<p>\n  FortiPoC 2.0.0.interim.76.fix.3\n</p>\n<hr/>\n<p>For Fortinet employees and partners <strong>use only</strong>.</p>\n<p>The unauthorized reproduction, distribution or usage of this\n  product is illegal.</p>\n<p>The unauthorized reproduction, distribution or usage of\n  resources used by this product is illegal.</p>\n<hr/>\n<p>\n  THE PRODUCT IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,\n  EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF\n  MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND\n  NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE\n  LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION\n  OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION\n  WITH THE PRODUCT OR THE USE OR OTHER DEALINGS IN THE PRODUCT.\n</p>\n<hr/>\n<p>\n  BY USING THE PRODUCT YOU AGREE TO ABIDE BY THESE TERMS AND CONDITIONS.\n</p>\n'}, 'status': 'done', 'rcode': 0}
+        load object if provided otherwise use a default
         """
+        log.debug("Enter")
         r = {}
         r['object'] = {}
         r['object']['authenticated'] = True
+        if self.object != None:
+            r['object'] = self.object
+        else:
+            log.debug("use a default empty output")
         r['errors'] = {}
         #r['cookie'] = {}
         #r['cookie']['fortipoc-csrftoken'] = ''
