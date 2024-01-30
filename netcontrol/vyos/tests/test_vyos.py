@@ -21,13 +21,15 @@ class VyosTestCase(unittest.TestCase):
 
     # Always run before any test
     def setUp(self):
-        self.vyos = Vyos(ip='10.205.10.120', port='10106', user='vyos',
+        self.vyos = Vyos(ip='10.205.10.120', version='1.1', port='10106', user='vyos',
                             password='vyos', debug=True)
 
+    #@unittest.skip
     def test_connect(self):
         self.vyos.connect()
         pass 
 
+    #@unittest.skip
     def test_attributs_validation(self):
         self.assertTrue(self.vyos.ip == '10.205.10.120')
         self.assertTrue(self.vyos.port == '10106')
@@ -35,7 +37,8 @@ class VyosTestCase(unittest.TestCase):
         self.assertTrue(self.vyos.password == 'vyos')
         self.assertTrue(self.vyos.traffic_policy == 'WAN')
 
-    def test_get_traffic_policy(self):
+    #@unittest.skip
+    def test_get_traffic_policy_v1_1(self):
         self.vyos.ssh.mock(context='vyosctl1')
         result = json.loads(self.vyos.get_traffic_policy())
         log.debug("Result : {}".format(result))
@@ -44,7 +47,18 @@ class VyosTestCase(unittest.TestCase):
         self.vyos.close()
         self.assertEqual(str(result),expected)
 
-    def test_set_traffic_policy(self):
+    #@unittest.skip
+    def test_get_traffic_policy_v1_4(self):
+        self.vyos.ssh.mock(context='vyosctl4')
+        result = json.loads(self.vyos.get_traffic_policy())
+        log.debug("Result : {}".format(result))
+        # Note : there is no quotes when value has not been set : see '0' and 0
+        expected = "{'network_delay': '10', 'packet_corruption': 0, 'packet_loss': 0, 'packet_reordering': 0, 'bandwidth': 0}"
+        self.vyos.close()
+        self.assertEqual(str(result),expected)
+
+    #@unittest.skip
+    def test_set_traffic_policy_v1_1(self):
         self.vyos.ssh.mock(context='vyosctl2')
         self.vyos.set_traffic_policy(network_delay=11, packet_loss=3,packet_reordering=4, packet_corruption=2, bandwidth=10)
         result = json.loads(self.vyos.get_traffic_policy())
@@ -53,7 +67,8 @@ class VyosTestCase(unittest.TestCase):
         self.vyos.close()
         self.assertEqual(str(result),expected)
 
-    def test_set_bandwidth(self):
+    #@unittest.skip
+    def test_set_bandwidth_v1_1(self):
         self.vyos.ssh.mock(context='vyosctl3')
         self.vyos.set_traffic_policy(bandwidth=12)
         result = json.loads(self.vyos.get_traffic_policy())
@@ -63,6 +78,18 @@ class VyosTestCase(unittest.TestCase):
         self.vyos.close()
         self.assertEqual(str(result),expected)
 
+    #@unittest.skip
+    def test_set_bandwidth_v1_4(self):
+        self.vyos.ssh.mock(context='vyosctl4a')
+        self.vyos.set_traffic_policy(bandwidth=12)
+        result = json.loads(self.vyos.get_traffic_policy())
+        log.debug("Result : {}".format(result))
+        expected = "{'network_delay': '11', 'packet_corruption': '2', 'packet_loss': '3', 'packet_reordering': '4', 'bandwidth': '12'}"
+        self.vyos.dump_config()
+        self.vyos.close()
+        self.assertEqual(str(result),expected)
+
+    #@unittest.skip
     def test_trace_file(self):
         self.vyos.trace_open(filename="vyos_tracefile.log")
         self.vyos.trace_write("\ntracefile test\n")
@@ -71,6 +98,7 @@ class VyosTestCase(unittest.TestCase):
         self.vyos.set_traffic_policy(network_delay=11, packet_loss=3,packet_reordering=4, packet_corruption=2, bandwidth=10)
         self.vyos.close()
 
+    #@unittest.skip
     def test_get_link_status(self):
         self.vyos.ssh.mock(context='vyosctl4')
         result = json.loads(self.vyos.get_link_status(device="R1"))
@@ -79,14 +107,12 @@ class VyosTestCase(unittest.TestCase):
         self.vyos.close()
         self.assertEqual(str(result),expected)
 
+    #@unittest.skip
     def test_set_link_status(self):
         self.vyos.ssh.mock(context='vyosctl4')
         result = self.vyos.set_link_status(link="eth1", status="down")
         expected = ""
         self.vyos.close()
-
-    #def test_unset_bandwidth(self):
-    #     self.vyos.set_traffic_policy(bandwidth=0)
 
 if __name__ == '__main__':
     unittest.main() 

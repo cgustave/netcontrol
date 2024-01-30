@@ -1,0 +1,2 @@
+set qos policy network-emulator WAN delay '10'
+vyos@vyos:~$ 

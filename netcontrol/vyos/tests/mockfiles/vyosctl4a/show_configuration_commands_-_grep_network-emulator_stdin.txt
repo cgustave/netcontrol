@@ -1,0 +1,6 @@
+set qos policy network-emulator WAN bandwidth '12mbit'
+set qos policy network-emulator WAN corruption '2'
+set qos policy network-emulator WAN delay '11'
+set qos policy network-emulator WAN loss '3'
+set qos policy network-emulator WAN reordering '4'
+vyos@vyos:~$

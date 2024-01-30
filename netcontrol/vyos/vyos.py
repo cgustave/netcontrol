@@ -75,27 +75,20 @@ class Vyos(object):
     """
     classdocs
     """
-    def __init__(self, ip='', port=22, user='vyos', password='vyos',
+    def __init__(self, version='1.1', ip='', port=22, user='vyos', password='vyos',
                  private_key_file='', traffic_policy='WAN', mock=False,
                  debug=False):
-        '''
-        Constructor
-        '''
-        # create logger
         log.basicConfig(
             format='%(asctime)s,%(msecs)3.3d %(levelname)-8s[%(module)-7.7s.%(funcName)-30.30s:%(lineno)5d] %(message)s',
             datefmt='%Y%m%d:%H:%M:%S',
             filename='debug.log',
             level=log.NOTSET)
-
         if debug:
             self.debug = True
             log.basicConfig(level='DEBUG')
+        log.debug(f"Constructor with version={version} ip={ip}, port={port}, user={user}, password={password}, private_key_file={private_key_file}, traffic_policy={traffic_policy}, debug={debug}")
 
-        log.debug("Constructor with ip={}, port={}, user={}, password={}, private_key_file={}, traffic_policy={}, debug={}".
-                 format(ip, port, user, password, private_key_file, traffic_policy, debug))
-
-        # public attributs
+        self.version = version
         self.ip = ip
         self.port = port
         self.user = user
@@ -104,8 +97,7 @@ class Vyos(object):
         self.moke_exception = ''
         self.moke_context = ''
         self.debug = debug
-        self.ssh = Ssh(ip=ip, port=port, user=user, password=password,
-                       private_key_file=private_key_file, debug=debug)
+        self.ssh = Ssh(ip=ip, port=port, user=user, password=password, private_key_file=private_key_file, debug=debug)
 
         # private attributs
         self._config = {}  # Internal representation of config
@@ -148,43 +140,35 @@ class Vyos(object):
         if not self.ssh.connected:
             self.ssh.connect()
 
-        # issue command and capture output
+        # issue command and capture output (works for v1.1 and v1.4)
+        # version 1.4 parameters are slighlty shorter than 1.1
         self.run_op_mode_command("show configuration commands | grep network-emulator\n")
 
         log.debug("output={}".format(self.ssh.output))
-        # Ex of output (all or some lines may be missing if not defined
-        # set traffic-policy network-emulator WAN burst '15k'
-        # set traffic-policy network-emulator WAN network-delay '100'
-        # set traffic-policy network-emulator WAN packet-loss '0'
-        # set traffic-policy network-emulator WAN packet-reordering '0'
-        # BW: if not in the config, it is not defined (there is no '0')
-        # set traffic-policy network-emulator WAN bandwidth 100mbps
-
-        # parse output and extract settings
 
         # delay
-        search_delay = "(?:network-emulator\s"+self.traffic_policy+"\snetwork-delay\s')(\d+)(?:m?s?')"
+        search_delay = "(?:network-emulator\s"+self.traffic_policy+"\s(?:network-)?delay\s')(\d+)(?:m?s?')"
         match_delay = re.search(search_delay, str(self.ssh.output))
         if match_delay:
             network_delay = match_delay.group(1)
             log.debug("match network_delay={}".format(network_delay))
 
         # packet-corruption
-        search_corruption = "(?:network-emulator\s"+self.traffic_policy+"\spacket-corruption\s')(\d+)'"
+        search_corruption = "(?:network-emulator\s"+self.traffic_policy+"\s(?:packet-)?corruption\s')(\d+)'"
         match_corruption = re.search(search_corruption, str(self.ssh.output))
         if match_corruption:
             packet_corruption = match_corruption.groups(0)[0]
             log.debug("match packet_corruption={}".format(packet_corruption))
 
         # packet-loss
-        search_loss = "(?:network-emulator\s"+self.traffic_policy+"\spacket-loss\s')(\d+)'"
+        search_loss = "(?:network-emulator\s"+self.traffic_policy+"\s(?:packet-)?loss\s')(\d+)'"
         match_loss = re.search(search_loss, str(self.ssh.output))
         if match_loss:
             packet_loss = match_loss.groups(0)[0]
             log.debug("match packet_loss={}".format(packet_loss))
 
         # packet-reordering
-        search_reorder = "(?:network-emulator\s"+self.traffic_policy+"\spacket-reordering\s')(\d+)'"
+        search_reorder = "(?:network-emulator\s"+self.traffic_policy+"\s(?:packet-)?reordering\s')(\d+)'"
         match_reorder = re.search(search_reorder, str(self.ssh.output))
         if match_reorder:
             packet_reordering = match_reorder.groups(0)[0]
@@ -235,58 +219,78 @@ class Vyos(object):
         """
         flag_configured = False
         command_list = []
-
         log.debug("Enter with network_delay={} packet_loss={} packet_reordering={} packet_corruption={} bandwidth={}".
                  format(network_delay, packet_loss, packet_reordering, packet_corruption, bandwidth))
 
-        # Process delay
         if (network_delay):
-            log.debug('processing network_delay=%s' % (network_delay))
+            log.debug(f"processing network_delay={network_delay} with version={self.version}")
             flag_configured = True
-            # ex : set traffic-policy network-emulator WAN network-delay 80
-            cmd = "set traffic-policy network-emulator "+self.traffic_policy+" network-delay "+str(network_delay)+"\n"
+            if self.version == '1.1':
+                cmd = f"set traffic-policy network-emulator {self.traffic_policy} network-delay {str(network_delay)}\n"
+            elif self.version == '1.4':
+                cmd = f"set qos policy network-emulator {self.traffic_policy} delay {str(network_delay)}\n"
+            else:
+                log.error(f"unknown version={self.version}")
+                return
             command_list.append(cmd)
 
-        # Process packet_loss
         if (packet_loss):
-            log.debug('processing packet_loss=%s' % (packet_loss))
+            log.debug(f"processing packet_loss={packet_loss}")
             flag_configured = True
-            # set traffic-policy network-emulator WAN packet-loss 0
-            cmd = "set traffic-policy network-emulator "+self.traffic_policy+" packet-loss "+str(packet_loss)+"\n"
+            if self.version == '1.1':
+                cmd = f"set traffic-policy network-emulator {self.traffic_policy} packet-loss {str(packet_loss)}\n"
+            elif self.version == '1.4':   
+                cmd = f"set qos policy network-emulator {self.traffic_policy} loss {str(packet_loss)}\n"
+            else:
+                log.error(f"unknown version={self.version}")
+                return   
             command_list.append(cmd)
 
-        # Process packet_corruption
         if (packet_corruption):
-            log.debug('processing packet_corruption=%s' % (packet_corruption))
+            log.debug(f"processing packet_corruption={packet_corruption}")
             flag_configured = True
-            # set traffic-policy network-emulator WAN packet-corruption 0
-            cmd = "set traffic-policy network-emulator "+self.traffic_policy+" packet-corruption "+str(packet_corruption)+"\n"
+            if self.version == '1.1':
+                cmd = f"set traffic-policy network-emulator {self.traffic_policy} packet-corruption {str(packet_corruption)}\n"
+            elif self.version == '1.4':   
+                cmd = f"set qos policy network-emulator {self.traffic_policy} corruption {str(packet_corruption)}\n"
+            else:
+                log.error(f"unknown version={self.version}")
+                return   
             command_list.append(cmd)
 
-        # Process packet reordering
         if (packet_reordering):
-            log.debug('processing packet_reordering=%s' % (packet_reordering))
+            log.debug(f"processing packet_reordering={packet_reordering}")
             flag_configured = True
-            # set traffic-policy network-emulator WAN packet-reordering 2
-            cmd = "set traffic-policy network-emulator "+self.traffic_policy+" packet-reordering "+str(packet_reordering)+"\n"
+            if self.version == '1.1':
+                cmd = f"set traffic-policy network-emulator {self.traffic_policy} packet-reordering {str(packet_reordering)}\n"
+            elif self.version == '1.4':   
+                cmd = f"set qos policy network-emulator {self.traffic_policy} reordering {str(packet_reordering)}\n"
+            else:
+                log.error(f"unknown version={self.version}")
+                return   
             command_list.append(cmd)
 
-        # Process bandwidth
         if (str(bandwidth)):
-            log.debug('processing bandwidth=%s' % (bandwidth))
-            flag_configured = True
-
             # a value '0' means the config statement should be removed
             # value '0' is not supported in vyos configuration
-            if (str(bandwidth) == '0'):
-                log.debug('need config statement removal')
-                cmd = "delete traffic-policy network-emulator "+self.traffic_policy+" bandwidth"+"\n"
-                command_list.append(cmd)
-
+            log.debug(f"processing bandwidth={bandwidth}")
+            flag_configured = True
+            if self.version == '1.1':
+                if (str(bandwidth) == '0'):
+                    log.debug('version 1.1 config statement removal')
+                    cmd = f"delete traffic-policy network-emulator {self.traffic_policy} bandwidth\n"
+                else:
+                    cmd = f"set traffic-policy network-emulator {self.traffic_policy} bandwidth {str(bandwidth)}mbps\n"
+            elif self.version == '1.4':   
+                if (str(bandwidth) == '0'):
+                    log.debug('version 1.4 config statement removal')
+                    cmd = f"delete qos policy network-emulator {self.traffic_policy} bandwidth\n"
+                else:
+                    cmd = f"set qos policy network-emulator {self.traffic_policy} bandwidth {str(bandwidth)}mbit\n"
             else:
-                # set traffic-policy network-emulator WAN bandwidth 100mbps
-                cmd = "set traffic-policy network-emulator "+self.traffic_policy+" bandwidth "+str(bandwidth)+"mbps"+"\n"
-                command_list.append(cmd)
+                log.error(f"unknown version={self.version}")
+                return   
+            command_list.append(cmd)
 
         # Processing commands
         if (flag_configured):
@@ -392,26 +396,21 @@ Class sample code
 if __name__ == '__main__':  # pragma: no cover
 
     # create object
-    vyos = Vyos(ip='10.5.58.162', port='10106', user='vyos',
-                      password='vyos', debug=True)
+    vyos = Vyos(ip='10.5.58.162', version='1.4', port='10106', user='vyos', password='vyos', debug=True)
 
     # Get and print traffic policy
     result = json.loads(vyos.get_traffic_policy())
     print("1: get traffic policy : {}".format(result))
 
     # Set traffic policy 1:
-    vyos.set_traffic_policy(network_delay='99', packet_loss='2',
-                               packet_reordering='3', packet_corruption='1',
-                               bandwidth='9')
+    vyos.set_traffic_policy(network_delay='99', packet_loss='2', packet_reordering='3', packet_corruption='1', bandwidth='9')
 
     # Retrieve values to see if set correctly
     result = json.loads(vyos.get_traffic_policy())
     print("2: traffic policy after modification : {}".format(result))
 
     # Set traffic policy 1:
-    vyos.set_traffic_policy(network_delay='0', packet_loss='0',
-                               packet_reordering='0', packet_corruption='0',
-                               bandwidth='0')
+    vyos.set_traffic_policy(network_delay='0', packet_loss='0', packet_reordering='0', packet_corruption='0', bandwidth='0')
 
     # Retrieve values to see if set correctly
     result = json.loads(vyos.get_traffic_policy())
