@@ -51,8 +51,8 @@ class Fabric(object):
         self.csrftoken = None
         self.cookies = None
         self.session = None
-        self.dev_id = None  # Cache for devie id, filled from get_link_status
-        self.port_id = None # Cache for port id, filled from get_link_status
+        self.dev_id = None # Cache for device id, filled from get_link_status
+        self.ports = {} # Cache for device ports id, filled from get_link_status
 
     def session_check(self):
         """ 
@@ -244,9 +244,9 @@ class Fabric(object):
         except Exception as e:
             log.error(f"error={repr(e)}")           
             
-    def get_link_status(self, peer_name='', peer_link=''):
+    def get_link_status(self, peer_name=''):
         """
-        Returns a json object representing fabric link status for given the given device and link.
+        Returns a json object representing fabric link status for given the given device.
         Keys are device port name but FS API uses the device runtime id for peer instead of name.
         Port status information is provided in the iproute2 section. If device is down, iproute is empty
         If device is up, there are flags and operstate:
@@ -259,64 +259,75 @@ class Fabric(object):
 
         Device shutdown example (no iproute2) => iproute2": {}
         {"name": "eth1", "index": 2, "hwaddr": "02:09:0F:00:02:02", "override_pair_hwaddr": "", "device": 24, "ipv4addr": null, "ipv4netmask": null, "mgmt": false, "addrmode": "STA", "auto_config": true, "dhcp_server": null, "copy_hwaddr_from_port": null, "mtu": 0, "iproute2": {}, "peer": null, "cable": null, "pair_hwaddr": "F2:09:0F:00:02:02", "runtime": 140, "__model": "model.vmport", "__db": "runtime", "id": 140}], "status": "done", "rcode": 0}
-
         Extract portid so it can be used by set_link_status
         example of return :
         {
-           "port1": "UP",
+           "eth0": "UP",
+           "eth1": "UP",
+           "eth2": "DOWN",
+           "eth3": "DOWN",
         }
         """
-        log.debug(f"Enter with peer_name={peer_name} peer_link={peer_link}")
+        log.debug(f"Enter with peer_name={peer_name}")
         dev_id = self.get_device_runtime_id(name=peer_name)
         log.debug(f"Found dev_id={dev_id} for peer_name={peer_name}")
         self.dev_id = dev_id
-        return_value = None
+        output = {}
         try:
             self.connect()
             # Note: operstate requires to add related-fields iproute2 in the query
-            url = f"https://{self.ip}:{self.port}/api/v1/runtime/device/{dev_id}/port?related-fields=iproute2&select=name%3D{peer_link}"
+            url = f"https://{self.ip}:{self.port}/api/v1/runtime/device/{dev_id}/port?related-fields=iproute2"
             headers = self.build_headers()
             response = requests.get(url, headers=headers, cookies=self.cookies, verify=False, timeout=5) 
             dict_response = response.json()
-            log.debug(f"status_code={response.status_code}")
-            log.debug(f"response={response.text}")
+            log.debug(f"status_code={response.status_code} response={response.text}")
             if response.status_code == 200:
                 if 'object' in dict_response:
-                    item = dict_response['object'][0]
-                    # Extract port_id
-                    if 'id' in item:
-                        log.debug(f"port_id={item['id']}")
-                        self.port_id = item['id']
-                    # Extract port status
-                    if 'iproute2' in item:
-                        iproute2 = item['iproute2']
-                        if 'operstate' in iproute2:
-                            if iproute2['operstate'] == 'UP':
-                                log.debug(f"operstate=UP => link {peer_link} is up")
-                                return_value = 'UP'
-                            elif iproute2['operstate'] == 'LOWERLAYERDOWN':
-                                log.debug(f"operstate=LOWERLAYERDOWN => link {peer_link} is DOWN")
-                                return_value = 'DOWN'
-                            elif iproute2['operstate'] == 'DOWN':
-                                log.debug(f"operstate=DOWN => link {peer_link} is DOWN")
-                                return_value = 'DOWN'
+                    # Process each ports
+                    for item in dict_response['object']:
+                        port_name = None
+                        port_id = None
+                        port_value = "DOWN"
+                        if 'name' in item:
+                            port_name = item['name'] 
+                            log.debug(f"processing port_name={port_name}")
+                        if 'id' in item:
+                            log.debug(f"processing port_id={item['id']}")
+                            port_id = item['id']
+                        # Extract port status
+                        if 'iproute2' in item:
+                            iproute2 = item['iproute2']
+                            if 'operstate' in iproute2:
+                                if iproute2['operstate'] == 'UP':
+                                    log.debug(f"operstate=UP => port_name={port_name} is up")
+                                    port_value = 'UP'
+                                elif iproute2['operstate'] == 'LOWERLAYERDOWN':
+                                    log.debug(f"operstate=LOWERLAYERDOWN => port_name={port_name} is DOWN")
+                                    port_value = 'DOWN'
+                                elif iproute2['operstate'] == 'DOWN':
+                                    log.debug(f"operstate=DOWN => port_name={port_name} is DOWN")
+                                    port_value = 'DOWN'
+                                else:
+                                    log.warning(f"unknown state={iproute2['operstate']} consider port_name={port_name} is DOWN")
+                                    port_value = 'DOWN'
                             else:
-                                log.warning(f"unknown state={iproute2['operstate']} consider {peer_link} is DOWN")
-                                return_value = 'DOWN'
+                                log.debug(f"no operstate => port_name={port_name} is DOWN")
+                                port_value = 'DOWN'
                         else:
-                            log.debug(f"no operstate => link {peer_link} is DOWN")
-                            return_value = 'DOWN'
-                    else:
-                        log.debug("No iproute2")
-                        return_value = 'DOWN'
+                            log.debug("No iproute2")
+                            port_value = 'DOWN'
+                        if port_name != None and port_id != None:
+                            log.debug(f"recording port_name={port_name} => id={port_id}, status={port_value}")
+                            # Filling cache information for set_peer_link
+                            self.ports[port_name] = {}
+                            self.ports[port_name]['id'] = port_id
+                            self.ports[port_name]['status'] = port_value
+                            output[port_name] = port_value
                 else:
                     log.error("no object")
-                log.debug(f"status={return_value}")
             else:
                 log.warning(f"unexpected status_code={response.status_code}")
             # Prepare json for output
-            output = {}
-            output[peer_link] = return_value
             json_return = json.dumps(output)
             log.debug(f"json_return={json_return}")
             return json_return
@@ -336,23 +347,37 @@ class Fabric(object):
             print("status values can only be 'up' or 'down'")
             return ("ERROR: status values can only be 'up' or 'down'")
         if (peer_name == ''):
-            print("peer_name is missing")
-            return("ERROR: peer_name missing")
+            print("peer_name is required")
+            return("ERROR: peer_name required")
         if (peer_link == ''):
             print("peer_link is required")
-            return("ERROR: peer_link missing")
-        # define url action
+            return("ERROR: peer_link required")
+        port_id = None
+        port_status = None
         action = 'repair'
         if status == 'down':
             action = 'break'
-        # Need first to get current status and get the portid
-        self.get_link_status(peer_name=peer_name, peer_link=peer_link)
-        if self.port_id == None or self.dev_id == None:
-            log.error(f"missing port_id={self.port_id} and/or dev_id={self.dev_id}")
+        # Need first to get current status and get the portid, filling cache
+        self.get_link_status(peer_name=peer_name)
+        if self.dev_id == None:
+            log.error(f"missing dev_id={self.dev_id}")
+            return
+        if peer_link in self.ports:
+            port_id = self.ports[peer_link]['id']
+            port_status = self.ports[peer_link]['status']
+            log.debug(f"retrieved port_id={port_id} and port_status={port_status}")
+            if status == 'up' and port_status == 'UP':
+                log.warning(f"port is already UP, stop here")
+                return
+            if status == 'down' and port_status == 'DOWN':
+                log.warning(f"port is already DOWN. stop here")
+                return
+        else:
+            log.error(f"missing port_id and port_status") 
             return
         try:
             self.connect()
-            url = f"https://{self.ip}:{self.port}/api/v1/runtime/cable/{self.dev_id}/{self.port_id}:{action}"
+            url = f"https://{self.ip}:{self.port}/api/v1/runtime/cable/{self.dev_id}/{port_id}:{action}"
             headers = self.build_headers()
             response = requests.post(url, headers=headers, cookies=self.cookies, verify=False, timeout=5) 
             log.debug(f"status_code={response.status_code}")
@@ -363,8 +388,6 @@ class Fabric(object):
                 log.warning(f"unexpected status_code={response.status_code}")
         except Exception as e:
             log.error(f"error={repr(e)}")
-        return
-        
         return
 
 if __name__ == '__main__': #pragma: no cover

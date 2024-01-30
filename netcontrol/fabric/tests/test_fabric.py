@@ -27,51 +27,32 @@ class fabricTestCase(unittest.TestCase):
     #@unittest.skip
     def test_get_link_status(self):
         self.fabric.ip = "get_link_status_eth0"
-        j = self.fabric.get_link_status(peer_name='Client', peer_link='eth0')
-        self.assertEqual(j, '{"eth0": "UP"}')
-        self.fabric.ip = "get_link_status_eth3"
-        j = self.fabric.get_link_status(peer_name='Client', peer_link='eth3')
-        self.assertEqual(j, '{"eth3": "UP"}')
+        j = self.fabric.get_link_status(peer_name='Client')
+        self.assertEqual(j, '{"eth0": "UP", "eth1": "DOWN", "eth2": "DOWN", "eth3": "UP"}')
 
     #@unittest.skip
     def test_set_link_status_up(self):
-        self.fabric.ip = "get_link_status_eth3"
-        log.debug("*** port get_link status 1 ***")
-        self.fabric.get_link_status(peer_name='Client', peer_link='eth3')
-        log.debug("*** port set Client eth3 UP ***")
+        self.fabric.ip = "get_link_status_eth3_down"
         self.fabric.set_link_status(peer_name='Client', peer_link='eth3', status='up')
-        log.debug("*** port get_link status 2 ***")
-        j = self.fabric.get_link_status(peer_name='Client', peer_link='eth3')
-        self.assertEqual(j, '{"eth3": "UP"}')
+        self.fabric.ip = "get_link_status_eth3_up"
+        j = self.fabric.get_link_status(peer_name='Client')
+        self.assertEqual(j, '{"eth0": "UP", "eth1": "DOWN", "eth2": "DOWN", "eth3": "UP"}')
 
     #@unittest.skip
     def test_set_link_status_down(self):
-         self.fabric.ip = "get_link_status_eth3_down"
-         log.debug("*** port DOWN test ***")
-         #self.fabric.ip = "link_status_down.json"
-         self.fabric.set_link_status(peer_name='Client', peer_link='eth3', status='down')
-         log.debug("*** port get_link status 1 ***")
-         j = self.fabric.get_link_status(peer_name='Client', peer_link='eth3')
-         self.assertEqual(j, '{"eth3": "DOWN"}')
-         log.debug("*** port UP test ***")
-         self.fabric.ip = "get_link_status_eth3"
-         self.fabric.set_link_status(peer_name='Client', peer_link='eth3', status='up')
-         log.debug("*** port get_link status 1 ***")
-         j = self.fabric.get_link_status(peer_name='Client', peer_link='eth3')
-         self.assertEqual(j, '{"eth3": "UP"}')
+        self.fabric.ip = "get_link_status_eth3_up"
+        self.fabric.set_link_status(peer_name='Client', peer_link='eth3', status='down')
+        self.fabric.ip = "get_link_status_eth3_down"
+        j = self.fabric.get_link_status(peer_name='Client')
+        self.assertEqual(j, '{"eth0": "UP", "eth1": "DOWN", "eth2": "DOWN", "eth3": "DOWN"}')
 
     #@unittest.skip
     def test_session_check(self):
-        self.fabric.ip = "get_link_status_eth0"
-        log.debug("*** TEST CHECK ***")
         self.fabric.ip = "session_check"
-        self.fabric.session_check()
-        log.debug("*** second attempt ***")
         self.fabric.session_check()
 
     #@unittest.skip
     def test_open_session(self):
-        #self.fabric.close()
         log.debug("*** Session ONE ***")
         self.fabric.ip = "get_link_status_eth0"
         self.fabric.open_session()
@@ -87,10 +68,9 @@ class fabricTestCase(unittest.TestCase):
 
     #@unittest.skip
     def test_close_session(self):
-        #self.fabric.ip = "get_link_status_eth0"
+        self.fabric.ip = "get_link_status_eth0"
         self.fabric.open_session()
         self.fabric.close()
 
 if __name__ == '__main__':
         unittest.main()
-

@@ -1,0 +1,160 @@
+[
+    {
+      "name": "eth0",
+      "index": 1,
+      "hwaddr": "02:09:0F:00:02:01",
+      "override_pair_hwaddr": "",
+      "device": 24,
+      "ipv4addr": "10.254.1.3",
+      "ipv4netmask": "255.255.255.0",
+      "mgmt": false,
+      "addrmode": "STA",
+      "auto_config": true,
+      "dhcp_server": null,
+      "copy_hwaddr_from_port": null,
+      "mtu": 0,
+      "iproute2": {
+        "ifindex": 200,
+        "link_index": 2,
+        "ifname": "mgmtsw.port4",
+        "flags": [
+          "BROADCAST",
+          "MULTICAST",
+          "UP",
+          "LOWER_UP"
+        ],
+        "mtu": 1500,
+        "qdisc": "noqueue",
+        "master": "ovs-system",
+        "operstate": "UP",
+        "group": "fabric",
+        "txqlen": 1000,
+        "link_type": "ether",
+        "address": "f2:09:0f:00:02:01",
+        "broadcast": "ff:ff:ff:ff:ff:ff",
+        "link_netnsid": 1,
+        "altnames": [
+          "was:LXC.eth0",
+          "LXC.eth0"
+        ],
+        "addr_info": [
+          {
+            "family": "inet6",
+            "local": "fe80::f009:fff:fe00:201",
+            "prefixlen": 64,
+            "scope": "link",
+            "valid_life_time": 4294967295,
+            "preferred_life_time": 4294967295
+          }
+        ]
+      },
+      "peer": 129,
+      "cable": 22,
+      "pair_hwaddr": "F2:09:0F:00:02:01",
+      "runtime": 139,
+      "__model": "model.vmport",
+      "__db": "runtime",
+      "id": 139
+    },
+    {
+      "name": "eth1",
+      "index": 2,
+      "hwaddr": "02:09:0F:00:02:02",
+      "override_pair_hwaddr": "",
+      "device": 24,
+      "ipv4addr": null,
+      "ipv4netmask": null,
+      "mgmt": false,
+      "addrmode": "STA",
+      "auto_config": true,
+      "dhcp_server": null,
+      "copy_hwaddr_from_port": null,
+      "mtu": 0,
+      "iproute2": {},
+      "peer": null,
+      "cable": null,
+      "pair_hwaddr": "F2:09:0F:00:02:02",
+      "runtime": 140,
+      "__model": "model.vmport",
+      "__db": "runtime",
+      "id": 140
+    },
+    {
+      "name": "eth2",
+      "index": 3,
+      "hwaddr": "02:09:0F:00:02:03",
+      "override_pair_hwaddr": "",
+      "device": 24,
+      "ipv4addr": null,
+      "ipv4netmask": null,
+      "mgmt": false,
+      "addrmode": "STA",
+      "auto_config": true,
+      "dhcp_server": null,
+      "copy_hwaddr_from_port": null,
+      "mtu": 0,
+      "iproute2": {},
+      "peer": null,
+      "cable": null,
+      "pair_hwaddr": "F2:09:0F:00:02:03",
+      "runtime": 141,
+      "__model": "model.vmport",
+      "__db": "runtime",
+      "id": 141
+    },
+    {
+      "name": "eth3",
+      "index": 4,
+      "hwaddr": "02:09:0F:00:02:04",
+      "override_pair_hwaddr": "",
+      "device": 24,
+      "ipv4addr": "10.0.0.2",
+      "ipv4netmask": "255.255.255.0",
+      "mgmt": false,
+      "addrmode": "STA",
+      "auto_config": true,
+      "dhcp_server": null,
+      "copy_hwaddr_from_port": null,
+      "mtu": 0,
+      "iproute2": {
+        "ifindex": 203,
+        "link_index": 5,
+        "ifname": "SW.port4",
+        "flags": [
+          "BROADCAST",
+          "MULTICAST"
+        ],
+        "mtu": 1500,
+        "qdisc": "noqueue",
+        "master": "ovs-system",
+        "operstate": "DOWN",
+        "group": "fabric",
+        "txqlen": 1000,
+        "link_type": "ether",
+        "address": "f2:09:0f:00:02:04",
+        "broadcast": "ff:ff:ff:ff:ff:ff",
+        "link_netnsid": 1,
+        "altnames": [
+          "was:LXC.eth3",
+          "LXC.eth3"
+        ],
+        "addr_info": [
+          {
+            "family": "inet6",
+            "local": "fe80::f009:fff:fe00:204",
+            "prefixlen": 64,
+            "scope": "link",
+            "valid_life_time": 4294967295,
+            "preferred_life_time": 4294967295
+          }
+        ]
+      },
+      "peer": 147,
+      "cable": 25,
+      "pair_hwaddr": "F2:09:0F:00:02:04",
+      "runtime": 142,
+      "__model": "model.vmport",
+      "__db": "runtime",
+      "id": 142
+    }
+]
