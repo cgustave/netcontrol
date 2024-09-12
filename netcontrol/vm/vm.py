@@ -593,11 +593,11 @@ class Vm(object):
             log.debug("line={}".format(line))
             need_tokenize = False
             # Looking for kvm process starting line (qemu-system-x86_64)
-            if line.find('qemu-system-x86_64\s') != -1:
+            if line.find('qemu-system-x86_64 ') != -1:
                 log.debug("Found kvm process form qemu-system-x86_64 line start")
                 kvm_start = True
                 kvm_end = False
-            if line.find('kvm\s') != -1:
+            if line.find('/bin/kvm ') != -1:
                 log.debug("Found kvm process form kvm line start")
                 kvm_start = True
                 kvm_end = False
