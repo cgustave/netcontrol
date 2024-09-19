@@ -432,79 +432,92 @@ class Vm(object):
         esx_start = False
         esx_end = False
         esx_line = 0
+        found_lms_vms = False
         vm_name = ""
         vm_memory = 0
         ret = True
         for line in self.ssh.output.splitlines():
             if esx_start:
                 esx_line = esx_line + 1
-            log.debug("esx_line={} line={}".format(esx_line, line))
+            log.debug(f"esx_line={esx_line} line={line}")
             if esx_line == 1:
                 match_name = re.search("(?P<vm_name>\S+)\s\[(?P<create_user>\S+)\]\s(?P<system>\S+)", line)
                 if match_name:
+                    found_lms_vms = True
                     vm_name = match_name.group('vm_name')
                     create_user = match_name.group('create_user')
                     system = match_name.group('system')
                     self._vms_total['number'] += 1
-                    log.debug("Found new vm_name={} create_user={} system={} total_number={}".format(vm_name, create_user, system, self._vms_total['number']))
+                    log.debug(f"Found new vm_name={vm_name} create_user={create_user} system={system} total_number={self._vms_total['number']}")
                 else:
                     log.warning("VM does not look like an LMS vms")
-                    # make sure this vm not from ours is not recorded with previous valid name !
+                    found_lms_vms = False
                     esx_start = False
             if esx_start:
                 match_esxid = re.search("VMX\sCartel\sID:\s(?P<vm_esxid>\d+)", line)
                 if match_esxid:
                     vm_esxid = match_esxid.group('vm_esxid')
-                    log.debug("Found {} vm_esxid={}".format(vm_name, vm_esxid))
+                    log.debug(f"Found {vm_name} vm_esxid={vm_esxid}")
                     self._vms_esx_id_map[vm_esxid] = vm_name
                     if vm_esxid in self._vms_esx_memory:
-                        vm_memory = int(int(self._vms_esx_memory[vm_esxid]) / 1024)
-                        self._vms_total['memory'] += int(vm_memory)
+                        if found_lms_vms:
+                            vm_memory = int(int(self._vms_esx_memory[vm_esxid]) / 1024)
+                            self._vms_total['memory'] += int(vm_memory)
+                        else:
+                            log.warn('ignore memory on non lms vm')
                     else:
-                        log.error("Could not find vm memory for vm_esxi={}".format(vm_esxid))
+                        log.error(f"Could not find vm memory for vm_esxi={vm_esxid}")
                         ret = False
             if (not esx_start and (line.find('esxcli vm process list') != -1) or (line == "")):
                 log.debug("Found esx process line start")
                 esx_start = True
                 esx_end = False
                 esx_line = 0
+                found_lms_vms = False
             if (esx_start and (line.find('Config File') != -1)):
                 log.debug("Found esx process line end")
                 esx_end = True
                 esx_start = False
-                vm = {}
-                instance = self._get_vm_instance_from_name(name=vm_name)
-                if re.search('\d+', instance):
-                    vm['id'] = instance
-                    vm['cpu'] = 0
-                    vm['memory'] = vm_memory
-                    vm['template'] = system
-                    if system:
-                        system = system.replace('_ESXI','')
+                if found_lms_vms:
+                    vm = {}
+                    instance = self._get_vm_instance_from_name(name=vm_name)
+                    log.debug(f'recording lms vm instance={instance}')
+                    if re.search('\d+', instance):
+                        vm['id'] = instance
+                        vm['cpu'] = 0
+                        vm['memory'] = vm_memory
+                        vm['template'] = system
+                        if system:
+                            system = system.replace('_ESXI','')
+                        else:
+                            log.warning("No _ESXI in system")
+                        log.debug(f'instance={instance} => system={system}')
+                        vm['system'] = system
+                        self._vms_system.append({'id': instance, 'system': system, 'type': 'ESXI' })
+                        if vm_name in self._vms_esx_cpu:
+                            vm['cpu'] = self._vms_esx_cpu[vm_name]
+                            self._vms_total['cpu'] += vm['cpu']
+                            log.debug(f"fvm_name={vm_name} instance={instance} vms_total_cpu={self._vms_total['cpu']}")                    
+                        else:
+                            log.error(f"Could not find nb of cpu for vm_name={vm_name}")
+                            ret = False
+                        if vm_name in self._vms_esx_disks:
+                            vm['disk'] = self._vms_esx_disks[vm_name]
+                            vm['type'] = 'ESXI'
+                            self._vms_total['disk'] += vm['disk']
+                            log.debug(f"vm_name={vm_name} instance={instance} vms_total_disk={self._vms_total['disk']}")
+                        else:
+                            log.error(f"Could not find disk size for vm_name={vm_name}")
+                            ret = False
+                        log.debug(f'record vm={vm}')
+                        self._vms.append(vm)
                     else:
-                        log.warning("No _ESXI in system")
-                    vm['system'] = system
-                    self._vms_system.append({'id': instance, 'system': system, 'type': 'ESXI' })
-                    if vm_name in self._vms_esx_cpu:
-                        vm['cpu'] = self._vms_esx_cpu[vm_name]
-                        self._vms_total['cpu'] += vm['cpu']
-                        log.debug("vm_name={} instance={} vms_total_cpu={}".format(vm_name, instance, self._vms_total['cpu']))
-                    else:
-                        log.error("Could not find nb of cpu for vm_name={}".format(vm_name))
+                        log.warning(f"got unexpected instance format instance={instance}")
+                        found_lms_vms = False
                         ret = False
-                    if vm_name in self._vms_esx_disks:
-                        vm['disk'] = self._vms_esx_disks[vm_name]
-                        vm['type'] = 'ESXI'
-                        self._vms_total['disk'] += vm['disk']
-                        log.debug("vm_name={} instance={} vms_total_disk={}".format(vm_name, instance, self._vms_total['disk']))
-                    else:
-                        log.error("Could not find disk size for vm_name={}".format(vm_name))
-                        ret = False
-                    log.debug(f'record vm {vm['id']}')
-                    self._vms.append(vm)
                 else:
-                    log.warning("got unexpected instance format instance={}".format(instance))
-                    ret = False
+                    log.warning(f'vm is not an lms vm, skip')
+
         return ret
 
     def _get_vm_instance_from_name(self, name=""):
