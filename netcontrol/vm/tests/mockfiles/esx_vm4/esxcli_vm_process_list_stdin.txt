@@ -1,0 +1,81 @@
+[root@falcon:~] esxcli vm process list
+VMware vCenter Server Appliance
+   World ID: 2102229
+   Process ID: 0
+   VMX Cartel ID: 2102197
+   UUID: 56 4d c9 8d 87 2f a6 68-b2 3b 99 9f fb dc 76 cd
+   Display Name: VMware vCenter Server Appliance
+   Config File: /vmfs/volumes/64647e47-f74861a3-54af-c84bd699819a/VMware vCenter Server Appliance/VMware vCenter Server Appliance.vmx
+
+Router1-VYOS
+   World ID: 2140081
+   Process ID: 0
+   VMX Cartel ID: 2140080
+   UUID: 42 23 f4 67 06 76 9c f4-91 c2 2f 3d 3f bf 71 bc
+   Display Name: Router1-VYOS
+   Config File: /vmfs/volumes/6459a379-ee2c0913-685e-1423f23d8fa0/Router1-VYOS/Router1-VYOS.vmx
+
+Router2-VYOS
+   World ID: 2140094
+   Process ID: 0
+   VMX Cartel ID: 2140093
+   UUID: 42 23 cd 3b 86 bd 77 34-ef 6f ee 17 0a fe 8a 83
+   Display Name: Router2-VYOS
+   Config File: /vmfs/volumes/6459a379-ee2c0913-685e-1423f23d8fa0/Router2-VYOS/Router2-VYOS.vmx
+
+FPOC-REPO
+   World ID: 2140242
+   Process ID: 0
+   VMX Cartel ID: 2140237
+   UUID: 42 23 ce cf 5f f2 69 a3-2b 85 4b c4 c1 46 c1 b5
+   Display Name: FPOC-REPO
+   Config File: /vmfs/volumes/6459a379-ee2c0913-685e-1423f23d8fa0/FPOC-REPO/FPOC-REPO.vmx
+
+fortiweb-infra-01
+   World ID: 2140245
+   Process ID: 0
+   VMX Cartel ID: 2140238
+   UUID: 42 23 11 76 34 73 3c 8d-2a ca 1e ea 74 da ff 52
+   Display Name: fortiweb-infra-01
+   Config File: /vmfs/volumes/6459a379-ee2c0913-685e-1423f23d8fa0/fortiweb-infra-01/fortiweb-infra-01.vmx
+
+tac-ctr-srv
+   World ID: 2140251
+   Process ID: 0
+   VMX Cartel ID: 2140239
+   UUID: 42 23 4b 89 6c ce 49 d6-b3 03 f2 2f 8c 45 63 a2
+   Display Name: tac-ctr-srv
+   Config File: /vmfs/volumes/6459a379-ee2c0913-685e-1423f23d8fa0/tac-ctr-srv/tac-ctr-srv.vmx
+
+FileServer
+   World ID: 2140257
+   Process ID: 0
+   VMX Cartel ID: 2140241
+   UUID: 42 23 d1 8f b5 c7 79 67-1a a7 6a 30 c9 2a eb 47
+   Display Name: FileServer
+   Config File: /vmfs/volumes/6459a379-ee2c0913-685e-1423f23d8fa0/FileServer/FileServer.vmx
+
+falcon-esx01 [nprakash] FGT_VM64_ESXI
+   World ID: 2177262
+   Process ID: 0
+   VMX Cartel ID: 2177261
+   UUID: cd ad 89 19 32 09 48 bf-90 cd be 06 b9 de c2 78
+   Display Name: falcon-esx01 [nprakash] FGT_VM64_ESXI
+   Config File: /vmfs/volumes/6459a379-ee2c0913-685e-1423f23d8fa0/machines/falcon-esx01 [nprakash] FGT_VM64_ESXI/falcon-esx01 [nprakash] FGT_VM64_ESXI.vmx
+
+Tools Portal VM
+   World ID: 2177655
+   Process ID: 0
+   VMX Cartel ID: 2177654
+   UUID: 42 23 61 bb 46 8f 43 5a-08 ff 1e f2 62 83 4f 5c
+   Display Name: Tools Portal VM
+   Config File: /vmfs/volumes/6459a379-ee2c0913-685e-1423f23d8fa0/Tools Portal VM/Tools Portal VM.vmx
+
+falcon-esx04 [nprakash] FGT_VM64_ESXI
+   World ID: 2179714
+   Process ID: 0
+   VMX Cartel ID: 2179713
+   UUID: 80 36 fb a1 5b f4 47 e1-ae 67 5c 42 2d e0 f8 9b
+   Display Name: falcon-esx04 [nprakash] FGT_VM64_ESXI
+   Config File: /vmfs/volumes/6459a379-ee2c0913-685e-1423f23d8fa0/machines/falcon-esx04 [nprakash] FGT_VM64_ESXI/falcon-esx04 [nprakash] FGT_VM64_ESXI.vmx
+[root@falcon:~] 

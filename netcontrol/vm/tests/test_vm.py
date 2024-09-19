@@ -24,19 +24,19 @@ class VMctlTestCase(unittest.TestCase):
         self.vm = Vm(ip='10.5.0.31', port='22', user='root',
                             password='fortinet', debug=True)
 
-    #unittest.skip
+    #@unittest.skip
     def test_connect(self):
         self.vm.connect()
         pass
 
-    #unittest.skip
+    #@unittest.skip
     def test_attributs_validation(self):
         self.assertTrue(self.vm.ip == '10.5.0.31')
         self.assertTrue(self.vm.port == '22')
         self.assertTrue(self.vm.user == 'root')
         self.assertTrue(self.vm.password == 'fortinet')
 
-    #unittest.skip
+    #@unittest.skip
     def test_get_statistics_kvm(self):
         self.vm.ssh.mock(context='kvm_vm1')
         result = json.loads(self.vm.get_statistics())
@@ -52,7 +52,7 @@ class VMctlTestCase(unittest.TestCase):
         self.assertEqual(result["load"]["15mn"], "13.96")
         self.assertEqual(len(str(result)), 1194)
 
-    #unittest.skip
+    #@unittest.skip
     def test_get_statistics_esx_v60(self):
         self.vm.host_type = 'ESX'
         self.vm.hypervisor_type = 'esx'
@@ -70,7 +70,7 @@ class VMctlTestCase(unittest.TestCase):
         self.assertEqual(result["load"]['15mn'], "0.07")
         self.assertEqual(len(str(result)), 855)
 
-    #unittest.skip
+    #@unittest.skip
     def test_get_statistics_esx_v67(self):
         self.vm.host_type = 'ESX'
         self.vm.hypervisor_type = 'esx'
@@ -88,7 +88,20 @@ class VMctlTestCase(unittest.TestCase):
         self.assertEqual(result["load"]['15mn'], "0.05")
         self.assertEqual(len(str(result)), 858)
 
-    #unittest.skip
+    #@unittest.skip
+    def test_vms_esx_memory_for_esx01(self):
+        # check VM memory
+        #v m.2177261 n     450961             4    2177261      2097152    2097152 
+        self.vm.ssh.mock(context='esx_vm4')
+        self.vm._build_vms_esx_memory()
+        log.debug(f'_vms_esx_memory={self.vm._vms_esx_memory}')
+        self.assertEqual(self.vm._vms_esx_memory['2177261'],'2097152')
+        self.vm._get_processes_esx()
+        log.debug(f'vms={self.vm._vms}')
+        self.assertEqual(self.vm._vms[1]['memory'], 2048)
+
+
+    #@unittest.skip
     def test_get_vm_resources_kvm(self):
         self.vm.ssh.mock(context='kvm_vm2')
         result = json.loads(self.vm.get_vms_statistics())
@@ -101,7 +114,7 @@ class VMctlTestCase(unittest.TestCase):
         self.assertEqual(result["vms_total"]["number"], 55)
         self.assertEqual(len(str(result)), 8569)
 
-    #unittest.skip
+    #@unittest.skip
     def test_build_vms_esx_disk(self):
         self.vm.host_type = 'ESX'
         self.vm.hypervisor_type = 'esx'
@@ -111,7 +124,7 @@ class VMctlTestCase(unittest.TestCase):
         log.debug("ESXI disk Result : {} len={}".format(result, len(str(result))))
         self.assertEqual(result['vms_disks'][0]['size'], 22225616896)
 
-    #unittest.skip
+    #@unittest.skip
     def test_build_vms_esx_disk2(self):
         # case with different path on uranium
         self.vm.host_type = 'ESX'
@@ -121,7 +134,7 @@ class VMctlTestCase(unittest.TestCase):
         result = json.loads(self.vm.get_vms_statistics())
         self.assertEqual(result['vms_disks'][0]['size'], 3328180224)
 
-    #unittest.skip
+    #@unittest.skip
     def test_get_vm_resources_esx_v60(self):
         self.vm.host_type = 'ESX'
         self.vm.hypervisor_type = 'esx'
@@ -136,7 +149,7 @@ class VMctlTestCase(unittest.TestCase):
         self.assertEqual(result["vms_total"]["memory"], 128000)
         self.assertEqual(result["vms_total"]["number"], 35)
 
-    #unittest.skip
+    #@unittest.skip
     def test_get_vm_resources_esx_v67(self):
         self.vm.host_type = 'ESX'
         self.vm.hypervisor_type = 'esx'
@@ -151,7 +164,7 @@ class VMctlTestCase(unittest.TestCase):
         self.assertEqual(result["vms_total"]["memory"], 196608)
         self.assertEqual(result["vms_total"]["number"], 12)
 
-    #unittest.skip
+    #@unittest.skip
     def test_total_vm_resources(self):
         self.vm.ssh.mock(context='kvm_vm2')
         result = json.loads(self.vm.get_vms_statistics())
@@ -160,7 +173,7 @@ class VMctlTestCase(unittest.TestCase):
         log.debug("used_cpu = {}".format(used_cpu))
         self.assertEqual(used_cpu, 77)
 
-    #unittest.skip
+    #@unittest.skip
     def test_trace_file(self):
         self.vm.trace_open(filename="vm_tracefile.log")
         self.vm.trace_write("\ntracefile test\n")
@@ -170,7 +183,7 @@ class VMctlTestCase(unittest.TestCase):
         self.vm.close()
 
     # bug seen on radon
-    #unittest.skip
+    #@unittest.skip
     def test_get_vm_statistics_case2(self):
         self.vm.ssh.mock(context='kvm_vm3')
         result = json.loads(self.vm.get_statistics())
@@ -182,7 +195,7 @@ class VMctlTestCase(unittest.TestCase):
     # tokenize failed vm_id=None cpu=4 => line=20777 ?        Sl   12314:32 qemu-system-x86_64 -enable-kvm -name guest=SHA04,
     # manual VM need to be excluded
 
-    #unittest.skip
+    #@unittest.skip
     def test_total_vm_resources_case2(self):
         self.vm.ssh.mock(context='kvm_vm3')
         result = json.loads(self.vm.get_vms_statistics())
@@ -191,7 +204,7 @@ class VMctlTestCase(unittest.TestCase):
         log.debug("used_cpu = {}".format(used_cpu))
         self.assertEqual(used_cpu, 46)
 
-    #unittest.skip
+    #@unittest.skip
     def test_get_vms_disk_kvm(self):
         self.vm.ssh.mock(context='kvm_vmd1')
         self.vm._get_vms_disk_kvm()
@@ -202,14 +215,14 @@ class VMctlTestCase(unittest.TestCase):
         self.assertEqual(result['vms_disks'][0]['type'], 'KVM')
 
     #empty vm list {} causing a failure
-    #unittest.skip
+    #@unittest.skip
     def test_get_vm_statistics_case3(self):
         self.vm.ssh.mock(context='kvm_vm4')
         result = json.loads(self.vm.get_statistics())
         log.debug("Result : {} len={}".format(result, len(str(result))))
         self.assertEqual(result["nb_cpu"], 128)
 
-    #unittest.skip
+    #@unittest.skip
     def test_get_vm_resources_kvm(self):
         self.vm.ssh.mock(context='kvm_vm4')
         result = json.loads(self.vm.get_vms_statistics())
@@ -221,7 +234,7 @@ class VMctlTestCase(unittest.TestCase):
         self.assertEqual(result['vms_disks'][0]['type'], 'KVM')
         #self.vm.close()
 
-    #unittest.skip
+    #@unittest.skip
     def test_get_processes_kvm_1(self):
        """ process named qemu-system (ex: Ubuntu 20.04.5)"""
        self.vm.ssh.mock(context='kvm_vm5')
@@ -234,7 +247,7 @@ class VMctlTestCase(unittest.TestCase):
        self.assertEqual(total_mem, 8192)
        self.assertEqual(total_number, 3)
 
-    #unittest.skip
+    #@unittest.skip
     def test_get_processes_kvm_2(self):
        """ process named qemu-system (ex: Ubuntu 22.04.2)"""
        self.vm.ssh.mock(context='kvm_vm6')
@@ -248,7 +261,7 @@ class VMctlTestCase(unittest.TestCase):
        self.assertEqual(total_number, 3)
 
 
-    #unittest.skip
+    #@unittest.skip
     def test_get_processes_esx(self):
         self.vm.ssh.mock(context='esx_vm1')
         self.vm._get_processes_esx()
@@ -257,7 +270,7 @@ class VMctlTestCase(unittest.TestCase):
         self.assertEqual(self.vm._vms_system[0]['system'], 'FSA_VM64')
         self.assertEqual(self.vm._vms_system[0]['type'], 'ESXI')
 
-    #unittest.skip
+    #@unittest.skip
     def test_get_processes_esx_2(self):
         """
         fix bug #16 failure when a VM is not an LMS VM
@@ -268,8 +281,8 @@ class VMctlTestCase(unittest.TestCase):
         self.vm._get_processes_esx()
         log.debug("vms_system={}".format(self.vm._vms_system))
         self.assertEqual(self.vm._vms_system[0]['id'], '056')
-    
-    #unittest.skip
+   
+    #@unittest.skip
     def test_get_vms_system_kvm(self):
         self.vm.ssh.mock(context='kvm_vm2')
         self.vm._get_vms_system_kvm()
@@ -277,7 +290,6 @@ class VMctlTestCase(unittest.TestCase):
         self.assertEqual(self.vm._vms_system[0]['id'], '035')
         self.assertEqual(self.vm._vms_system[0]['system'], 'FGT_VM64')
         self.assertEqual(self.vm._vms_system[0]['type'], 'KVM')
-
 
 
 if __name__ == '__main__':

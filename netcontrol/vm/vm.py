@@ -449,6 +449,8 @@ class Vm(object):
                     log.debug("Found new vm_name={} create_user={} system={} total_number={}".format(vm_name, create_user, system, self._vms_total['number']))
                 else:
                     log.warning("VM does not look like an LMS vms")
+                    # make sure this vm not from ours is not recorded with previous valid name !
+                    esx_start = False
             if esx_start:
                 match_esxid = re.search("VMX\sCartel\sID:\s(?P<vm_esxid>\d+)", line)
                 if match_esxid:
@@ -498,6 +500,7 @@ class Vm(object):
                     else:
                         log.error("Could not find disk size for vm_name={}".format(vm_name))
                         ret = False
+                    log.debug(f'record vm {vm['id']}')
                     self._vms.append(vm)
                 else:
                     log.warning("got unexpected instance format instance={}".format(instance))
