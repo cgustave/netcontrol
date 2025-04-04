@@ -16,10 +16,8 @@ This object is used in project labvmstats for all interaction with VM servers.
 '''
 from netcontrol.ssh.ssh import Ssh
 import logging as log
-
 import re
 import json
-
 # Workaround for paramiko deprecation warnings (will be fixed later in paramiko)
 import warnings
 warnings.filterwarnings(action='ignore', module='.*paramiko.*')
@@ -47,15 +45,11 @@ class Vm(object):
             datefmt='%Y%m%d:%H:%M:%S',
             filename='debug.log',
             level=log.NOTSET)
-
         # Set debug level first
         if debug:
             self.debug = True
             log.basicConfig(level='DEBUG')
-
-        log.debug("Enter with host_type={} hypervisor_type={} ip={}, port={}, user={}, password={}, private_key_file={}, debug={}".
-                 format(host_type, hypervisor_type, ip, port, user, password, private_key_file, debug))
-
+        log.debug(f"Enter with host_type={host_type} hypervisor_type={hypervisor_type} ip={ip}, port={port}, user={user}, password={password}, private_key_file={private_key_file}, debug={debug}") 
         # public class attributs
         self.host_type = host_type
         self.hypervisor_type = hypervisor_type
@@ -65,8 +59,7 @@ class Vm(object):
         self.password = password
         self.private_key_file = private_key_file
         self.mock_context = ''
-        self.ssh = Ssh(ip=ip, port=port, user=user, password=password,
-                       private_key_file=private_key_file, debug=debug)
+        self.ssh = Ssh(ip=ip, port=port, user=user, password=password, private_key_file=private_key_file, debug=debug)
         # private class attributes
         self._statistics = {}  # Internal representation of statistics
         self._vms = []         # Internal representation of each VMs
@@ -140,15 +133,13 @@ class Vm(object):
         Same command used for for Linux and ESX system
         """
         log.debug("Enter")
-
         self.ssh.shell_send(["cat /proc/cpuinfo | grep processor | wc -l\n"])
-        log.debug("output={}".format(self.ssh.output))
-
+        log.debug(f"output={self.ssh.output}")
         # This is the first line with a single number in the line
-        nb_cpu_match = re.search("(\d+)\n", str(self.ssh.output))
+        nb_cpu_match = re.search(r'(\d+)\n', str(self.ssh.output))
         if nb_cpu_match:
             nb_cpu = int(nb_cpu_match.groups(0)[0])
-            log.debug("nb_cpu={}".format(nb_cpu))
+            log.debug(f"nb_cpu={nb_cpu}")
             self._statistics['nb_cpu'] = nb_cpu
 
     def _get_loadavg(self):
@@ -167,7 +158,7 @@ class Vm(object):
         load_1mn = ""
         load_5mn = ""
         load_15mn = ""
-        log.debug("host_type={}".format(self.host_type))
+        log.debug(f"host_type={self.host_type}")
         if self.host_type == 'Linux':
             cmd = "cat /proc/loadavg\n"
             # load average (1mn 5mn 15mn) typical output :
@@ -176,7 +167,7 @@ class Vm(object):
             cmd = "uptime\n"
             #  9:43:24 up 141 days, 03:33:10, load average: 0.06, 0.07, 0.07
         self.ssh.shell_send([cmd])
-        load_match = re.search("(\d+\.?\d?\d?)\,?\s+(\d+\.?\d?\d?)\,?\s+(\d+\.?\d?\d?)", str(self.ssh.output))
+        load_match = re.search(r'(\d+\.?\d?\d?)\,?\s+(\d+\.?\d?\d?)\,?\s+(\d+\.?\d?\d?)', str(self.ssh.output))
         if load_match:
             load_1mn = load_match.groups(0)[0]
             load_5mn = load_match.groups(0)[1]
@@ -185,9 +176,9 @@ class Vm(object):
             self._statistics['load']['1mn'] = load_1mn
             self._statistics['load']['5mn'] = load_5mn
             self._statistics['load']['15mn'] = load_15mn
-            log.debug("load_1mn={} load_5mn={} load_15mn={}".format(load_1mn, load_5mn, load_15mn))
+            log.debug(f"load_1mn={load_1mn} load_5mn={load_5mn} load_15mn={load_15mn}")
         else:
-            log.error("Could not extract system load for type={}".format(self.host_type))
+            log.error(f"Could not extract system load for type={self.host_type}")
 
     def _get_memory_kvm(self):
         """
@@ -214,20 +205,19 @@ class Vm(object):
         memory_total = 0
         memory_free = 0
         memory_available = 0
-        mem_total_match = re.search("MemTotal:\s+(\d+) kB", str(self.ssh.output))
+        mem_total_match = re.search(r'MemTotal:\s+(\d+) kB', str(self.ssh.output))
         if mem_total_match:
             memory_total = int(mem_total_match.groups(0)[0])
             self._statistics['memory']['total'] = memory_total
-        mem_free_match = re.search("MemFree:\s+(\d+) kB", str(self.ssh.output))
+        mem_free_match = re.search(r'MemFree:\s+(\d+) kB', str(self.ssh.output))
         if mem_free_match:
             memory_free = int(mem_free_match.groups(0)[0])
             self._statistics['memory']['free'] = memory_free
-        mem_available_match = re.search("MemAvailable:\s+(\d+) kB", str(self.ssh.output))
+        mem_available_match = re.search(r'MemAvailable:\s+(\d+) kB', str(self.ssh.output))
         if mem_available_match:
             memory_available = int(mem_available_match.groups(0)[0])
             self._statistics['memory']['available'] = memory_available
-        log.debug("memory_total={}, memory_free={}, memory_available={}".
-                  format(memory_total, memory_free, memory_available))
+        log.debug(f"memory_total={memory_total}, memory_free={memory_free}, memory_available={memory_available}")
 
     def _get_memory_esx(self):
         """
@@ -251,42 +241,40 @@ class Vm(object):
         memory_total = 0
         memory_free = 0
         memory_available = 0
-
         # Memory regexp for version 6.0.0 and 6.7.0
-        mem_re_v60 = "(?P<total>\d+)\s+"\
-                   + "(?P<discarded>\d+)\s+"\
-                   + "(?P<managedByMemMap>\d+)\s+"\
-                   + "(?P<reliableMem>\d+)\s+"\
-                   + "(?P<kernelCode>\d+)\s+"\
-                   + "(?P<critical>\d+)\s+"\
-                   + "(?P<dataAndHeap>\d+)\s+"\
-                   + "(?P<buddyOvhd>\d+)\s+"\
-                   + "(?P<rsvdLow>\d+)\s+"\
-                   + "(?P<managedByMemSched>\d+)\s+"\
-                   + "(?P<minFree>\d+)\s+"\
-                   + "(?P<vmkClientConsumed>\d+)\s+"\
-                   + "(?P<otherConsumed>\d+)\s+"\
-                   + "(?P<free>\d+)\s+"
-
-        mem_re_v67 = "(?P<total>\d+)\s+"\
-                   + "(?P<discarded>\d+)\s+"\
-                   + "(?P<managedByMemMap>\d+)\s+"\
-                   + "(?P<reliableMem>\d+)\s+"\
-                   + "(?P<kernelCode>\d+)\s+"\
-                   + "(?P<dataAndHeap>\d+)\s+"\
-                   + "(?P<buddyOvhd>\d+)\s+"\
-                   + "(?P<rsvdLow>\d+)\s+"\
-                   + "(?P<managedByMemSched>\d+)\s+"\
-                   + "(?P<minFree>\d+)\s+"\
-                   + "(?P<vmkClientConsumed>\d+)\s+"\
-                   + "(?P<otherConsumed>\d+)\s+"\
-                   + "(?P<free>\d+)\s+"
-
+        mem_re_v60 = r'(?P<total>\d+)\s+'\
+                   + r'(?P<discarded>\d+)\s+'\
+                   + r'(?P<managedByMemMap>\d+)\s+'\
+                   + r'(?P<reliableMem>\d+)\s+'\
+                   + r'(?P<kernelCode>\d+)\s+'\
+                   + r'(?P<critical>\d+)\s+'\
+                   + r'(?P<dataAndHeap>\d+)\s+'\
+                   + r'(?P<buddyOvhd>\d+)\s+'\
+                   + r'(?P<rsvdLow>\d+)\s+'\
+                   + r'(?P<managedByMemSched>\d+)\s+'\
+                   + r'(?P<minFree>\d+)\s+'\
+                   + r'(?P<vmkClientConsumed>\d+)\s+'\
+                   + r'(?P<otherConsumed>\d+)\s+'\
+                   + r'(?P<free>\d+)\s+'
+        # v6,7
+        mem_re_v67 = r'(?P<total>\d+)\s+'\
+                   + r'(?P<discarded>\d+)\s+'\
+                   + r'(?P<managedByMemMap>\d+)\s+'\
+                   + r'(?P<reliableMem>\d+)\s+'\
+                   + r'(?P<kernelCode>\d+)\s+'\
+                   + r'(?P<dataAndHeap>\d+)\s+'\
+                   + r'(?P<buddyOvhd>\d+)\s+'\
+                   + r'(?P<rsvdLow>\d+)\s+'\
+                   + r'(?P<managedByMemSched>\d+)\s+'\
+                   + r'(?P<minFree>\d+)\s+'\
+                   + r'(?P<vmkClientConsumed>\d+)\s+'\
+                   + r'(?P<otherConsumed>\d+)\s+'\
+                   + r'(?P<free>\d+)\s+'
         esx_vers = '6.7'
         for line in self.ssh.output.splitlines():
-            log.debug("line={}".format(line))
+            log.debug(f"line={line}")
             # 'critical' is the marker of the 6.0 version
-            match_version = re.search("critical", line)
+            match_version = re.search(r'critical', line)
             if match_version:
                 esx_vers = '6.0'
                 log.debug("found 6.0 like version")
@@ -298,8 +286,7 @@ class Vm(object):
                 memory_total = int(match_memory.group('total'))
                 memory_free = int(match_memory.group('free'))
                 memory_available = memory_free
-                log.debug("memory_total={} memory_free={} computed memory_available={}"\
-                          .format(memory_total, memory_free, memory_available))
+                log.debug(f"memory_total={memory_total} memory_free={memory_free} computed memory_available={memory_available}")
                 self._statistics['memory']['total'] = memory_total
                 self._statistics['memory']['free'] = memory_free
                 self._statistics['memory']['available'] = memory_available
@@ -331,10 +318,10 @@ class Vm(object):
         self.ssh.shell_send(["df -BG\n"])
         self._statistics['disk'] = {}
         for line in self.ssh.output.splitlines():
-            log.debug("line={}".format(line))
-            home_re = "(?P<dev>[A-Za-z0-9\/]+)(?:\s+)(\d+)G\s+(?P<used>\d+)G\s+"\
-                    + "(?P<available>\d+)G\s+(?P<used_percent>\d+)%\s+"\
-                    + "(?P<mounted>[A-Za-z0-9\/]+)"
+            log.debug(f"line={line}")
+            home_re = r'(?P<dev>[A-Za-z0-9\/]+)(?:\s+)(\d+)G\s+(?P<used>\d+)G\s+'\
+                    + r'(?P<available>\d+)G\s+(?P<used_percent>\d+)%\s+'\
+                    + r'(?P<mounted>[A-Za-z0-9\/]+)'
             home_match = re.search(home_re, line)
             if home_match:
                 dev = home_match.group('dev')
@@ -342,15 +329,13 @@ class Vm(object):
                 available = home_match.group('available')
                 used_percent = home_match.group('used_percent')
                 mounted = home_match.group('mounted')
-                log.debug("dev={} used={} available={} used_percent={} mounted={}".
-                          format(dev, used, available, used_percent, mounted))
+                log.debug(f"dev={dev} used={used} available={available} used_percent={used_percent} mounted={mounted}")
                 self._statistics['disk'][mounted] = {}
                 self._statistics['disk'][mounted]['dev'] = dev
                 self._statistics['disk'][mounted]['used'] = used
                 self._statistics['disk'][mounted]['available'] = available
                 self._statistics['disk'][mounted]['used_percent'] = used_percent
                 self._statistics['disk'][mounted]['type'] = 'KVM'
-
 
     def _get_disk_esx(self):
         """
@@ -383,10 +368,10 @@ class Vm(object):
         self.ssh.shell_send(["df -m\n"])
         self._statistics['disk'] = {}
         for line in self.ssh.output.splitlines():
-            log.debug("line={}".format(line))
-            datastore_re = "(?P<dev>[A-Za-z0-9\/-]+)(?:\s+)(\d+)\s+(?P<used>\d+)\s+"\
-                    + "(?P<available>\d+)\s+(?P<used_percent>\d+)%\s+"\
-                    + "(?P<mounted>[A-Za-z0-9\/]+)"
+            log.debug(f"line={line}")
+            datastore_re = r'(?P<dev>[A-Za-z0-9\/-]+)(?:\s+)(\d+)\s+(?P<used>\d+)\s+'\
+                    + r'(?P<available>\d+)\s+(?P<used_percent>\d+)%\s+'\
+                    + r'(?P<mounted>[A-Za-z0-9\/]+)'
             datastore_match = re.search(datastore_re, line)
             if datastore_match:
                 dev = datastore_match.group('dev')
@@ -394,15 +379,13 @@ class Vm(object):
                 available = datastore_match.group('available')
                 used_percent = datastore_match.group('used_percent')
                 mounted = datastore_match.group('mounted')
-                log.debug("dev={} used={} available={} used_percent={} mounted={}".
-                          format(dev, used, available, used_percent, mounted))
+                log.debug(f"dev={dev} used={used} available={available} used_percent={used_percent} mounted={mounted}")
                 self._statistics['disk'][mounted] = {}
                 self._statistics['disk'][mounted]['dev'] = dev
                 self._statistics['disk'][mounted]['used'] = used
                 self._statistics['disk'][mounted]['available'] = available
                 self._statistics['disk'][mounted]['used_percent'] = used_percent
                 self._statistics['disk'][mounted]['type'] = 'ESXI'
-
 
     def _get_processes_esx(self):
         """
@@ -441,7 +424,7 @@ class Vm(object):
                 esx_line = esx_line + 1
             log.debug(f"esx_line={esx_line} line={line}")
             if esx_line == 1:
-                match_name = re.search("(?P<vm_name>\S+)\s\[(?P<create_user>\S+)\]\s(?P<system>\S+)", line)
+                match_name = re.search(r'(?P<vm_name>\S+)\s\[(?P<create_user>\S+)\]\s(?P<system>\S+)', line)
                 if match_name:
                     found_lms_vms = True
                     vm_name = match_name.group('vm_name')
@@ -454,14 +437,14 @@ class Vm(object):
                     found_lms_vms = False
                     esx_start = False
             if esx_start:
-                match_esxid = re.search("VMX\sCartel\sID:\s(?P<vm_esxid>\d+)", line)
+                match_esxid = re.search(r'VMX\sCartel\sID:\s(?P<vm_esxid>\d+)', line)
                 if match_esxid:
                     vm_esxid = match_esxid.group('vm_esxid')
                     log.debug(f"Found {vm_name} vm_esxid={vm_esxid}")
                     self._vms_esx_id_map[vm_esxid] = vm_name
                     if vm_esxid in self._vms_esx_memory:
                         if found_lms_vms:
-                            vm_memory = int(int(self._vms_esx_memory[vm_esxid]) / 1024)
+                            vm_memory = int(int(self._vms_esx_memory[vm_esxid]) >> 10)
                             self._vms_total['memory'] += int(vm_memory)
                         else:
                             log.warn('ignore memory on non lms vm')
@@ -482,7 +465,7 @@ class Vm(object):
                     vm = {}
                     instance = self._get_vm_instance_from_name(name=vm_name)
                     log.debug(f'recording lms vm instance={instance}')
-                    if re.search('\d+', instance):
+                    if re.search(r'\d+', instance):
                         vm['id'] = instance
                         vm['cpu'] = 0
                         vm['memory'] = vm_memory
@@ -517,7 +500,6 @@ class Vm(object):
                         ret = False
                 else:
                     log.warning(f'vm is not an lms vm, skip')
-
         return ret
 
     def _get_vm_instance_from_name(self, name=""):
@@ -525,15 +507,15 @@ class Vm(object):
         VM instance is like 001, 011, 122 and so on.
         It should be extracted from server name (ex: uranium-tam-esx42)
         """
-        log.debug("Enter with name={}".format(name))
+        log.debug(f"Enter with name={name}")
         result = "" 
-        match_inst = re.search("(?P<inst>\d+)$", name)
+        match_inst = re.search(r'(?P<inst>\d+)$', name)
         if match_inst:
             inst = match_inst.group('inst')
             result = str(inst).zfill(3)
-            log.debug("formatted instance result={}".format(result))
+            log.debug(f"formatted instance result={result}")
         else:
-            log.warning("Could not extract formatted instance from name={}".format(name))
+            log.warning(f"Could not extract formatted instance from name={name}")
         return result
 
     def _build_vms_esx_cpu(self):
@@ -553,12 +535,12 @@ class Vm(object):
         self._vms_esx_cpu = {}
         self.ssh.shell_send(["ps -u\n"])
         for line in self.ssh.output.splitlines():
-            log.debug("line={}".format(line))
-            match = re.search("\d+\s+\d+\s+vmx-vcpu-(?P<cpu>\d+):(?P<vm_id>\S+)",line)
+            log.debug(f"line={line}")
+            match = re.search(r'\d+\s+\d+\s+vmx-vcpu-(?P<cpu>\d+):(?P<vm_id>\S+)',line)
             if match:
                 cpu = match.group('cpu')
                 vm_id = match.group('vm_id')
-                log.debug("found vm_id={} cpu={}".format(vm_id, cpu))
+                log.debug(f"found vm_id={vm_id} cpu={cpu}")
                 self._vms_esx_cpu[vm_id] = int(cpu) + 1
 
     def _build_vms_esx_memory(self):
@@ -575,12 +557,12 @@ class Vm(object):
         self._vms_esx_memory = {}
         self.ssh.shell_send(["memstats -r vm-stats\n"])
         for line in self.ssh.output.splitlines():
-            log.debug("line={}".format(line))
-            match = re.search("vm\.\d+\s+\S+\s+\d+\s+\d+\s+(?P<esxid>\d+)\s+(?P<memory>\d+)\s",line)
+            log.debug(f"line={line}")
+            match = re.search(r'vm\.\d+\s+\S+\s+\d+\s+\d+\s+(?P<esxid>\d+)\s+(?P<memory>\d+)\s',line)
             if match:
                 esxid = match.group('esxid')
                 memory = match.group('memory')
-                log.debug("found esxid={} memory={}".format(esxid, memory))
+                log.debug(f"found esxid={esxid} memory={memory}")
                 self._vms_esx_memory[esxid] = memory
 
     def _get_processes_kvm(self):
@@ -597,7 +579,7 @@ class Vm(object):
         remove ansi color needed on grep
         """
         log.debug("Enter")
-        self.ssh.shell_send(["sudo ps -xww | grep --color=never -E 'qemu-system\s|kvm\s'\n"])
+        self.ssh.shell_send(["sudo ps -xww | grep --color=never -E 'qemu-system |kvm '\n"])
         self._vms_total = {}
         self._vms_total['cpu'] = 0
         self._vms_total['memory'] = 0
@@ -606,7 +588,7 @@ class Vm(object):
         kvm_start = False
         kvm_end = False
         for line in self.ssh.output.splitlines():
-            log.debug("line={}".format(line))
+            log.debug(f"line={line}")
             need_tokenize = False
             # Looking for kvm process starting line (qemu-system-x86_64)
             if line.find('qemu-system-x86_64 ') != -1:
@@ -652,10 +634,10 @@ class Vm(object):
                     # Count number of VMs based on the cpu token
                     self._vms_total['number'] += 1
                     self._vms_total['cpu'] += int(result['cpu'])
-                    log.debug("vms_total_cpu={}".format(self._vms_total['cpu']))
+                    log.debug(f"vms_total_cpu={self._vms_total['cpu']}")
                 if 'memory' in result:
                     self._vms_total['memory'] += int(result['memory'])
-                    log.debug("vms_total_memory={}".format(self._vms_total['memory']))
+                    log.debug(f"vms_total_memory={self._vms_total['memory']}")
 
     def _get_vms_system_kvm(self):
         """
@@ -681,8 +663,8 @@ class Vm(object):
         log.debug("Enter")
         self.ssh.shell_send(["sudo virsh list --title\n"])
         for line in self.ssh.output.splitlines():
-            log.debug("line={}".format(line))
-            system_match = re.search("\s+\S+\s+(?P<id>\S+)\s+(?:running|idle|paused|in\sshutdown|shut\soff|crashed|pmsuspended)\s+\S+\s+\S+\s+(?P<system>\S+)", line)
+            log.debug(f"line={line}")
+            system_match = re.search(r'\s+\S+\s+(?P<id>\S+)\s+(?:running|idle|paused|in\sshutdown|shut\soff|crashed|pmsuspended)\s+\S+\s+\S+\s+(?P<system>\S+)', line)
             if system_match:
                 id = system_match.group('id')
                 system = system_match.group('system')
@@ -690,15 +672,15 @@ class Vm(object):
                     system = system.replace('_KVM','')
                 else:
                     log.warning("No _KVM in system")
-                log.debug("Found id={} system={}".format(id, system))
+                log.debug(f"Found id={id} system={system}")
                 self._vms_system.append({'id': id, 'system': system, 'type': 'KVM' })
 
     def _tokenize(self, line):
-        """
+        r"""
         Tokenise ps lines has run into a dictionnary where the key is the option
         (the -xxxx). Only tokenize tokens we are interested in
 
-        210316 : manually started vm need to be exculded (the id does not match
+        210316 : manually started vm need to be excluded (the id does not match
         guest=\d+), seen on radon
 
         return: dictionary like
@@ -709,60 +691,50 @@ class Vm(object):
             'template': ...
         }
         """
-        log.debug("Enter with line={}".format(line))
+        log.debug(f"Enter with line={line}")
         vm_id = None
         cpu = None
         memory = None
         template = None
-
         # VM id only digit if launched from labsetup
         # other if launched manually from a user
-        id_match = re.search("\sguest=([A-Za-z0-9_\-\.\/\s]+)(?:,|\s)", line)
+        id_match = re.search(r'\sguest=([A-Za-z0-9_\-\.\/\s]+)(?:,|\s)', line)
         if id_match:
             vm_id = id_match.groups(0)[0]
-            log.debug("id={}".format(vm_id))
-
+            log.debug(f"id={vm_id}")
         # Number of CPU assigned to the VM
-        cpu_match = re.search("\s-smp\s(\d+)(?:,|\s)", line)
+        cpu_match = re.search(r'\s-smp\s(\d+)(?:,|\s)', line)
         if cpu_match:
             cpu = int(cpu_match.groups(0)[0])
-            log.debug("cpu={}".format(cpu))
-
+            log.debug(f"cpu={cpu}")
         # Allocated memory in Mb
-        memory_match = re.search("\s-m\s(\d+)(?:,|\s)", line)
+        memory_match = re.search(r'\s-m\s(\d+)(?:,|\s)', line)
         if memory_match:
             memory = int(memory_match.groups(0)[0])
-            log.debug("memory={}".format(memory))
-
+            log.debug(f"memory={memory}")
         # Running template
-        template_match = re.search("\s-drive\sfile=([A-Za-z0-9_\-\.\/\s]+)", line)
+        template_match = re.search(r'\s-drive\sfile=([A-Za-z0-9_\-\.\/\s]+)', line)
         if template_match:
             template = template_match.groups(0)[0]
-            log.debug("template={}".format(template))
-
+            log.debug(f"template={template}")
         vm = {}
         if template_match and memory_match and cpu_match and id_match:
-            log.debug("tokenize succesful : id={} cpu={} memory={} template={}".
-                      format(vm_id, cpu, memory, template))
+            log.debug(f"tokenize succesful : id={vm_id} cpu={cpu} memory={memory} template={template}")
             vm['id'] = vm_id
             vm['cpu'] = cpu
             vm['memory'] = memory
             vm['template'] = template
             return vm
-
         elif memory_match and cpu_match and id_match:
             # This case was seen with windows VM created without disk (stay in
             # boot failure)
-            log.debug("tokenize succesful without template : id={} cpu={} memory={}".
-                        format(vm_id, cpu, memory))
+            log.debug(f"tokenize succesful without template : id={vm_id} cpu={cpu} memory={memory}")
             vm['id'] = vm_id
             vm['cpu'] = cpu
             vm['memory'] = memory
             return vm
-
         else:
-            log.warning("tokenize failed (maybe a manually started VM) vm_id={} cpu={} memory={}".format(vm_id, cpu, memory))
-
+            log.warning(f"tokenize failed (maybe a manually started VM) vm_id={vm_id} cpu={cpu} memory={memory}")
         # Need to return an empty dictionnary
         return {}
 
@@ -772,24 +744,33 @@ class Vm(object):
         Retrieve all VMs disk usage located in vmpath.
         Make sure to retrieve the provisioned disk size and not the current usage of a qcow
         For this 'ls' or 'du' can't be used, however 'file' can do the job.
-        Ex: # for i in `virsh list | awk '{​​​​​​ print $2}​​​​​​'`;  do file /home/virtualMachines/$i/*; done
-        /home/virtualMachines/Name/*: cannot open `/home/virtualMachines/Name/*' (No such file or directory)
-        /home/virtualMachines/045/boot.qcow2:      QEMU QCOW Image (v3), 1073741824 bytes
-        /home/virtualMachines/045/datadrive.qcow2: QEMU QCOW Image (v3), 64424509440 bytes
-        /home/virtualMachines/008/win10.qcow2: QEMU QCOW Image (v2), has backing file (path /home/templates/Windows10/20201014/sop.qcow2), 85899345920 bytes
-        /home/virtualMachines/097/fmg.qcow2:     QEMU QCOW Image (v2), 2147483648 bytes
-        /home/virtualMachines/097/storage.qcow2: QEMU QCOW Image (v2), 85899345920 bytes
-        /home/virtualMachines/002/fortios.qcow2: QEMU QCOW Image (v3), 2147483648 bytes
+        Ex: # for i in `virsh list | awk '{​​​​​​ print $2}​​​​​​'`;  do du /home/virtualMachines/$i/*; done
+        vmstats@iron:~$ for i in `sudo virsh list --all | awk '{print $2}'`; do sudo du /home/virtualMachines/$i/* ; done
+        du: cannot access '/home/virtualMachines/Name/*': No such file or directory
+        755988  /home/virtualMachines/031/fortios.qcow2
+        518264  /home/virtualMachines/031/logdisk.qcow2
+        37974508        /home/virtualMachines/056/win10.qcow2
+        274140  /home/virtualMachines/023/fmg.qcow2
+        22225620        /home/virtualMachines/023/storage.qcow2
+        27958384        /home/virtualMachines/099/Windows11.qcow2
+        1946768 /home/virtualMachines/017/fortiproxy.qcow2
+        1534700 /home/virtualMachines/017/logdisk.qcow2
+        13331752        /home/virtualMachines/007/win2016.qcow2
+        18494412        /home/virtualMachines/068/win2019.qcow2
+        => size in KB
         ../..
         Need to addition for each VM the size of each disks in bytes
         """
-        log.debug('Enter with vmpath={}'.format(vmpath))
-        cmd = "for i in `sudo virsh list --all | awk '{print $2}'`; do sudo file "+vmpath+"/$i/* ; done"
+        log.debug(f'Enter with vmpath={vmpath}')
+        cmd = "for i in `sudo virsh list --all | awk '{print $2}'`; do sudo du "+vmpath+"/$i/* ; done"
         self.ssh.shell_send([cmd+"\n"])
         for line in self.ssh.output.splitlines():
-            log.debug("line={}".format(line))
+            log.debug(f"line={line}")
+            if re.search(r'No such file', line):
+                continue
             self._extract_vms_disk(vmpath, line)
         for id in self._vms_disks_dict:
+            # Size in Bytes
             size = self._vms_disks_dict[id]
             self._vms_disks.append({'id': id, 'size': size, 'type': 'KVM'})
 
@@ -829,30 +810,29 @@ class Vm(object):
         3.8G    /vmfs/volumes/datastore-Uranium/machines/uranium-esx49 [vchauhan] FAC_VM64_ESXI
         2.6G    /vmfs/volumes/datastore-Uranium/machines/uranium-esx04 [fbegit] FGT_VM64_ESXI
         2.3G    /vmfs/volumes/datastore-Uranium/machines/uranium-esx60 [ncorreia] FGT_VM64_ESXI
-        Result to be provided in MB
         Should be run before _get_processes_esx
         Note: 220223 on slower server, ouput ot the command be be seen on next one...
         Sending an empty line in th end seems to do the trick
+        Store in Bytes
         """
         log.debug("Enter")
         cmd = "du -h /vmfs/volumes/*datastore*/ | grep esx | awk '// { print $1 \", \" $2}'"
         self.ssh.shell_send([cmd+"\n"])
         for line in self.ssh.output.splitlines():
-            log.debug("line={}".format(line))
-            match_vm = re.search("(?P<size>\d+\.?\d+?)(?P<unit>G|M|K|T),\s(?P<machine>\S+)", line)
+            log.debug(f"line={line}")
+            match_vm = re.search(r'(?P<size>\d+\.?\d+?)(?P<unit>G|M|K|T),\s(?P<machine>\S+)', line)
             if match_vm:
                 size = match_vm.group('size')
                 unit = match_vm.group('unit')
                 machine = match_vm.group('machine')
-                log.debug("Found size={} unit={} machine={}".format(size, unit, machine))
+                log.debug(f"Found size={size} unit={unit} machine={machine}")
                 # get machine id from full name
                 # ex: /vmfs/volumes/datastore-Neutron/machines/neutron-esx36  or
                 # ex: /vmfs/volumes/datastore-Uranium/uranium-esx69   (no machines)
-
-                match_name = re.search("(machines)?/(?P<name>[A-Za-z0-9_-]+)$", machine)
+                match_name = re.search(r'(machines)?/(?P<name>[A-Za-z0-9_-]+)$', machine)
                 if match_name:
                     name = match_name.group('name')
-                    log.debug("Found name={}".format(name))
+                    log.debug(f"Found name={name}")
                     if unit == 'G':
                         value = int(float(size) * 1024)
                     elif unit == 'M':
@@ -862,22 +842,23 @@ class Vm(object):
                     elif unit == 'K':
                         value == int(float(size) / 1024)
                     else:
-                        log.error("Unexpected disk size unit={} on esx machine={}".format(unit, name))
+                        log.error(f"Unexpected disk size unit={unit} on esx machine={name}")
                         value = 0
                     self._vms_esx_disks[name] = value
-                    log.debug("name={} disk size={}".format(name, value))
-                    match = re.search("esx(?P<id>\d+)", name)
+                    log.debug(f"name={name} disk size={value}")
+                    match = re.search(r'esx(?P<id>\d+)', name)
                     if match:
                         id = match.group('id')
                         fid = self.format_instance(id=id)
-                        size = value * 1024 * 1024
+                        # size in Mega => to Bytes (1024 * 1024)
+                        size = int(value) << 20
                         json = {'id': fid , 'size': size, 'type': 'ESXI'}
-                        log.debug("json={}".format(json))
+                        log.debug(f"json={json}")
                         self._vms_disks.append(json)
                     else:
-                        log.warning("No disk for name={} fid={}".format(name, fid))
+                        log.warning(f"No disk for name={name} fid={fid}")
                 else:
-                    log.debug("Could not extract machine name from machine={}".format(machine))
+                    log.debug(f"Could not extract machine name from machine={machine}")
         # Sending an empty line in the end to temporize before next command
         # was needed on electron
         log.debug("end of processing, sending empty line")
@@ -886,31 +867,34 @@ class Vm(object):
     def _extract_vms_disk(self, vmpath, line):
         """
         Parse output to get all vms disk consumption
+        in Bytes
         """
-        log.debug("Enter with vmpath={} line={}".format(vmpath, line))
-        d_match = re.search(vmpath+"/(?P<id>[a-zA-Z0-9_\-\.\/s]+)/",line)
+        log.debug(f"Enter with vmpath={vmpath} line={line}")
+        d_match = re.search(vmpath+r'/(?P<id>[a-zA-Z0-9_\-\.\/s]+)/',line)
         if d_match:
             id = d_match.group("id")
-            log.debug("id={}".format(id))
-            s_match = re.search("(?P<size>\d+) bytes", line)
+            log.debug(f"id={id}")
+            s_match = re.search(r'^(?P<size>\d+)\s+', line)
             if s_match:
                 size = s_match.group("size")
+                # need in Bytes
+                size = int(float(size) * 1024)  
                 if id not in self._vms_disks_dict:
-                    self._vms_disks_dict[id] = int(size)
+                    self._vms_disks_dict[id] = int(size) 
                 else:
                     self._vms_disks_dict[id] = int(self._vms_disks_dict[id]) + int(size)
-                log.debug("id={} file size={} disk total={} ".format(id, size, self._vms_disks_dict[id] ))
+                log.debug(f"id={id} file size={size} Bytes disk total={self._vms_disks_dict[id]} Bytes")
 
     def format_instance(self, id=''):
         """
         Common format for VM id  (3 digit format, ex: 001 or 032 or 121 or 002)
         """
-        log.debug("Enter with id={}".format(id))
+        log.debug(f"Enter with id={id}")
         result = id
         try:
             result = str(id).zfill(3)
         except:
-            log.debug("Could not format id={}".format(id))
+            log.debug(f"Could not format id={id}")
         return result
 
     def dump_statistics(self):
@@ -936,13 +920,15 @@ class Vm(object):
         print(json.dumps(self._vms_total, indent=4, sort_keys=True))
 
 
-
-
 """
 Class sample code
 """
 if __name__ == '__main__':  # pragma: no cover
 
     # create object
-    vm = Vm(ip='10.5.0.31', port='22', user='root', password='fortinet', debug=True)
-    print(vm.get_statistics())
+    # uranium ESX
+    #vm = Vm(ip='10.5.4.10', hypervisor_type='esx', host_type='ESX', port='22', user='root', password='', private_key_file='/tmp/id_vmstats', debug=True)
+    # KVM axion
+    vm = Vm(ip='10.5.0.93', hypervisor_type='kvm', host_type='Linux', port='22', user='vmstats', password='', private_key_file='/tmp/id_vmstats', debug=True)
+    print(f"statistics={vm.get_statistics()}\n\n")
+    print(f"vm_statistics={vm.get_vms_statistics()}")

@@ -210,8 +210,8 @@ class VMctlTestCase(unittest.TestCase):
         self.vm._get_vms_disk_kvm()
         result = json.loads(self.vm.get_vms_statistics())
         log.debug("Result : {}".format(result))
-        self.assertEqual(result['vms_disks'][0]['id'], '045')
-        self.assertEqual(result['vms_disks'][0]['size'], 65498251264)
+        self.assertEqual(result['vms_disks'][0]['id'], '097')
+        self.assertEqual(result['vms_disks'][0]['size'], 23773429760)
         self.assertEqual(result['vms_disks'][0]['type'], 'KVM')
 
     #empty vm list {} causing a failure
@@ -229,8 +229,8 @@ class VMctlTestCase(unittest.TestCase):
         log.debug("KVM result : {} len={}".format(result, len(str(result))))
         self.vm.dump_vms()
         self.vm.dump_vms_total()
-        self.assertEqual(result['vms_disks'][0]['id'], '001')
-        self.assertEqual(result['vms_disks'][0]['size'], 19327352832)
+        self.assertEqual(result['vms_disks'][0]['id'], '002')
+        self.assertEqual(result['vms_disks'][0]['size'],67094061056 )
         self.assertEqual(result['vms_disks'][0]['type'], 'KVM')
         #self.vm.close()
 
