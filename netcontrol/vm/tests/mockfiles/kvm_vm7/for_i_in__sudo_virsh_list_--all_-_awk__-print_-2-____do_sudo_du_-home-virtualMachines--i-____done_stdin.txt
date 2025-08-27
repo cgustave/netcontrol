@@ -1,0 +1,5 @@
+vmstats@gallium:~$ for i in `sudo virsh list --all | awk '{print $2}'`; do sudo du /home/virtualMachines/$i/* ; done
+du: cannot access '/home/virtualMachines/Name/*': No such file or directory
+1731348 /home/virtualMachines/001/ubuntu2404.qcow2
+1451668 /home/virtualMachines/032/ubuntu2404.qcow2
+vmstats@gallium:~$ 

@@ -114,6 +114,20 @@ class VMctlTestCase(unittest.TestCase):
         self.assertEqual(result["vms_total"]["number"], 55)
         self.assertEqual(len(str(result)), 8569)
 
+    @unittest.skip
+    def test_get_vm_resources_kvm_debian13(self):
+        self.vm.ssh.mock(context='kvm_vm7')
+        result = json.loads(self.vm.get_vms_statistics())
+        log.debug("KVM result : {} len={}".format(result, len(str(result))))
+        self.vm.dump_vms()
+        self.vm.dump_vms_total()
+        #self.vm.close()
+        self.assertEqual(result["vms_total"]["cpu"], 77)
+        self.assertEqual(result["vms_total"]["memory"], 182272)
+        self.assertEqual(result["vms_total"]["number"], 55)
+        self.assertEqual(len(str(result)), 8569)
+
+
     #@unittest.skip
     def test_build_vms_esx_disk(self):
         self.vm.host_type = 'ESX'

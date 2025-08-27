@@ -856,7 +856,7 @@ class Vm(object):
                         log.debug(f"json={json}")
                         self._vms_disks.append(json)
                     else:
-                        log.warning(f"No disk for name={name} fid={fid}")
+                        log.warning(f"No disk for name={name}")
                 else:
                     log.debug(f"Could not extract machine name from machine={machine}")
         # Sending an empty line in the end to temporize before next command
@@ -929,6 +929,7 @@ if __name__ == '__main__':  # pragma: no cover
     # uranium ESX
     #vm = Vm(ip='10.5.4.10', hypervisor_type='esx', host_type='ESX', port='22', user='root', password='', private_key_file='/tmp/id_vmstats', debug=True)
     # KVM axion
-    vm = Vm(ip='10.5.0.93', hypervisor_type='kvm', host_type='Linux', port='22', user='vmstats', password='', private_key_file='/tmp/id_vmstats', debug=True)
+    #vm = Vm(ip='10.5.0.69', hypervisor_type='kvm', host_type='Linux', port='22', user='vmstats', password='', private_key_file='/tmp/id_vmstats', debug=True)
+    vm = Vm(ip='10.109.3.60', hypervisor_type='esx', host_type='ESX', port='22', user='root', password='', private_key_file='/tmp/id_vmstats', debug=True)
     print(f"statistics={vm.get_statistics()}\n\n")
     print(f"vm_statistics={vm.get_vms_statistics()}")

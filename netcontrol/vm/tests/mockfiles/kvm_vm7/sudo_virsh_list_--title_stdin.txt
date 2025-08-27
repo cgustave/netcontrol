@@ -1,0 +1,7 @@
+vmstats@gallium:~$ sudo virsh list --title
+ Id   Name   State     Title
+------------------------------------------------------
+ 1    001    running   001 [xlemaire] ubuntu2404_KVM
+ 2    032    running   032 [xlemaire] ubuntu2404_KVM
+
+vmstats@gallium:~$ 
