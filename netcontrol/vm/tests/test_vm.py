@@ -114,7 +114,7 @@ class VMctlTestCase(unittest.TestCase):
         self.assertEqual(result["vms_total"]["number"], 55)
         self.assertEqual(len(str(result)), 8569)
 
-    @unittest.skip
+    #@unittest.skip
     def test_get_vm_resources_kvm_debian13(self):
         self.vm.ssh.mock(context='kvm_vm7')
         result = json.loads(self.vm.get_vms_statistics())
@@ -122,10 +122,10 @@ class VMctlTestCase(unittest.TestCase):
         self.vm.dump_vms()
         self.vm.dump_vms_total()
         #self.vm.close()
-        self.assertEqual(result["vms_total"]["cpu"], 77)
-        self.assertEqual(result["vms_total"]["memory"], 182272)
-        self.assertEqual(result["vms_total"]["number"], 55)
-        self.assertEqual(len(str(result)), 8569)
+        self.assertEqual(result["vms_total"]["cpu"], 6)
+        self.assertEqual(result["vms_total"]["memory"], 10240)
+        self.assertEqual(result["vms_total"]["number"], 2)
+        self.assertEqual(len(str(result)), 385)
 
 
     #@unittest.skip

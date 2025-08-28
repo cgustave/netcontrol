@@ -577,6 +577,7 @@ class Vm(object):
         one (timestamp=). If the ending one is not there, lines need to be
         concatenated in one before it is tokenized
         remove ansi color needed on grep
+        25/08 Debian13 memory is like :  -m size=6291456k
         """
         log.debug("Enter")
         self.ssh.shell_send(["sudo ps -xww | grep --color=never -E 'qemu-system |kvm '\n"])
@@ -711,21 +712,26 @@ class Vm(object):
         memory_match = re.search(r'\s-m\s(\d+)(?:,|\s)', line)
         if memory_match:
             memory = int(memory_match.groups(0)[0])
-            log.debug(f"memory={memory}")
+            log.debug(f"memory={memory} Mb")
+        # Allocated memory for Debian13 :  -m size=6291456k, need to convert to MB
+        memory_match2 = re.search(r'\s-m\ssize=(\d+)k(?:,|\s)', line)
+        if memory_match2:
+            memory = int(int(memory_match2.groups(0)[0]) / 1024)
+            log.debug(f"Debian13 memory={memory} Mb")
         # Running template
         template_match = re.search(r'\s-drive\sfile=([A-Za-z0-9_\-\.\/\s]+)', line)
         if template_match:
             template = template_match.groups(0)[0]
             log.debug(f"template={template}")
         vm = {}
-        if template_match and memory_match and cpu_match and id_match:
+        if template_match and (memory_match or memory_match2) and cpu_match and id_match:
             log.debug(f"tokenize succesful : id={vm_id} cpu={cpu} memory={memory} template={template}")
             vm['id'] = vm_id
             vm['cpu'] = cpu
             vm['memory'] = memory
             vm['template'] = template
             return vm
-        elif memory_match and cpu_match and id_match:
+        elif (memory_match or memory_match2) and cpu_match and id_match:
             # This case was seen with windows VM created without disk (stay in
             # boot failure)
             log.debug(f"tokenize succesful without template : id={vm_id} cpu={cpu} memory={memory}")
