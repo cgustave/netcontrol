@@ -1,0 +1,17 @@
+{
+  "errors": {},
+  "warnings": {},
+  "object": {
+    "conn1": 498,
+    "conn2": 507,
+    "hwaddr": "EE:09:0F:00:00:03",
+    "description": "",
+    "state": "connected",
+    "runtime": 104,
+    "__model": "model.cable",
+    "__db": "runtime",
+    "id": 104
+  },
+  "status": "done",
+  "rcode": 0
+}

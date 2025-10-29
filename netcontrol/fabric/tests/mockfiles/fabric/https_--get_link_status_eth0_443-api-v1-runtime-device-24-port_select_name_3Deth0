@@ -1,0 +1,25 @@
+{
+  "errors": {},
+  "warnings": {},
+  "object": [
+    {
+      "name": "eth0",
+      "index": 1,
+      "hwaddr": "CE:09:0F:00:00:01",
+      "override_pair_hwaddr": "",
+      "device": 24,
+      "vlan": 0,
+      "trunk": "",
+      "mode": "default",
+      "peer": 498,
+      "cable": 104,
+      "pair_hwaddr": null,
+      "runtime": 507,
+      "__model": "model.switchport",
+      "__db": "runtime",
+      "id": 507
+    }
+  ],
+  "status": "done",
+  "rcode": 0
+}
