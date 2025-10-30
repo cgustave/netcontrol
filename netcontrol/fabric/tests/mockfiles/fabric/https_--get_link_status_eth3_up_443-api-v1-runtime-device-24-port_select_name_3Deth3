@@ -1,25 +1,19 @@
-{
-  "errors": {},
-  "warnings": {},
-  "object": [
-    {
-      "name": "eth3",
-      "index": 1,
-      "hwaddr": "CE:09:0F:00:00:01",
-      "override_pair_hwaddr": "",
-      "device": 78,
-      "vlan": 0,
-      "trunk": "",
-      "mode": "default",
-      "peer": 498,
-      "cable": 24,
-      "pair_hwaddr": null,
-      "runtime": 507,
-      "__model": "model.switchport",
-      "__db": "runtime",
-      "id": 507
-    }
-  ],
-  "status": "done",
-  "rcode": 0
-}
+[
+   {
+    "name": "eth3",
+    "index": 1,
+    "hwaddr": "CE:09:0F:00:00:01",
+    "override_pair_hwaddr": "",
+    "device": 78,
+    "vlan": 0,
+    "trunk": "",
+    "mode": "default",
+    "peer": 498,
+    "cable": 24,
+    "pair_hwaddr": null,
+    "runtime": 507,
+    "__model": "model.switchport",
+    "__db": "runtime",
+    "id": 507
+  } 
+]

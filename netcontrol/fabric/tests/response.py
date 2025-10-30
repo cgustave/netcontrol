@@ -33,7 +33,9 @@ class response(object):
        self.cookies = cookies()
        self.object = {}
        if self.object != None:
-           self.object = object
+           log.debug(f"object type={type(self.object)}")
+           if type(self.object) is dict:
+               self.object = object
     
     def json(self):
         """
@@ -46,6 +48,7 @@ class response(object):
         r['object'] = {}
         r['object']['authenticated'] = True
         if self.object != None:
+            log.debug(f"using object={self.object}")
             r['object'] = self.object
         else:
             log.debug("use a default empty output")

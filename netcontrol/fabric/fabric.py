@@ -52,6 +52,7 @@ class Fabric(object):
         self.cookies = None
         self.session = None
         self.dev_id = None # Cache for device id, filled from get_link_status
+        self.cable_id = None # Cache for the cable id
         self.ports = {} # Cache for device ports id, filled from get_link_status
 
     def session_check(self):
@@ -228,7 +229,7 @@ class Fabric(object):
             headers = self.build_headers()
             response = requests.get(url, headers=headers, cookies=self.cookies, verify=False, timeout=5) 
             dict_response = response.json()
-            log.debug(f"type dict_response={type(dict_response)}")
+            log.debug(f"type dict_response={dict_response}")
             log.debug(f"status_code={response.status_code}")
             if response.status_code == 200:
                 self.process_cookies(cookies=response.cookies)
@@ -239,6 +240,8 @@ class Fabric(object):
                     log.debug(f"response text={response.text}")
                     log.debug(f"found runtime={runtime} for device name={name}")
                     return runtime
+                else:
+                    log.warning("missing object")
             else:
                 log.warning(f"status code {response.status_code}")
         except Exception as e:
@@ -275,6 +278,8 @@ class Fabric(object):
         with a 'non-broken' cable:
             state:	"connected"
         is returned 
+
+        Need to cache cable_id in cable_id attribute for set_link_status
         """
         log.debug(f"Enter with peer_name={peer_name} peer_link={peer_link}")
         # Sanity checks
@@ -299,27 +304,25 @@ class Fabric(object):
             log.debug(f"dict_response={dict_response}")
             if response.status_code == 200:
                 if 'object' in dict_response:
-                    if 'object' in dict_response['object']:
-                        for item in dict_response['object']['object']:
-                            log.debug(f"item={item}")
-                            if 'name' in item:
-                                log.debug(f"processing name={item['name']}")
-                                port_name = item['name']
-                            if 'cable' in item:
-                                cable_id = item['cable']
-                                log.debug(f"processing cable_id={cable_id}")
-                                port_value = self.get_cable_state(cable_id=cable_id)
-                            else:
-                                log.warning(f"no cable, consider DOWN")
-                                port_value = 'DOWN'
-                            log.debug(f"recording peer_name={peer_name} peer_link={peer_link} => port_value={port_value}")
-                            # Filling cache information for set_peer_link
-                            self.ports[peer_link] = {}
-                            self.ports[peer_link]['id'] = port_name
-                            self.ports[peer_link]['status'] = port_value
-                            output[peer_link] = port_value
-                    else:
-                        log.error("no object field in object response")
+                    for item in dict_response['object']:
+                        log.debug(f"item={item}")
+                        if 'name' in item:
+                            log.debug(f"processing name={item['name']}")
+                            port_name = item['name']
+                        if 'cable' in item:
+                            cable_id = item['cable']
+                            log.debug(f"processing cable_id={cable_id} store in attribute")
+                            self.cable_id = cable_id
+                            port_value = self.get_cable_state(cable_id=cable_id)
+                        else:
+                            log.warning(f"no cable, consider DOWN")
+                            port_value = 'DOWN'
+                        log.debug(f"recording peer_name={peer_name} peer_link={peer_link} => port_value={port_value}")
+                        # Filling cache information for set_peer_link
+                        self.ports[peer_link] = {}
+                        self.ports[peer_link]['id'] = port_name
+                        self.ports[peer_link]['status'] = port_value
+                        output[peer_link] = port_value
                 else:
                     log.error("no object in response")
             else:
@@ -339,6 +342,7 @@ class Fabric(object):
         When cable can't be found, should return DOWN
         """
         log.debug(f"Enter with cable_id={cable_id}")
+        self.connect()
         state = 'DOWN'
         # sanity
         if cable_id == '':
@@ -348,25 +352,26 @@ class Fabric(object):
             self.connect()
             url = f"https://{self.ip}:{self.port}/api/v1/runtime/cable/{cable_id}?related-fields=state"
             headers = self.build_headers()
-            response = requests.post(url, headers=headers, cookies=self.cookies, verify=False, timeout=5)
+            response = requests.get(url, headers=headers, cookies=self.cookies, verify=False, timeout=5)
             dict_response = response.json()
             log.debug(f"status_code={response.status_code}")
             log.debug(f"dict_response={dict_response}")
             if response.status_code == 200:
                 if 'object' in dict_response:
-                    if 'object' in dict_response['object']:
-                        obj = dict_response['object']['object']
-                        if 'state' in obj:
-                            if obj['state'] == 'connected':
-                                log.debug(f"found a connected cable")
-                                state = 'UP'
-                            elif obj['state'] == 'broken':
-                                log.debug(f"found a broken cable")
-                                state = 'DOWN'
-                            else:
-                                log.warning(f"unexpected state {obj['state']}")
+                    obj = dict_response['object']
+                    log.debug(f"obj={obj}")
+                    if 'state' in obj:
+                        log.debug(f'state={state}')
+                        if obj['state'] == 'connected':
+                            log.debug(f"found a connected cable")
+                            state = 'UP'
+                        elif obj['state'] == 'broken':
+                            log.debug(f"found a broken cable")
+                            state = 'DOWN'
+                        else:
+                            log.warning(f"unexpected state {obj['state']}")
                     else:
-                        log.warning("no object in response object")
+                        log.warning(f"missing state")
                 else:
                     log.warning("no object in response")
             else:
@@ -399,8 +404,8 @@ class Fabric(object):
             action = 'break'
         # Need first to get current status and get the portid, filling cache
         self.get_link_status(peer_name=peer_name, peer_link=peer_link)
-        if self.dev_id == None:
-            log.error(f"missing dev_id={self.dev_id}")
+        if self.cable_id == None:
+            log.error(f"missing cable_id")
             return
         if peer_link in self.ports:
             port_id = self.ports[peer_link]['id']
@@ -417,13 +422,16 @@ class Fabric(object):
             return
         try:
             self.connect()
-            url = f"https://{self.ip}:{self.port}/api/v1/runtime/cable/{self.dev_id}/{port_id}:{action}"
+            url = f"https://{self.ip}:{self.port}/api/v1/runtime/cable/{self.cable_id}:{action}"
             headers = self.build_headers()
             response = requests.post(url, headers=headers, cookies=self.cookies, verify=False, timeout=5) 
+            dict_response = response.json()
             log.debug(f"status_code={response.status_code}")
             log.debug(f"response={response.text}")
             if response.status_code == 200:
-                log.debug("ok")
+                if 'status' in dict_response:
+                    if dict_response['status'] == 'done':
+                        log.debug(f"status={status} success")
             else:
                 log.warning(f"unexpected status_code={response.status_code}")
         except Exception as e:

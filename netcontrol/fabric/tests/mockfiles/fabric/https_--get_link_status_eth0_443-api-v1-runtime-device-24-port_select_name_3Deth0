@@ -1,7 +1,4 @@
-{
-  "errors": {},
-  "warnings": {},
-  "object": [
+[
     {
       "name": "eth0",
       "index": 1,
@@ -19,7 +16,4 @@
       "__db": "runtime",
       "id": 507
     }
-  ],
-  "status": "done",
-  "rcode": 0
-}
+  ]

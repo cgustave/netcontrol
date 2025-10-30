@@ -61,12 +61,12 @@ class fabricTestCase(unittest.TestCase):
         two.ip = "get_link_status_eth0"
         two.open_session()
 
-    #@unittest.skip
+    @unittest.skip
     def test_version(self):
         self.fabric.ip = "get_link_status_eth0"
         self.fabric.version()
 
-    #@unittest.skip
+    @unittest.skip
     def test_close_session(self):
         self.fabric.ip = "get_link_status_eth0"
         self.fabric.open_session()

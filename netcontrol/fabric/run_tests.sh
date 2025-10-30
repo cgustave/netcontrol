@@ -2,6 +2,8 @@
 
 NAME=fabric
 
+rm -f debug.log
+
 if [ -n "$1" ]; then 
 
     echo "Test with direct connection to fortipoc at $1"

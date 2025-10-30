@@ -27,6 +27,7 @@ def get(url, headers='', cookies=None, data=None, verify=False, timeout=5):
     tr_url = url.translate(str.maketrans({"/":"-", "\\":"_", "'":"_", "^":"_", " ":"_", "|":"-", "<":"_", ">":"_", ":":"_", "=":"_", "?":"_","&":"_", "%":"_"}))
     log.debug(f"tr_url={tr_url}")
     filename = "tests/mockfiles/fabric/"+tr_url
+    log.debug(f"using mockfile={filename}")
     output=""
     try:
         f  = open(filename, "r", encoding="utf8")
@@ -43,7 +44,7 @@ def get(url, headers='', cookies=None, data=None, verify=False, timeout=5):
     tr_output = tr_output.replace('True','true')
     #log.debug(f"tr_output={tr_output}")
     d = json.loads(tr_output)
-    log.debug(f"type={type(d)}")
+    log.debug(f"type={type(d)} d={d}")
     res = response(object=d)
     return res
     
@@ -53,6 +54,7 @@ def post(url, headers='', cookies=None, data=None, verify=False, timeout=5):
     log.debug(f"tr_url={tr_url}")
     filename = "tests/mockfiles/fabric/"+tr_url
     output=""
+    log.debug(f"using mockfile={filename}")
     try:
         f  = open(filename, "r", encoding="utf8")
         lines = f.readlines()
